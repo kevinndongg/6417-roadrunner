@@ -28,7 +28,7 @@ public class MainTeleOp1 extends LinearOpMode {
 
     // arm to drop position
     public void armBack() {
-        Arm.setTargetPosition(-1700);
+        Arm.setTargetPosition(Constants.armBack);
     }
 
     // arm to pick up position
@@ -38,12 +38,12 @@ public class MainTeleOp1 extends LinearOpMode {
 
     // wrist to pick up position
     public void wristDown() {
-        wrist.setPosition(Methods.wristDown());
+        wrist.setPosition(Constants.wristDown);
     }
 
     // wrist to drop position
     public void wristUp() {
-        wrist.setPosition(Methods.wristUp());
+        wrist.setPosition(Constants.wristUp);
     }
 
     public void runOpMode() throws InterruptedException
@@ -63,7 +63,7 @@ public class MainTeleOp1 extends LinearOpMode {
             @Override
             public void onOpened()
             {
-                webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(640, 360, OpenCvCameraRotation.SIDEWAYS_RIGHT);
             }
 
             @Override
@@ -109,12 +109,12 @@ public class MainTeleOp1 extends LinearOpMode {
             double vert = -gamepad1.left_stick_y;
             double horz = gamepad1.left_stick_x;
             double rotate = gamepad1.right_stick_x;
-            if(gamepad1.left_trigger > 0.15) {
-                driveSpeed = Methods.driveSpeedSlow();
-            } else  if(gamepad1.right_trigger > 0.15){
-                driveSpeed = Methods.driveSpeedFast();
+            if(gamepad1.left_trigger > 0.1) {
+                driveSpeed = Constants.driveSpeedSlow + (1.0-gamepad1.left_trigger) * (Constants.driveSpeedNormal-Constants.driveSpeedSlow);
+            } else  if(gamepad1.right_trigger > 0.1){
+                driveSpeed = Constants.driveSpeedNormal + gamepad1.left_trigger * (Constants.driveSpeedFast - Constants.driveSpeedNormal);
             } else {
-                driveSpeed = Methods.driveSpeedNormal();
+                driveSpeed = Constants.driveSpeedNormal;
             }
 
             // only drives when input is there
@@ -127,12 +127,12 @@ public class MainTeleOp1 extends LinearOpMode {
 
             // grabber closed preset
             if(gamepad1.left_bumper){
-                grabber.setPosition(Methods.grabberClose());
+                grabber.setPosition(Constants.grabberClose);
             }
 
             // grabber open preset
             if(gamepad1.right_bumper){
-                grabber.setPosition(Methods.grabberOpen());
+                grabber.setPosition(Constants.grabberOpen);
             }
 
             if(gamepad1.dpad_up) {
@@ -155,7 +155,7 @@ public class MainTeleOp1 extends LinearOpMode {
             // arm back + slider up to low
             if(gamepad1.b) {
                 Slider.setPower(0.5);
-                Slider.setTargetPosition(Methods.slideLow());
+                Slider.setTargetPosition(Constants.slideLow);
                 Arm.setPower(0.75);
                 armBack();
                 wristUp();
@@ -163,7 +163,7 @@ public class MainTeleOp1 extends LinearOpMode {
 
             if(gamepad1.y) {
                 Slider.setPower(0.5);
-                Slider.setTargetPosition(Methods.slideMedium());
+                Slider.setTargetPosition(Constants.slideMedium);
                 Arm.setPower(0.6);
                 armBack();
                 wristUp();

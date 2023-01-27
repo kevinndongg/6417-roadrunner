@@ -26,8 +26,8 @@ public class SignalDetectorPipeline extends OpenCvPipeline {
             return input;
         }
 
-        Imgproc.rectangle(copy, new Rect(50,50,50,50), new Scalar(0,255,0));
-        Mat subMat = copy.submat(new Rect(50, 50, 50, 50));
+        Imgproc.rectangle(copy, new Rect(135,580,50,50), new Scalar(0,255,0));
+        Mat subMat = copy.submat(new Rect(300, 300, 50, 50));
 
         redTotal = Core.sumElems(subMat).val[0];
         greenTotal = Core.sumElems(subMat).val[1];

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
@@ -74,7 +75,7 @@ public class TestAuto extends LinearOpMode {
         Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Arm.setTargetPosition(0);
         Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Arm.setPower();
+        Arm.setPower(0);
 
         waitForStart();
         resetRuntime();
@@ -86,12 +87,12 @@ public class TestAuto extends LinearOpMode {
             double horz = gamepad1.left_stick_x;
             double rotate = gamepad1.right_stick_x;
             if(gamepad1.left_trigger > 0.15) {
-                driveSpeed = Methods.driveSpeedSlow();
+                driveSpeed = Constants.driveSpeedSlow;
                 driveTuningBL = 0.8;
             } else  if(gamepad1.right_trigger > 0.15){
-                driveSpeed = Methods.driveSpeedFast();
+                driveSpeed = Constants.driveSpeedFast;
             } else {
-                driveSpeed = Methods.driveSpeedNormal();
+                driveSpeed = Constants.driveSpeedNormal;
             }
 
             // only drives when input is there

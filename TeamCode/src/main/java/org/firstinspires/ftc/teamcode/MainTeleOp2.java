@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.apache.commons.math3.analysis.function.Constant;
+
 @TeleOp(name = "Main TeleOp 2", group = "TeleOp")
 public class MainTeleOp2 extends LinearOpMode {
     DcMotorEx FrontLeft,FrontRight,BackLeft,BackRight,Slider,Arm;
@@ -21,7 +23,7 @@ public class MainTeleOp2 extends LinearOpMode {
 
     // arm to drop position
     public void armBack() {
-        Arm.setTargetPosition(-1700);
+        Arm.setTargetPosition(Constants.armBack);
     }
 
     // arm to pick up position
@@ -31,12 +33,12 @@ public class MainTeleOp2 extends LinearOpMode {
 
     // wrist to pick up position
     public void wristDown() {
-        wrist.setPosition(Methods.wristDown());
+        wrist.setPosition(Constants.wristDown);
     }
 
     // wrist to drop position
     public void wristUp() {
-        wrist.setPosition(Methods.wristUp());
+        wrist.setPosition(Constants.wristUp);
     }
 
     public void runOpMode() throws InterruptedException
@@ -80,11 +82,11 @@ public class MainTeleOp2 extends LinearOpMode {
 
             // drive speeds
             if(gamepad1.left_trigger > 0.15) {
-                driveSpeed = Methods.driveSpeedSlow();
+                driveSpeed = Constants.driveSpeedSlow;
             } else if (gamepad1.right_trigger > 0.15) {
-                driveSpeed = Methods.driveSpeedFast();
+                driveSpeed = Constants.driveSpeedFast;
             } else {
-                driveSpeed = Methods.driveSpeedNormal();
+                driveSpeed = Constants.driveSpeedNormal;
             }
 
             // only drives when input is there
@@ -97,12 +99,12 @@ public class MainTeleOp2 extends LinearOpMode {
 
             // grabber closed preset
             if(gamepad1.left_bumper){
-                grabber.setPosition(Methods.grabberClose());
+                grabber.setPosition(Constants.grabberClose);
             }
 
             // grabber open preset
             if(gamepad1.right_bumper){
-                grabber.setPosition(Methods.grabberOpen());
+                grabber.setPosition(Constants.grabberOpen);
             }
 
             if(gamepad1.dpad_up) {
@@ -125,7 +127,7 @@ public class MainTeleOp2 extends LinearOpMode {
             // arm back + slider up to low
             if(gamepad2.b) {
                 Slider.setPower(0.5);
-                Slider.setTargetPosition(Methods.slideLow());
+                Slider.setTargetPosition(Constants.slideLow);
                 Arm.setPower(0.75);
                 armBack();
                 wristUp();
@@ -133,7 +135,7 @@ public class MainTeleOp2 extends LinearOpMode {
 
             if(gamepad2.y) {
                 Slider.setPower(0.5);
-                Slider.setTargetPosition(Methods.slideMedium());
+                Slider.setTargetPosition(Constants.slideMedium);
                 Arm.setPower(0.6);
                 armBack();
                 wristUp();
