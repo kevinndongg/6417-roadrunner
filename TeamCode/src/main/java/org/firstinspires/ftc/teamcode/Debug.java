@@ -5,41 +5,23 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoControllerEx;
 
-import org.apache.commons.math3.analysis.function.Constant;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "Main TeleOp 2", group = "TeleOp")
-public class MainTeleOp2 extends LinearOpMode {
+@TeleOp(name = "Debug", group = "TeleOp")
+public class Debug extends LinearOpMode {
     DcMotorEx FrontLeft,FrontRight,BackLeft,BackRight,Slider,Arm;
     Servo grabber;
     Servo wrist;
     //DistanceSensor distance;
-    double driveSpeed;
 
+    // list of power values
+    public double slidePower = 0.2;
 
-
-    // list of methods
-
-    // arm to drop position
-    public void armBack() {
-        Arm.setTargetPosition(Constants.armBack);
-    }
-
-    // arm to pick up position
-    public void armFront() {
-        Arm.setTargetPosition(0);
-    }
-
-    // wrist to pick up position
-    public void wristDown() {
-        wrist.setPosition(Constants.wristDown);
-    }
-
-    // wrist to drop position
-    public void wristUp() {
-        wrist.setPosition(Constants.wristUp);
-    }
+    public double armPower = 0.2;
 
     public void runOpMode() throws InterruptedException
     {
@@ -59,19 +41,26 @@ public class MainTeleOp2 extends LinearOpMode {
 
         BackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         FrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        // slider declarations
+
         Slider.setDirection(DcMotorSimple.Direction.REVERSE);
 
         Slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Slider.setTargetPosition(0);
         Slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Slider.setPower(slidePower);
+
+        // arm declarations
 
         Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Arm.setTargetPosition(0);
         Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Arm.setPower(armPower);
+
 
 
         waitForStart();
-        resetRuntime();
 
         while(opModeIsActive()){
 
@@ -80,14 +69,6 @@ public class MainTeleOp2 extends LinearOpMode {
             double horz = gamepad1.left_stick_x;
             double rotate = gamepad1.right_stick_x;
 
-            // drive speeds
-            if(gamepad1.left_trigger > 0.15) {
-                driveSpeed = Constants.driveSpeedSlow;
-            } else if (gamepad1.right_trigger > 0.15) {
-                driveSpeed = Constants.driveSpeedFast;
-            } else {
-                driveSpeed = Constants.driveSpeedNormal;
-            }
 
             // only drives when input is there
             if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1){
@@ -97,62 +78,63 @@ public class MainTeleOp2 extends LinearOpMode {
                 Drive(0,0,0);
             }
 
-            // grabber closed preset
-            if(gamepad1.left_bumper){
-                grabber.setPosition(Constants.grabberClose);
+            // arm adjustments
+
+            if(gamepad1.a){
+                Arm.setTargetPosition(Arm.getCurrentPosition() + 50);
+            }
+            if(gamepad1.b)
+            {
+                Arm.setTargetPosition(Arm.getCurrentPosition() - 50);
             }
 
-            // grabber open preset
-            if(gamepad1.right_bumper){
+            // grabber adjustments
+
+            if(gamepad1.left_bumper){
                 grabber.setPosition(Constants.grabberOpen);
             }
 
-            if(gamepad1.y) {
-                wristUp();
+            if(gamepad1.right_bumper){
+                grabber.setPosition(Constants.grabberClose);
+            }
+
+            // slider adjustments
+
+            if(gamepad1.dpad_up && Slider.getCurrentPosition() < 1500) {
+                Slider.setTargetPosition(Slider.getCurrentPosition() + 100);
+            }
+
+            if(gamepad1.dpad_down && Slider.getCurrentPosition() > 100) {
+                Slider.setTargetPosition(Slider.getCurrentPosition() - 100);
             }
 
             if(gamepad1.x) {
-                wristDown();
+                wrist.setPosition(Constants.wristDown);
             }
 
-            if(gamepad2.dpad_up) {
-                Slider.setTargetPosition(Slider.getCurrentPosition()+30);
+            if(gamepad1.y) {
+                wrist.setPosition(Constants.wristUp);
             }
 
-            if(gamepad2.dpad_down) {
-                Slider.setTargetPosition(Slider.getCurrentPosition()-30);
-            }
+            // RESET ENCODERS
 
-            // Everything down
-            if(gamepad2.a) {
-                Slider.setPower(0.9);
+            /*
+            if(gamepad1.y) {
+                Slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 Slider.setTargetPosition(0);
-                Arm.setPower(0.55);
-                armFront();
-                wristDown();
+                Slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                Arm.setTargetPosition(0);
+                Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
 
-            // arm back + slider up to low
-            if(gamepad2.b) {
-                Slider.setPower(0.5);
-                Slider.setTargetPosition(Constants.slideLow);
-                Arm.setPower(0.75);
-                armBack();
-                wristUp();
-            }
-
-            if(gamepad2.y) {
-                Slider.setPower(0.5);
-                Slider.setTargetPosition(Constants.slideMedium);
-                Arm.setPower(0.6);
-                armBack();
-                wristUp();
-            }
+             */
 
             // telemetry for testing
-            telemetry.addData("slider position", Slider.getCurrentPosition());
-            telemetry.addData("Grabber position: ", grabber.getPosition());
-            telemetry.addData("Wrist position: ", wrist.getPosition());
+            telemetry.addData("Slider position", Slider.getCurrentPosition());
+            telemetry.addData("grabber position: ", grabber.getPosition());
+            telemetry.addData("wrist position: ", wrist.getPosition());
             telemetry.addData("Arm position: ", + Arm.getCurrentPosition());
             //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
@@ -162,10 +144,11 @@ public class MainTeleOp2 extends LinearOpMode {
 
     // drive calculations
 
+    double driveSpeed = 0.3;
     double driveTuningFR = 1.0;
-    double driveTuningFL = 0.78;
+    double driveTuningFL = 0.75;
     double driveTuningBR = 1.0;
-    double driveTuningBL = 0.8;
+    double driveTuningBL = 0.75;
 
     public void Drive(double vert, double horz, double rotate){
         double frdrive = -vert - horz - rotate;

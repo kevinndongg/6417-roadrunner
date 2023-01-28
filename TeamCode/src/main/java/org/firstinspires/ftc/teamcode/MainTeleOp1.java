@@ -109,7 +109,7 @@ public class MainTeleOp1 extends LinearOpMode {
             double vert = -gamepad1.left_stick_y;
             double horz = gamepad1.left_stick_x;
             double rotate = gamepad1.right_stick_x;
-            if(gamepad1.left_trigger > 0.1) {
+            if(gamepad1.left_trigger > 0.15) {
                 driveSpeed = Constants.driveSpeedSlow + (1.0-gamepad1.left_trigger) * (Constants.driveSpeedNormal-Constants.driveSpeedSlow);
             } else  if(gamepad1.right_trigger > 0.1){
                 driveSpeed = Constants.driveSpeedNormal + gamepad1.left_trigger * (Constants.driveSpeedFast - Constants.driveSpeedNormal);
