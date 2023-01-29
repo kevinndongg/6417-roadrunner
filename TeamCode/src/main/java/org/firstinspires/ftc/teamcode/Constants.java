@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 public class Constants {
-    public static double grabberClose = 0.32;
+    public static double grabberClose = 0.3;
 
     public static double grabberOpen = 0.52;
 
@@ -17,7 +17,7 @@ public class Constants {
 
     public static double driveSpeedNormal = 0.6;
 
-    public static double driveSpeedSlow = 0.3;
+    public static double driveSpeedSlow = 0.35;
 
     public static double driveSpeedFast = 1.0;
 }

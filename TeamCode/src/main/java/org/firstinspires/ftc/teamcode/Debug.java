@@ -24,6 +24,8 @@ public class Debug extends LinearOpMode {
 
     public double armPower = 0.2;
 
+    double driveSpeed = Constants.driveSpeedSlow;
+
     public void runOpMode() throws InterruptedException
     {
 
@@ -64,7 +66,10 @@ public class Debug extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
-
+            // drive calculations
+            double vert = -gamepad1.left_stick_y;
+            double horz = gamepad1.left_stick_x;
+            double rotate = gamepad1.right_stick_x;
             // arm adjustments
 
             if(gamepad1.a){
@@ -77,8 +82,18 @@ public class Debug extends LinearOpMode {
 
             // grabber adjustments
 
-            if(Math.abs(gamepad1.left_stick_x) > 0.1) {
-                grabber.setPosition((gamepad1.left_stick_x + 1.0)/2.0);
+            boolean leftTrigger;
+
+            if(gamepad1.left_trigger > 0.1) {
+                if (Math.abs(gamepad1.left_stick_x) > 0.1) {
+                    grabber.setPosition((gamepad1.left_stick_x + 1.0) / 2.0);
+                }
+
+                if (Math.abs(gamepad1.right_stick_x) > 0.1) {
+                    wrist.setPosition((gamepad1.right_stick_x + 1.0) / 2.0);
+                }
+            } else {
+                Drive(vert, horz, rotate);
             }
 
             // slider adjustments
@@ -91,9 +106,6 @@ public class Debug extends LinearOpMode {
                 Slider.setTargetPosition(Slider.getCurrentPosition() - 100);
             }
 
-            if(Math.abs(gamepad1.right_stick_x) > 0.1) {
-                wrist.setPosition((gamepad1.right_stick_x + 1.0)/2.0);
-            }
 
             if(gamepad1.y) {
                 wrist.setPosition(Constants.wristUp);
@@ -123,5 +135,25 @@ public class Debug extends LinearOpMode {
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();
         }
+    }
+
+    double driveTuningFR = 1.0;
+    double driveTuningFL = 0.75;
+    double driveTuningBR = 1.0;
+    double driveTuningBL = 0.75;
+    public void Drive(double vert, double horz, double rotate){
+        double frdrive = -vert - horz - rotate;
+        double fldrive = -vert + horz + rotate;
+        double brdrive = -vert + horz - rotate;
+        double bldrive = -vert - horz + rotate;
+
+        // finding maximum drive for division below
+        double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
+
+        // power calculations
+        FrontRight.setPower(driveSpeed * driveTuningFR * frdrive / max);
+        FrontLeft.setPower(driveSpeed * driveTuningFL * fldrive / max);
+        BackRight.setPower(driveSpeed * driveTuningBR * brdrive / max);
+        BackLeft.setPower(driveSpeed * driveTuningBL * bldrive / max);
     }
 }

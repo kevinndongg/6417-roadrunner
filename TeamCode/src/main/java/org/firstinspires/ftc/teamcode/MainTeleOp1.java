@@ -16,10 +16,10 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @TeleOp(name = "Main TeleOp 1", group = "TeleOp")
 public class MainTeleOp1 extends LinearOpMode {
     DcMotorEx frontLeft, frontRight, backLeft, backRight, slider, arm;
-    Servo grabber;
-    Servo wrist;
+    Servo grabber, wrist;
     //DistanceSensor distance;
     double driveSpeed;
+    boolean armGoingUp = false;
 
     public void runOpMode() throws InterruptedException
     {
@@ -119,8 +119,16 @@ public class MainTeleOp1 extends LinearOpMode {
                 wrist.setPosition(Constants.wristDown);
             }
 
+            // while arm is going up and is past -1000
+            if(armGoingUp && arm.getCurrentPosition() < -1000) {
+                // arm is slow
+                arm.setPower(0.35);
+                armGoingUp = false;
+            }
+
             // Everything down
             if(gamepad1.a) {
+                armGoingUp = false;
                 slider.setPower(0.9);
                 slider.setTargetPosition(0);
                 arm.setPower(0.6);
@@ -129,37 +137,42 @@ public class MainTeleOp1 extends LinearOpMode {
             }
 
             // arm back + slider up to low
-            if(gamepad2.b) {
+            if(gamepad1.b) {
+                armGoingUp = true;
                 if(slider.getCurrentPosition() > Constants.slideLow){
                     slider.setPower(0.6);
                 } else {
-                    slider.setPower(0.55);
+                    slider.setPower(0.4);
                 }
                 slider.setTargetPosition(Constants.slideLow);
                 arm.setPower(0.7);
                 arm.setTargetPosition(Constants.armBack);
                 wrist.setPosition(Constants.wristUp);
 
-                armBackWaitThread = new ArmDecelerateThread(arm);
-                armBackWaitThread.run();
+                // armBackWaitThread = new ArmDecelerateThread(arm);
+                // armBackWaitThread.run();
             }
 
-            if(gamepad2.y) {
-                slider.setPower(0.7);
+            if(gamepad1.y) {
+                armGoingUp = true;
+                slider.setPower(0.6);
                 slider.setTargetPosition(Constants.slideMedium);
                 arm.setPower(0.6);
                 arm.setTargetPosition(Constants.armBack);
                 wrist.setPosition(Constants.wristUp);
 
-                armBackWaitThread = new ArmDecelerateThread(arm);
-                armBackWaitThread.run();
+                // armBackWaitThread = new ArmDecelerateThread(arm);
+                // armBackWaitThread.run();
             }
 
             // telemetry for testing
             telemetry.addData("slider position", slider.getCurrentPosition());
+            telemetry.addData("slider power", slider.getPower());
             telemetry.addData("Grabber position: ", grabber.getPosition());
             telemetry.addData("Wrist position: ", wrist.getPosition());
-            telemetry.addData("Arm position: ", + arm.getCurrentPosition());
+            telemetry.addData("Arm position: ", arm.getCurrentPosition());
+            telemetry.addData("Arm Power: ", arm.getPower());
+            telemetry.addData("armGoingUp: ", armGoingUp);
             //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();
