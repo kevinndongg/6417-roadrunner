@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 public class Constants {
-    public static double grabberClose = 0.3;
+    public static double grabberClose = 0.29;
 
     public static double grabberOpen = 0.52;
 
