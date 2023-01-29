@@ -20,6 +20,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous(name = "Test Auto")
 public class TestAuto extends LinearOpMode {
@@ -56,8 +59,12 @@ public class TestAuto extends LinearOpMode {
         }); //done initializing camera
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Trajectory test = drive.trajectoryBuilder(new Pose2d())
-                .forward(10)
+        Trajectory forward1 = drive.trajectoryBuilder(new Pose2d())
+                .forward(25)
+                .build();
+
+        Trajectory strafe = drive.trajectoryBuilder(forward1.end())
+                .strafeLeft(10)
                 .build();
 
 
@@ -88,13 +95,18 @@ public class TestAuto extends LinearOpMode {
         waitForStart();
         resetRuntime();
 
+        int position = pipeline.position;
+        webcam.stopStreaming();
+
+        drive.setPoseEstimate(new Pose2d());
+
         grabber.setPosition(Constants.grabberClose);
-        drive.followTrajectory(test);
-        Slider.setPower(0.5);
-        Slider.setTargetPosition(500);
+        drive.followTrajectory(forward1);
+        drive.followTrajectory(strafe);
+        Slider.setPower(0.6);
+        Slider.setTargetPosition(1300);
         grabber.setPosition(Constants.grabberOpen);
 
-        // webcam.stopStreaming();
 
         while(opModeIsActive()){
 
