@@ -26,6 +26,7 @@ public class MainTeleOp1 extends LinearOpMode {
         //camera declaration
         OpenCvCamera webcam;
         SignalDetectorPipeline pipeline;
+        ArmDecelerateThread armBackWaitThread;
 
         //initialize camera
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -139,10 +140,8 @@ public class MainTeleOp1 extends LinearOpMode {
                 arm.setTargetPosition(Constants.armBack);
                 wrist.setPosition(Constants.wristUp);
 
-                ArmDecelerateThread armBackWaitThread = new ArmDecelerateThread(arm);
+                armBackWaitThread = new ArmDecelerateThread(arm);
                 armBackWaitThread.run();
-
-                arm.setPower(0.35);
             }
 
             if(gamepad2.y) {
@@ -152,10 +151,8 @@ public class MainTeleOp1 extends LinearOpMode {
                 arm.setTargetPosition(Constants.armBack);
                 wrist.setPosition(Constants.wristUp);
 
-                ArmDecelerateThread armBackWaitThread = new ArmDecelerateThread(arm);
+                armBackWaitThread = new ArmDecelerateThread(arm);
                 armBackWaitThread.run();
-
-                arm.setPower(0.35);
             }
 
             // telemetry for testing
