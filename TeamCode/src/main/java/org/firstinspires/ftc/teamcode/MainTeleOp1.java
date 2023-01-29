@@ -7,44 +7,19 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
+import org.firstinspires.ftc.teamcode.threads.ArmDecelerateThread;
 import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvPipeline;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @TeleOp(name = "Main TeleOp 1", group = "TeleOp")
 public class MainTeleOp1 extends LinearOpMode {
-    DcMotorEx FrontLeft,FrontRight,BackLeft,BackRight,Slider,Arm;
+    DcMotorEx frontLeft, frontRight, backLeft, backRight, slider, arm;
     Servo grabber;
     Servo wrist;
     //DistanceSensor distance;
     double driveSpeed;
-
-
-
-    // list of methods
-
-    // arm to drop position
-    public void armBack() {
-        Arm.setTargetPosition(Constants.armBack);
-    }
-
-    // arm to pick up position
-    public void armFront() {
-        Arm.setTargetPosition(0);
-    }
-
-    // wrist to pick up position
-    public void wristDown() {
-        wrist.setPosition(Constants.wristDown);
-    }
-
-    // wrist to drop position
-    public void wristUp() {
-        wrist.setPosition(Constants.wristUp);
-    }
 
     public void runOpMode() throws InterruptedException
     {
@@ -75,30 +50,30 @@ public class MainTeleOp1 extends LinearOpMode {
 
 
         // motor declarations
-        FrontLeft = hardwareMap.get(DcMotorEx.class,"front left");
-        FrontRight = hardwareMap.get(DcMotorEx.class, "front right");
-        BackLeft = hardwareMap.get(DcMotorEx.class, "back left");
-        BackRight = hardwareMap.get(DcMotorEx.class, "back right");
+        frontLeft = hardwareMap.get(DcMotorEx.class,"front left");
+        frontRight = hardwareMap.get(DcMotorEx.class, "front right");
+        backLeft = hardwareMap.get(DcMotorEx.class, "back left");
+        backRight = hardwareMap.get(DcMotorEx.class, "back right");
         //distance =  hardwareMap.get(DistanceSensor.class, "distance");
-        Slider = hardwareMap.get(DcMotorEx.class, "slider");
-        Arm = hardwareMap.get(DcMotorEx.class, "arm");
+        slider = hardwareMap.get(DcMotorEx.class, "slider");
+        arm = hardwareMap.get(DcMotorEx.class, "arm");
 
         // servo declarations
         wrist = hardwareMap.get(Servo.class, "wrist");
         grabber = hardwareMap.get(Servo.class,"grabber");
 
-        BackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        FrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        Slider.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        slider.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        Slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Slider.setTargetPosition(0);
-        Slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slider.setTargetPosition(0);
+        slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Arm.setTargetPosition(0);
-        Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Arm.setPower(0);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setTargetPosition(0);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(0);
 
         waitForStart();
         resetRuntime();
@@ -112,7 +87,7 @@ public class MainTeleOp1 extends LinearOpMode {
             if(gamepad1.left_trigger > 0.15) {
                 driveSpeed = Constants.driveSpeedSlow + (1.0-gamepad1.left_trigger) * (Constants.driveSpeedNormal-Constants.driveSpeedSlow);
             } else  if(gamepad1.right_trigger > 0.1){
-                driveSpeed = Constants.driveSpeedNormal + gamepad1.left_trigger * (Constants.driveSpeedFast - Constants.driveSpeedNormal);
+                driveSpeed = Constants.driveSpeedNormal + gamepad1.right_trigger * (Constants.driveSpeedFast - Constants.driveSpeedNormal);
             } else {
                 driveSpeed = Constants.driveSpeedNormal;
             }
@@ -136,44 +111,58 @@ public class MainTeleOp1 extends LinearOpMode {
             }
 
             if(gamepad1.dpad_up) {
-                wristUp();
+                wrist.setPosition(Constants.wristUp);
             }
 
             if(gamepad1.dpad_down) {
-                wristDown();
+                wrist.setPosition(Constants.wristDown);
             }
 
             // Everything down
             if(gamepad1.a) {
-                Slider.setPower(0.9);
-                Slider.setTargetPosition(0);
-                Arm.setPower(0.6);
-                armFront();
-                wristDown();
+                slider.setPower(0.9);
+                slider.setTargetPosition(0);
+                arm.setPower(0.6);
+                arm.setTargetPosition(0);
+                wrist.setPosition(Constants.wristDown);
             }
 
             // arm back + slider up to low
-            if(gamepad1.b) {
-                Slider.setPower(0.5);
-                Slider.setTargetPosition(Constants.slideLow);
-                Arm.setPower(0.75);
-                armBack();
-                wristUp();
+            if(gamepad2.b) {
+                if(slider.getCurrentPosition() > Constants.slideLow){
+                    slider.setPower(0.6);
+                } else {
+                    slider.setPower(0.55);
+                }
+                slider.setTargetPosition(Constants.slideLow);
+                arm.setPower(0.7);
+                arm.setTargetPosition(Constants.armBack);
+                wrist.setPosition(Constants.wristUp);
+
+                ArmDecelerateThread armBackWaitThread = new ArmDecelerateThread(arm);
+                armBackWaitThread.run();
+
+                arm.setPower(0.35);
             }
 
-            if(gamepad1.y) {
-                Slider.setPower(0.5);
-                Slider.setTargetPosition(Constants.slideMedium);
-                Arm.setPower(0.6);
-                armBack();
-                wristUp();
+            if(gamepad2.y) {
+                slider.setPower(0.7);
+                slider.setTargetPosition(Constants.slideMedium);
+                arm.setPower(0.6);
+                arm.setTargetPosition(Constants.armBack);
+                wrist.setPosition(Constants.wristUp);
+
+                ArmDecelerateThread armBackWaitThread = new ArmDecelerateThread(arm);
+                armBackWaitThread.run();
+
+                arm.setPower(0.35);
             }
 
             // telemetry for testing
-            telemetry.addData("slider position", Slider.getCurrentPosition());
+            telemetry.addData("slider position", slider.getCurrentPosition());
             telemetry.addData("Grabber position: ", grabber.getPosition());
             telemetry.addData("Wrist position: ", wrist.getPosition());
-            telemetry.addData("Arm position: ", + Arm.getCurrentPosition());
+            telemetry.addData("Arm position: ", + arm.getCurrentPosition());
             //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();
@@ -183,9 +172,9 @@ public class MainTeleOp1 extends LinearOpMode {
     // drive calculations
 
     double driveTuningFR = 1.0;
-    double driveTuningFL = 0.78;
+    double driveTuningFL = 0.75;
     double driveTuningBR = 1.0;
-    double driveTuningBL = 0.78;
+    double driveTuningBL = 0.75;
 
     public void Drive(double vert, double horz, double rotate){
         double frdrive = -vert - horz - rotate;
@@ -197,10 +186,10 @@ public class MainTeleOp1 extends LinearOpMode {
         double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
 
         // power calculations
-        FrontRight.setPower(driveSpeed * driveTuningFR * frdrive / max);
-        FrontLeft.setPower(driveSpeed * driveTuningFL * fldrive / max);
-        BackRight.setPower(driveSpeed * driveTuningBR * brdrive / max);
-        BackLeft.setPower(driveSpeed * driveTuningBL * bldrive / max);
+        frontRight.setPower(driveSpeed * driveTuningFR * frdrive / max);
+        frontLeft.setPower(driveSpeed * driveTuningFL * fldrive / max);
+        backRight.setPower(driveSpeed * driveTuningBR * brdrive / max);
+        backLeft.setPower(driveSpeed * driveTuningBL * bldrive / max);
 
 
 

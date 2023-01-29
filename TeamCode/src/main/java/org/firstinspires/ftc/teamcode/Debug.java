@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
 
@@ -64,20 +65,6 @@ public class Debug extends LinearOpMode {
 
         while(opModeIsActive()){
 
-            // drive calculations
-            double vert = -gamepad1.left_stick_y;
-            double horz = gamepad1.left_stick_x;
-            double rotate = gamepad1.right_stick_x;
-
-
-            // only drives when input is there
-            if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1){
-                Drive(vert,horz,rotate);
-            }
-            else{
-                Drive(0,0,0);
-            }
-
             // arm adjustments
 
             if(gamepad1.a){
@@ -90,12 +77,8 @@ public class Debug extends LinearOpMode {
 
             // grabber adjustments
 
-            if(gamepad1.left_bumper){
-                grabber.setPosition(Constants.grabberOpen);
-            }
-
-            if(gamepad1.right_bumper){
-                grabber.setPosition(Constants.grabberClose);
+            if(Math.abs(gamepad1.left_stick_x) > 0.1) {
+                grabber.setPosition((gamepad1.left_stick_x + 1.0)/2.0);
             }
 
             // slider adjustments
@@ -108,8 +91,8 @@ public class Debug extends LinearOpMode {
                 Slider.setTargetPosition(Slider.getCurrentPosition() - 100);
             }
 
-            if(gamepad1.x) {
-                wrist.setPosition(Constants.wristDown);
+            if(Math.abs(gamepad1.right_stick_x) > 0.1) {
+                wrist.setPosition((gamepad1.right_stick_x + 1.0)/2.0);
             }
 
             if(gamepad1.y) {
@@ -140,38 +123,5 @@ public class Debug extends LinearOpMode {
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();
         }
-    }
-
-    // drive calculations
-
-    double driveSpeed = 0.3;
-    double driveTuningFR = 1.0;
-    double driveTuningFL = 0.75;
-    double driveTuningBR = 1.0;
-    double driveTuningBL = 0.75;
-
-    public void Drive(double vert, double horz, double rotate){
-        double frdrive = -vert - horz - rotate;
-        double fldrive = -vert + horz + rotate;
-        double brdrive = -vert + horz - rotate;
-        double bldrive = -vert - horz + rotate;
-
-        // finding maximum drive for division below
-        double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
-
-        // power calculations
-        FrontRight.setPower(driveSpeed * driveTuningFR * frdrive / max);
-        FrontLeft.setPower(driveSpeed * driveTuningFL * fldrive / max);
-        BackRight.setPower(driveSpeed * driveTuningBR * brdrive / max);
-        BackLeft.setPower(driveSpeed * driveTuningBL * bldrive / max);
-
-
-
-
-
-
-
-
-
     }
 }
