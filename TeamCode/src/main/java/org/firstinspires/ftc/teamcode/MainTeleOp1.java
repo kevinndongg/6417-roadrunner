@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.threads.ArmDecelerateThread;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -26,7 +25,6 @@ public class MainTeleOp1 extends LinearOpMode {
         //camera declaration
         OpenCvCamera webcam;
         SignalDetectorPipeline pipeline;
-        ArmDecelerateThread armBackWaitThread;
 
         //initialize camera
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

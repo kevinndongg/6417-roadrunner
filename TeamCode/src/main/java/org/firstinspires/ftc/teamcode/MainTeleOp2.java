@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.threads.ArmDecelerateThread;
-
 @TeleOp(name = "Main TeleOp 2", group = "TeleOp")
 public class MainTeleOp2 extends LinearOpMode {
     DcMotorEx FrontLeft,FrontRight,BackLeft,BackRight, slider, arm;
@@ -138,8 +136,6 @@ public class MainTeleOp2 extends LinearOpMode {
                 arm.setTargetPosition(Constants.armBack);
                 wrist.setPosition(Constants.wristUp);
 
-                ArmDecelerateThread armDecelerateThread = new ArmDecelerateThread(arm);
-                armDecelerateThread.run();
             }
 
             if(gamepad2.y) {
@@ -149,8 +145,6 @@ public class MainTeleOp2 extends LinearOpMode {
                 arm.setTargetPosition(Constants.armBack);
                 wrist.setPosition(Constants.wristUp);
 
-                ArmDecelerateThread armDecelerateThread = new ArmDecelerateThread(arm);
-                armDecelerateThread.run();
             }
 
 
