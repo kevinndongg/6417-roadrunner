@@ -117,8 +117,8 @@ public class MainTeleOp1 extends LinearOpMode {
                 wrist.setPosition(Constants.wristDown);
             }
 
-            // while arm is going up and is past -1000
-            if(armGoingUp && arm.getCurrentPosition() < -1000) {
+            // while arm is going up and is past -750
+            if(armGoingUp && arm.getCurrentPosition() < -750) {
                 // arm is slow
                 arm.setPower(0.35);
                 armGoingUp = false;
@@ -146,9 +146,6 @@ public class MainTeleOp1 extends LinearOpMode {
                 arm.setPower(0.7);
                 arm.setTargetPosition(Constants.armBack);
                 wrist.setPosition(Constants.wristUp);
-
-                // armBackWaitThread = new ArmDecelerateThread(arm);
-                // armBackWaitThread.run();
             }
 
             if(gamepad1.y) {
@@ -158,9 +155,6 @@ public class MainTeleOp1 extends LinearOpMode {
                 arm.setPower(0.6);
                 arm.setTargetPosition(Constants.armBack);
                 wrist.setPosition(Constants.wristUp);
-
-                // armBackWaitThread = new ArmDecelerateThread(arm);
-                // armBackWaitThread.run();
             }
 
             // telemetry for testing

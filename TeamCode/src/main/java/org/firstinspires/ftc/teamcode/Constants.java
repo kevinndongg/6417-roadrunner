@@ -1,15 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
 public class Constants {
-    public static double grabberClose = 0.29;
+    public static double grabberClose = 0.28;
 
-    public static double grabberOpen = 0.52;
+    public static double grabberOpen = 0.50;
 
     public static double wristDown = 1.0;
 
     public static double wristUp = 0.37;
 
-    public static int armBack = -1670;
+    public static int armBack = -1400;
 
     public static int slideLow = 350;
 

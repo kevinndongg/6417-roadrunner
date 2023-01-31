@@ -13,7 +13,7 @@ public class SignalDetectorPipeline extends OpenCvPipeline {
     double greenTotal;
     double blueTotal;
 
-    public int position = 0;
+    public int position;
 
     public SignalDetectorPipeline(){
         //lol
@@ -26,8 +26,8 @@ public class SignalDetectorPipeline extends OpenCvPipeline {
             return input;
         }
 
-        Imgproc.rectangle(copy, new Rect(172,405,50,50), new Scalar(0,255,0));
-        Mat subMat = copy.submat(new Rect(172, 405, 50, 50));
+        Imgproc.rectangle(copy, new Rect(145,390,50,50), new Scalar(0,255,0));
+        Mat subMat = copy.submat(new Rect(145, 390, 50, 50));
 
         redTotal = Core.sumElems(subMat).val[0];
         greenTotal = Core.sumElems(subMat).val[1];

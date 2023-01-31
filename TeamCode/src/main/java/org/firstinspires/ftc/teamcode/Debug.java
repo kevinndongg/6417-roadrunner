@@ -82,8 +82,6 @@ public class Debug extends LinearOpMode {
 
             // grabber adjustments
 
-            boolean leftTrigger;
-
             if(gamepad1.left_trigger > 0.1) {
                 if (Math.abs(gamepad1.left_stick_x) > 0.1) {
                     grabber.setPosition((gamepad1.left_stick_x + 1.0) / 2.0);
@@ -98,7 +96,7 @@ public class Debug extends LinearOpMode {
 
             // slider adjustments
 
-            if(gamepad1.dpad_up && Slider.getCurrentPosition() < 1500) {
+            if(gamepad1.dpad_up) {
                 Slider.setTargetPosition(Slider.getCurrentPosition() + 100);
             }
 

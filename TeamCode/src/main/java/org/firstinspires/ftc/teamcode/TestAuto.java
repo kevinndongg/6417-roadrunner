@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.opencv.core.Core;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -30,6 +31,8 @@ public class TestAuto extends LinearOpMode {
     Servo grabber;
     Servo wrist;
     double driveSpeed;
+
+    int position;
 
     public void runOpMode() throws InterruptedException
     {
@@ -59,12 +62,16 @@ public class TestAuto extends LinearOpMode {
         }); //done initializing camera
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Trajectory forward1 = drive.trajectoryBuilder(new Pose2d())
+        Trajectory forward = drive.trajectoryBuilder(new Pose2d())
                 .forward(25)
                 .build();
 
-        Trajectory strafe = drive.trajectoryBuilder(forward1.end())
-                .strafeLeft(10)
+        Trajectory strafeR = drive.trajectoryBuilder(forward.end())
+                .strafeLeft(25)
+                .build();
+
+        Trajectory strafeL = drive.trajectoryBuilder(forward.end())
+                .strafeRight(25)
                 .build();
 
 
@@ -92,26 +99,49 @@ public class TestAuto extends LinearOpMode {
         Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         Arm.setPower(0);
 
+        while(opModeInInit()) {
+            position = pipeline.position;
+            telemetry.addData("position: ", position);
+            telemetry.addData("red total: ", pipeline.redTotal);
+            telemetry.addData("blue total: ", pipeline.blueTotal);
+            telemetry.addData("green total: ", pipeline.greenTotal);
+            telemetry.update();
+        }
+
         waitForStart();
         resetRuntime();
 
-        int position = pipeline.position;
+
+        position = pipeline.position;
         webcam.stopStreaming();
 
         drive.setPoseEstimate(new Pose2d());
 
-        grabber.setPosition(Constants.grabberClose);
-        drive.followTrajectory(forward1);
-        drive.followTrajectory(strafe);
-        Slider.setPower(0.6);
-        Slider.setTargetPosition(1300);
-        grabber.setPosition(Constants.grabberOpen);
+
+        switch(position) {
+            case 0:
+                grabber.setPosition(Constants.grabberClose);
+                drive.followTrajectory(forward);
+                drive.followTrajectory(strafeL);
+                break;
+            case 1:
+                grabber.setPosition(Constants.grabberClose);
+                drive.followTrajectory(forward);
+                break;
+            case 2:
+                grabber.setPosition(Constants.grabberClose);
+                drive.followTrajectory(forward);
+                drive.followTrajectory(strafeR);
+                break;
+        }
+
 
 
         while(opModeIsActive()){
 
 
             // telemetry for testing
+            telemetry.addData("position: ", position);
             telemetry.addData("slider position", Slider.getCurrentPosition());
             telemetry.addData("Grabber position: ", grabber.getPosition());
             telemetry.addData("Wrist position: ", wrist.getPosition());
