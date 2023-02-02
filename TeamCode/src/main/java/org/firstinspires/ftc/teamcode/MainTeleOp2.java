@@ -15,7 +15,7 @@ public class MainTeleOp2 extends LinearOpMode {
     //DistanceSensor distance;
     double driveSpeed;
 
-    boolean armGoingUp = false;
+    boolean armGoingUp, sliderWristDown;
 
     public void runOpMode() throws InterruptedException
     {
@@ -83,6 +83,12 @@ public class MainTeleOp2 extends LinearOpMode {
                 armGoingUp = false;
             }
 
+            if(sliderWristDown && slider.getCurrentPosition() > 300) {
+                sliderWristDown = false;
+                slider.setPower(0.5);
+                slider.setTargetPosition(0);
+            }
+
             // grabber closed preset
             if(gamepad1.left_bumper){
                 grabber.setPosition(Constants.grabberClose);
@@ -96,6 +102,9 @@ public class MainTeleOp2 extends LinearOpMode {
                 wrist.setPosition(Constants.wristUp);
             }
             if(gamepad1.x) {
+                sliderWristDown = true;
+                slider.setPower(0.3);
+                slider.setTargetPosition(350);
                 wrist.setPosition(Constants.wristDown);
             }
 
