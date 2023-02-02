@@ -15,7 +15,7 @@ public class MainTeleOp2 extends LinearOpMode {
     //DistanceSensor distance;
     double driveSpeed;
 
-    boolean armGoingUp, sliderWristDown;
+    boolean armGoingUp, wristDownSlider;
 
     public void runOpMode() throws InterruptedException
     {
@@ -83,8 +83,8 @@ public class MainTeleOp2 extends LinearOpMode {
                 armGoingUp = false;
             }
 
-            if(sliderWristDown && slider.getCurrentPosition() > 300) {
-                sliderWristDown = false;
+            if(wristDownSlider && slider.getCurrentPosition() > 300) {
+                wristDownSlider = false;
                 slider.setPower(0.5);
                 slider.setTargetPosition(0);
             }
@@ -102,17 +102,19 @@ public class MainTeleOp2 extends LinearOpMode {
                 wrist.setPosition(Constants.wristUp);
             }
             if(gamepad1.x) {
-                sliderWristDown = true;
+                wristDownSlider = true;
                 slider.setPower(0.3);
                 slider.setTargetPosition(350);
                 wrist.setPosition(Constants.wristDown);
             }
 
             if(gamepad2.dpad_up) {
+                wristDownSlider = false;
                 slider.setPower(0.5);
                 slider.setTargetPosition(slider.getCurrentPosition()+50);
             }
             if(gamepad2.dpad_down) {
+                wristDownSlider = false;
                 slider.setPower(0.5);
                 slider.setTargetPosition(slider.getCurrentPosition()-50);
             }
@@ -120,6 +122,7 @@ public class MainTeleOp2 extends LinearOpMode {
             // Everything down
             if(gamepad2.a) {
                 armGoingUp = false;
+                wristDownSlider = false;
                 slider.setPower(1.0);
                 slider.setTargetPosition(0);
                 arm.setPower(0.8);
@@ -130,6 +133,7 @@ public class MainTeleOp2 extends LinearOpMode {
             // arm back + slider up to low
             if(gamepad2.b) {
                 armGoingUp = true;
+                wristDownSlider = false;
                 slider.setPower(0.7);
                 slider.setTargetPosition(Constants.slideLow);
                 arm.setPower(0.6);
@@ -140,6 +144,7 @@ public class MainTeleOp2 extends LinearOpMode {
 
             if(gamepad2.y) {
                 armGoingUp = true;
+                wristDownSlider = false;
                 slider.setPower(0.7);
                 slider.setTargetPosition(Constants.slideMedium);
                 arm.setPower(0.6);
