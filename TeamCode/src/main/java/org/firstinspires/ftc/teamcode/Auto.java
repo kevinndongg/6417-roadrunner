@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -16,12 +15,11 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
-@Autonomous(name = "Test Auto")
-public class TestAuto extends LinearOpMode {
+@Autonomous(name = "Auto")
+public class Auto extends LinearOpMode {
     DcMotorEx FrontLeft,FrontRight,BackLeft,BackRight, slider, arm;
     Servo grabber;
     Servo wrist;
-    double driveSpeed;
 
     int position;
 
@@ -53,15 +51,19 @@ public class TestAuto extends LinearOpMode {
         }); //done initializing camera
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Trajectory forward = drive.trajectoryBuilder(new Pose2d())
-                .forward(27)
+        Trajectory forwardPush = drive.trajectoryBuilder(new Pose2d())
+                .forward(37)
                 .build();
 
-        Trajectory strafeR = drive.trajectoryBuilder(forward.end())
+        Trajectory back = drive.trajectoryBuilder(forwardPush.end())
+                .back(10)
+                .build();
+
+        Trajectory strafeR = drive.trajectoryBuilder(back.end())
                 .strafeLeft(23)
                 .build();
 
-        Trajectory strafeL = drive.trajectoryBuilder(forward.end())
+        Trajectory strafeL = drive.trajectoryBuilder(back.end())
                 .strafeRight(23)
                 .build();
 
@@ -113,9 +115,10 @@ public class TestAuto extends LinearOpMode {
             case 0:
                 grabber.setPosition(Constants.grabberClose);
                 wrist.setPosition(Constants.wristUp);
-                arm.setPower(0.35);
+                arm.setPower(0.25);
                 arm.setTargetPosition(-900);
-                drive.followTrajectory(forward);
+                drive.followTrajectory(forwardPush);
+                drive.followTrajectory(back);
                 drive.followTrajectory(strafeL);
                 arm.setTargetPosition(0);
                 wrist.setPosition(Constants.wristDown);
@@ -123,14 +126,17 @@ public class TestAuto extends LinearOpMode {
             case 1:
                 grabber.setPosition(Constants.grabberClose);
                 wrist.setPosition(Constants.wristUp);
-                drive.followTrajectory(forward);
+                drive.followTrajectory(forwardPush);
+                drive.followTrajectory(back);
+                wrist.setPosition(Constants.wristDown);
                 break;
             case 2:
                 grabber.setPosition(Constants.grabberClose);
                 wrist.setPosition(Constants.wristUp);
-                arm.setPower(0.35);
+                arm.setPower(0.25);
                 arm.setTargetPosition(-900);
-                drive.followTrajectory(forward);
+                drive.followTrajectory(forwardPush);
+                drive.followTrajectory(back);
                 drive.followTrajectory(strafeR);
                 arm.setTargetPosition(0);
                 wrist.setPosition(Constants.wristDown);

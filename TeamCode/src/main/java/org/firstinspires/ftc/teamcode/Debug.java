@@ -83,12 +83,12 @@ public class Debug extends LinearOpMode {
             // grabber adjustments
 
             if(gamepad1.left_trigger > 0.1) {
-                if (Math.abs(gamepad1.left_stick_x) > 0.1) {
-                    grabber.setPosition((gamepad1.left_stick_x + 1.0) / 2.0);
+                if (Math.abs(gamepad1.left_stick_y) > 0.1) {
+                    grabber.setPosition((-gamepad1.left_stick_y + 1.0) / 2.0);
                 }
 
-                if (Math.abs(gamepad1.right_stick_x) > 0.1) {
-                    wrist.setPosition((gamepad1.right_stick_x + 1.0) / 2.0);
+                if (Math.abs(gamepad1.right_stick_y) > 0.1) {
+                    wrist.setPosition((-gamepad1.right_stick_y + 1.0) / 2.0);
                 }
             } else {
                 Drive(vert, horz, rotate);

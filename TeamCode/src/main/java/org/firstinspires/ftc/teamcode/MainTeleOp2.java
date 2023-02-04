@@ -102,20 +102,22 @@ public class MainTeleOp2 extends LinearOpMode {
                 wrist.setPosition(Constants.wristUp);
             }
             if(gamepad1.x) {
-                wristDownSlider = true;
-                slider.setPower(0.3);
-                slider.setTargetPosition(350);
+                if(wrist.getPosition() > Constants.wristUp - 0.1) {
+                    wristDownSlider = true;
+                    slider.setPower(0.3);
+                    slider.setTargetPosition(350);
+                }
                 wrist.setPosition(Constants.wristDown);
             }
 
             if(gamepad2.dpad_up) {
                 wristDownSlider = false;
-                slider.setPower(0.5);
+                slider.setPower(0.6);
                 slider.setTargetPosition(slider.getCurrentPosition()+50);
             }
             if(gamepad2.dpad_down) {
                 wristDownSlider = false;
-                slider.setPower(0.5);
+                slider.setPower(0.8);
                 slider.setTargetPosition(slider.getCurrentPosition()-50);
             }
 
@@ -125,7 +127,7 @@ public class MainTeleOp2 extends LinearOpMode {
                 wristDownSlider = false;
                 slider.setPower(1.0);
                 slider.setTargetPosition(0);
-                arm.setPower(0.8);
+                arm.setPower(0.85);
                 arm.setTargetPosition(0);
                 wrist.setPosition(Constants.wristDown);
             }
@@ -136,7 +138,7 @@ public class MainTeleOp2 extends LinearOpMode {
                 wristDownSlider = false;
                 slider.setPower(0.7);
                 slider.setTargetPosition(Constants.slideLow);
-                arm.setPower(0.6);
+                arm.setPower(0.65);
                 arm.setTargetPosition(Constants.armBack);
                 wrist.setPosition(Constants.wristUp);
 
@@ -145,9 +147,9 @@ public class MainTeleOp2 extends LinearOpMode {
             if(gamepad2.y) {
                 armGoingUp = true;
                 wristDownSlider = false;
-                slider.setPower(0.7);
+                slider.setPower(0.75);
                 slider.setTargetPosition(Constants.slideMedium);
-                arm.setPower(0.6);
+                arm.setPower(0.65);
                 arm.setTargetPosition(Constants.armBack);
                 wrist.setPosition(Constants.wristUp);
 
