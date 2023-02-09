@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "Main TeleOp 2", group = "TeleOp")
 public class MainTeleOp2 extends LinearOpMode {
-    DcMotorEx FrontLeft,FrontRight,BackLeft,BackRight, slider, arm;
+    DcMotorEx frontLeft, frontRight, backLeft, backRight, slider, arm;
     Servo grabber;
     Servo wrist;
     //DistanceSensor distance;
@@ -21,10 +21,10 @@ public class MainTeleOp2 extends LinearOpMode {
     {
 
         // motor declarations
-        FrontLeft = hardwareMap.get(DcMotorEx.class,"front left");
-        FrontRight = hardwareMap.get(DcMotorEx.class, "front right");
-        BackLeft = hardwareMap.get(DcMotorEx.class, "back left");
-        BackRight = hardwareMap.get(DcMotorEx.class, "back right");
+        frontLeft = hardwareMap.get(DcMotorEx.class,"front left");
+        frontRight = hardwareMap.get(DcMotorEx.class, "front right");
+        backLeft = hardwareMap.get(DcMotorEx.class, "back left");
+        backRight = hardwareMap.get(DcMotorEx.class, "back right");
         //distance =  hardwareMap.get(DistanceSensor.class, "distance");
         slider = hardwareMap.get(DcMotorEx.class, "slider");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
@@ -33,8 +33,8 @@ public class MainTeleOp2 extends LinearOpMode {
         wrist = hardwareMap.get(Servo.class, "wrist");
         grabber = hardwareMap.get(Servo.class,"grabber");
 
-        BackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        FrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         slider.setDirection(DcMotorSimple.Direction.REVERSE);
 
         slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -170,27 +170,18 @@ public class MainTeleOp2 extends LinearOpMode {
     // drive calculations
 
     public void Drive(double vert, double horz, double rotate){
-        double frdrive = -vert - horz - rotate;
-        double fldrive = -vert + horz + rotate;
-        double brdrive = -vert + horz - rotate;
-        double bldrive = -vert - horz + rotate;
+        double frdrive = (-vert - horz - rotate) * Constants.driveTuningFR;
+        double fldrive = (-vert + horz + rotate) * Constants.driveTuningFL;
+        double brdrive = (-vert + horz - rotate) * Constants.driveTuningBR;
+        double bldrive = (-vert - horz + rotate) * Constants.driveTuningBL;
 
         // finding maximum drive for division below
         double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
 
         // power calculations
-        FrontRight.setPower(driveSpeed * Constants.driveTuningFR * frdrive / max);
-        FrontLeft.setPower(driveSpeed * Constants.driveTuningFL * fldrive / max);
-        BackRight.setPower(driveSpeed * Constants.driveTuningBR * brdrive / max);
-        BackLeft.setPower(driveSpeed * Constants.driveTuningBL * bldrive / max);
-
-
-
-
-
-
-
-
-
+        frontRight.setPower(driveSpeed  * frdrive / max);
+        frontLeft.setPower(driveSpeed * fldrive / max);
+        backRight.setPower(driveSpeed * brdrive / max);
+        backLeft.setPower(driveSpeed * bldrive / max);
     }
 }

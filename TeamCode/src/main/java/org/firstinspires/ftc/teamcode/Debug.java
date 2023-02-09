@@ -5,16 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoControllerEx;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp(name = "Debug", group = "TeleOp")
 public class Debug extends LinearOpMode {
-    DcMotorEx FrontLeft,FrontRight,BackLeft,BackRight,Slider,Arm;
+    DcMotorEx frontLeft, frontRight, backLeft, backRight, slider, arm;
     Servo grabber;
     Servo wrist;
     //DistanceSensor distance;
@@ -30,36 +25,36 @@ public class Debug extends LinearOpMode {
     {
 
         // motor declarations
-        FrontLeft = hardwareMap.get(DcMotorEx.class,"front left");
-        FrontRight = hardwareMap.get(DcMotorEx.class, "front right");
-        BackLeft = hardwareMap.get(DcMotorEx.class, "back left");
-        BackRight = hardwareMap.get(DcMotorEx.class, "back right");
+        frontLeft = hardwareMap.get(DcMotorEx.class,"front left");
+        frontRight = hardwareMap.get(DcMotorEx.class, "front right");
+        backLeft = hardwareMap.get(DcMotorEx.class, "back left");
+        backRight = hardwareMap.get(DcMotorEx.class, "back right");
         //distance =  hardwareMap.get(DistanceSensor.class, "distance");
-        Slider = hardwareMap.get(DcMotorEx.class, "slider");
-        Arm = hardwareMap.get(DcMotorEx.class, "arm");
+        slider = hardwareMap.get(DcMotorEx.class, "slider");
+        arm = hardwareMap.get(DcMotorEx.class, "arm");
 
         // servo declarations
         wrist = hardwareMap.get(Servo.class, "wrist");
         grabber = hardwareMap.get(Servo.class,"grabber");
 
-        BackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        FrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // slider declarations
 
-        Slider.setDirection(DcMotorSimple.Direction.REVERSE);
+        slider.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        Slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Slider.setTargetPosition(0);
-        Slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Slider.setPower(slidePower);
+        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slider.setTargetPosition(0);
+        slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slider.setPower(slidePower);
 
         // arm declarations
 
-        Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Arm.setTargetPosition(0);
-        Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Arm.setPower(armPower);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setTargetPosition(0);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(armPower);
 
 
 
@@ -73,11 +68,11 @@ public class Debug extends LinearOpMode {
             // arm adjustments
 
             if(gamepad1.a){
-                Arm.setTargetPosition(Arm.getCurrentPosition() + 50);
+                arm.setTargetPosition(arm.getCurrentPosition() + 50);
             }
             if(gamepad1.b)
             {
-                Arm.setTargetPosition(Arm.getCurrentPosition() - 50);
+                arm.setTargetPosition(arm.getCurrentPosition() - 50);
             }
 
             // grabber adjustments
@@ -97,11 +92,11 @@ public class Debug extends LinearOpMode {
             // slider adjustments
 
             if(gamepad1.dpad_up) {
-                Slider.setTargetPosition(Slider.getCurrentPosition() + 100);
+                slider.setTargetPosition(slider.getCurrentPosition() + 100);
             }
 
-            if(gamepad1.dpad_down && Slider.getCurrentPosition() > 100) {
-                Slider.setTargetPosition(Slider.getCurrentPosition() - 100);
+            if(gamepad1.dpad_down && slider.getCurrentPosition() > 100) {
+                slider.setTargetPosition(slider.getCurrentPosition() - 100);
             }
 
 
@@ -125,10 +120,10 @@ public class Debug extends LinearOpMode {
              */
 
             // telemetry for testing
-            telemetry.addData("Slider position", Slider.getCurrentPosition());
+            telemetry.addData("Slider position", slider.getCurrentPosition());
             telemetry.addData("grabber position: ", grabber.getPosition());
             telemetry.addData("wrist position: ", wrist.getPosition());
-            telemetry.addData("Arm position: ", + Arm.getCurrentPosition());
+            telemetry.addData("Arm position: ", + arm.getCurrentPosition());
             //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();
@@ -145,9 +140,9 @@ public class Debug extends LinearOpMode {
         double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
 
         // power calculations
-        FrontRight.setPower(driveSpeed * Constants.driveTuningFR * frdrive / max);
-        FrontLeft.setPower(driveSpeed * Constants.driveTuningFL * fldrive / max);
-        BackRight.setPower(driveSpeed * Constants.driveTuningBR * brdrive / max);
-        BackLeft.setPower(driveSpeed * Constants.driveTuningBL * bldrive / max);
+        frontRight.setPower(driveSpeed * Constants.driveTuningFR * frdrive / max);
+        frontLeft.setPower(driveSpeed * Constants.driveTuningFL * fldrive / max);
+        backRight.setPower(driveSpeed * Constants.driveTuningBR * brdrive / max);
+        backLeft.setPower(driveSpeed * Constants.driveTuningBL * bldrive / max);
     }
 }
