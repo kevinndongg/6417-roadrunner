@@ -10,8 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "Main TeleOp 2", group = "TeleOp")
 public class MainTeleOp2 extends LinearOpMode {
     DcMotorEx FrontLeft,FrontRight,BackLeft,BackRight, slider, arm;
-    Servo grabber;
-    Servo wrist;
+    Servo grabber, wrist;
     //DistanceSensor distance;
     double driveSpeed;
 
@@ -25,7 +24,6 @@ public class MainTeleOp2 extends LinearOpMode {
         FrontRight = hardwareMap.get(DcMotorEx.class, "front right");
         BackLeft = hardwareMap.get(DcMotorEx.class, "back left");
         BackRight = hardwareMap.get(DcMotorEx.class, "back right");
-        //distance =  hardwareMap.get(DistanceSensor.class, "distance");
         slider = hardwareMap.get(DcMotorEx.class, "slider");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
 
