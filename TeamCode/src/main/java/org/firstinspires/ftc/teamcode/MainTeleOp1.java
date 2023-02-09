@@ -173,10 +173,6 @@ public class MainTeleOp1 extends LinearOpMode {
 
     // drive calculations
 
-    double driveTuningFR = 1.0;
-    double driveTuningFL = 0.75;
-    double driveTuningBR = 1.0;
-    double driveTuningBL = 0.75;
 
     public void Drive(double vert, double horz, double rotate){
         double frdrive = -vert - horz - rotate;
@@ -188,10 +184,10 @@ public class MainTeleOp1 extends LinearOpMode {
         double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
 
         // power calculations
-        frontRight.setPower(driveSpeed * driveTuningFR * frdrive / max);
-        frontLeft.setPower(driveSpeed * driveTuningFL * fldrive / max);
-        backRight.setPower(driveSpeed * driveTuningBR * brdrive / max);
-        backLeft.setPower(driveSpeed * driveTuningBL * bldrive / max);
+        frontRight.setPower(driveSpeed * Constants.driveTuningFR * frdrive / max);
+        frontLeft.setPower(driveSpeed * Constants.driveTuningFL * fldrive / max);
+        backRight.setPower(driveSpeed * Constants.driveTuningBR * brdrive / max);
+        backLeft.setPower(driveSpeed * Constants.driveTuningBL * bldrive / max);
 
 
 
