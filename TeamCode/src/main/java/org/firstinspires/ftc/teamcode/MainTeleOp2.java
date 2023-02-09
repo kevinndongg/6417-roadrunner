@@ -21,10 +21,7 @@ public class MainTeleOp2 extends LinearOpMode {
     {
 
         // motor declarations
-        frontLeft = hardwareMap.get(DcMotorEx.class,"front left");
-        frontRight = hardwareMap.get(DcMotorEx.class, "front right");
-        backLeft = hardwareMap.get(DcMotorEx.class, "back left");
-        backRight = hardwareMap.get(DcMotorEx.class, "back right");
+        Drive6417 drive = new Drive6417(hardwareMap);
         //distance =  hardwareMap.get(DistanceSensor.class, "distance");
         slider = hardwareMap.get(DcMotorEx.class, "slider");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
@@ -42,6 +39,7 @@ public class MainTeleOp2 extends LinearOpMode {
         slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -67,18 +65,18 @@ public class MainTeleOp2 extends LinearOpMode {
 
             // only drives when input is there
             if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1){
-                Drive(vert,horz,rotate);
+                drive.setPowers(vert,horz,rotate,driveSpeed);
             }
             else{
-                Drive(0,0,0);
+                drive.setPowers(0,0,0,0);
             }
 
 
 
             // while arm going up and is back
-            if(armGoingUp && arm.getCurrentPosition() < -750) {
+            if(armGoingUp && arm.getCurrentPosition() > Constants.armTop) {
                 // arm slow
-                arm.setPower(0.35);
+                arm.setPower(Constants.armSlowSpeed);
                 // reset armGoingUp
                 armGoingUp = false;
             }

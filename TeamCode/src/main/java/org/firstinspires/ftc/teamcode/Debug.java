@@ -52,6 +52,7 @@ public class Debug extends LinearOpMode {
         // arm declarations
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(armPower);

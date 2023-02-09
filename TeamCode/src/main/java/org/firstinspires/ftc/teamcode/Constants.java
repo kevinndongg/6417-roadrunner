@@ -7,7 +7,9 @@ public class Constants {
     public static double wristDown = 0.93;
     public static double wristUp = 0.28;
 
-    public static int armBack = -1300;
+    public static double armSlowSpeed = 0.3;
+    public static int armTop = 800;
+    public static int armBack = 1300;
 
     public static int slideLow = 250;
     public static int slideMedium = 1070;

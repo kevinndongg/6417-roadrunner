@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -47,12 +48,11 @@ public class MainTeleOp1 extends LinearOpMode {
             }
         }); //done initializing camera
 
+        // drive init
+        Drive6417 drive = new Drive6417(hardwareMap);
 
         // motor declarations
-        frontLeft = hardwareMap.get(DcMotorEx.class,"front left");
-        frontRight = hardwareMap.get(DcMotorEx.class, "front right");
-        backLeft = hardwareMap.get(DcMotorEx.class, "back left");
-        backRight = hardwareMap.get(DcMotorEx.class, "back right");
+
         //distance =  hardwareMap.get(DistanceSensor.class, "distance");
         slider = hardwareMap.get(DcMotorEx.class, "slider");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
@@ -70,6 +70,7 @@ public class MainTeleOp1 extends LinearOpMode {
         slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(0);
@@ -93,10 +94,10 @@ public class MainTeleOp1 extends LinearOpMode {
 
             // only drives when input is there
             if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1){
-                Drive(vert,horz,rotate);
+                drive.setPowers(vert,horz,rotate,driveSpeed);
             }
             else{
-                Drive(0,0,0);
+                drive.setPowers(0,0,0, 0);
             }
 
             // grabber closed preset
@@ -118,9 +119,9 @@ public class MainTeleOp1 extends LinearOpMode {
             }
 
             // while arm is going up and is past -750
-            if(armGoingUp && arm.getCurrentPosition() < -750) {
+            if(armGoingUp && arm.getCurrentPosition() > Constants.armTop) {
                 // arm is slow
-                arm.setPower(0.35);
+                arm.setPower(Constants.armSlowSpeed);
                 armGoingUp = false;
             }
 
