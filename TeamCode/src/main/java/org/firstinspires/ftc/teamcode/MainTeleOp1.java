@@ -61,8 +61,8 @@ public class MainTeleOp1 extends LinearOpMode {
         wrist = hardwareMap.get(Servo.class, "wrist");
         grabber = hardwareMap.get(Servo.class,"grabber");
 
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        /*backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);*/
         slider.setDirection(DcMotorSimple.Direction.REVERSE);
 
         slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
