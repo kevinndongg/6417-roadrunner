@@ -21,10 +21,7 @@ public class MainTeleOp2 extends LinearOpMode {
     {
 
         // motor declarations
-        frontLeft = hardwareMap.get(DcMotorEx.class,"front left");
-        frontRight = hardwareMap.get(DcMotorEx.class, "front right");
-        backLeft = hardwareMap.get(DcMotorEx.class, "back left");
-        backRight = hardwareMap.get(DcMotorEx.class, "back right");
+        Hardware6417 drive = new Hardware6417(hardwareMap);
         //distance =  hardwareMap.get(DistanceSensor.class, "distance");
         slider = hardwareMap.get(DcMotorEx.class, "slider");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
@@ -42,6 +39,7 @@ public class MainTeleOp2 extends LinearOpMode {
         slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -50,6 +48,11 @@ public class MainTeleOp2 extends LinearOpMode {
         resetRuntime();
 
         while(opModeIsActive()){
+
+            // safety for switching controllers
+            if(gamepad2.start || gamepad1.start){
+                continue;
+            }
 
             // drive calculations
             double vert = -gamepad1.left_stick_y;
@@ -67,18 +70,18 @@ public class MainTeleOp2 extends LinearOpMode {
 
             // only drives when input is there
             if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1){
-                Drive(vert,horz,rotate);
+                drive.mecanumDrive(vert,horz,rotate,driveSpeed);
             }
             else{
-                Drive(0,0,0);
+                drive.mecanumDrive(0,0,0,0);
             }
 
 
 
             // while arm going up and is back
-            if(armGoingUp && arm.getCurrentPosition() < -750) {
+            if(armGoingUp && arm.getCurrentPosition() > Constants.armTop) {
                 // arm slow
-                arm.setPower(0.35);
+                arm.setPower(Constants.armSlowSpeed);
                 // reset armGoingUp
                 armGoingUp = false;
             }
@@ -165,23 +168,5 @@ public class MainTeleOp2 extends LinearOpMode {
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();
         }
-    }
-
-    // drive calculations
-
-    public void Drive(double vert, double horz, double rotate){
-        double frdrive = (-vert - horz - rotate) * Constants.driveTuningFR;
-        double fldrive = (-vert + horz + rotate) * Constants.driveTuningFL;
-        double brdrive = (-vert + horz - rotate) * Constants.driveTuningBR;
-        double bldrive = (-vert - horz + rotate) * Constants.driveTuningBL;
-
-        // finding maximum drive for division below
-        double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
-
-        // power calculations
-        frontRight.setPower(driveSpeed  * frdrive / max);
-        frontLeft.setPower(driveSpeed * fldrive / max);
-        backRight.setPower(driveSpeed * brdrive / max);
-        backLeft.setPower(driveSpeed * bldrive / max);
     }
 }
