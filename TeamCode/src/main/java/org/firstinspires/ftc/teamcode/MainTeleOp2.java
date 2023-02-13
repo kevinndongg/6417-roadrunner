@@ -69,12 +69,12 @@ public class MainTeleOp2 extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // set states
-        MainTeleOp1.ROBOTSTATE robotState = MainTeleOp1.ROBOTSTATE.INTAKE;
+        ROBOTSTATE robotState = ROBOTSTATE.INTAKE;
 
-        MainTeleOp1.SLIDESTATE slideState = MainTeleOp1.SLIDESTATE.ZERO;
-        MainTeleOp1.ARMSTATE armState = MainTeleOp1.ARMSTATE.GROUNDFRONT;
-        MainTeleOp1.GRABBERSTATE grabberState = MainTeleOp1.GRABBERSTATE.OPEN;
-        MainTeleOp1.WRISTSTATE wristState = MainTeleOp1.WRISTSTATE.DOWN;
+        SLIDESTATE slideState = SLIDESTATE.ZERO;
+        ARMSTATE armState = ARMSTATE.GROUNDFRONT;
+        GRABBERSTATE grabberState = GRABBERSTATE.OPEN;
+        WRISTSTATE wristState = WRISTSTATE.DOWN;
 
         // setup servos
         grabber.setPosition(Constants.grabberOpen);
