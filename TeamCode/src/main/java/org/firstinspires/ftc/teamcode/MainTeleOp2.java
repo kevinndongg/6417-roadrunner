@@ -17,6 +17,31 @@ public class MainTeleOp2 extends LinearOpMode {
 
     boolean armGoingUp, wristDownSlider;
 
+    // Enums for state machine
+
+    // High level enums
+    enum ROBOTSTATE {
+        INTAKE, MANEUVERING, OUTTAKEGROUND, OUTTAKEUP
+    }
+
+    // Lower level enums
+
+    enum SLIDESTATE {
+        ZERO, LOW, MEDIUM, HIGH
+    }
+
+    enum ARMSTATE {
+        GROUNDFRONT, MANEUVERING, OUTTAKEBACK, GROUNDBACK
+    }
+
+    enum GRABBERSTATE {
+        OPEN, CLOSE
+    }
+
+    enum WRISTSTATE {
+        DOWN, UP
+    }
+
     public void runOpMode() throws InterruptedException
     {
 
@@ -43,6 +68,17 @@ public class MainTeleOp2 extends LinearOpMode {
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        // set states
+        MainTeleOp1.ROBOTSTATE robotState = MainTeleOp1.ROBOTSTATE.INTAKE;
+
+        MainTeleOp1.SLIDESTATE slideState = MainTeleOp1.SLIDESTATE.ZERO;
+        MainTeleOp1.ARMSTATE armState = MainTeleOp1.ARMSTATE.GROUNDFRONT;
+        MainTeleOp1.GRABBERSTATE grabberState = MainTeleOp1.GRABBERSTATE.OPEN;
+        MainTeleOp1.WRISTSTATE wristState = MainTeleOp1.WRISTSTATE.DOWN;
+
+        // setup servos
+        grabber.setPosition(Constants.grabberOpen);
+        wrist.setPosition(Constants.wristDown);
 
         waitForStart();
         resetRuntime();

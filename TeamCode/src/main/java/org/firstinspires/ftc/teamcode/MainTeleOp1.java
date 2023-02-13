@@ -24,30 +24,42 @@ public class MainTeleOp1 extends LinearOpMode {
     // Enums for state machine
 
     // High level enums
-    enum RobotState {
-        INTAKE, MANEUVERING, OUTTAKE
+    enum ROBOTSTATE {
+        INTAKE, MANEUVERING, OUTTAKEGROUND, OUTTAKEUP
     }
 
     // Lower level enums
 
-    enum SlideState {
+    enum SLIDESTATE {
         ZERO, LOW, MEDIUM, HIGH
     }
 
-    enum ArmState {
+    enum ARMSTATE {
         GROUNDFRONT, MANEUVERING, OUTTAKEBACK, GROUNDBACK
     }
 
-    enum GrabberState {
+    enum GRABBERSTATE {
         OPEN, CLOSE
     }
 
-    enum WristState {
+    enum WRISTSTATE {
         DOWN, UP
     }
 
     public void runOpMode() throws InterruptedException
     {
+        // set states
+        ROBOTSTATE robotState = ROBOTSTATE.INTAKE;
+
+        SLIDESTATE slideState = SLIDESTATE.ZERO;
+        ARMSTATE armState = ARMSTATE.GROUNDFRONT;
+        GRABBERSTATE grabberState = GRABBERSTATE.OPEN;
+        WRISTSTATE wristState = WRISTSTATE.DOWN;
+
+        // setup servos
+        grabber.setPosition(Constants.grabberOpen);
+        wrist.setPosition(Constants.wristDown);
+
         //camera declaration
         OpenCvCamera webcam;
         SignalDetectorPipeline pipeline;
