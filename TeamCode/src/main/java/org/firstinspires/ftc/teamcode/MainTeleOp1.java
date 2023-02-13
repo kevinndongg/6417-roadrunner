@@ -15,11 +15,36 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @TeleOp(name = "Main TeleOp 1", group = "TeleOp")
 public class MainTeleOp1 extends LinearOpMode {
-    DcMotorEx frontLeft, frontRight, backLeft, backRight, slider, arm;
+    DcMotorEx slider, arm;
     Servo grabber, wrist;
     //DistanceSensor distance;
     double driveSpeed;
     boolean armGoingUp = false;
+
+    // Enums for state machine
+
+    // High level enums
+    enum RobotState {
+        INTAKE, MANEUVERING, OUTTAKE
+    }
+
+    // Lower level enums
+
+    enum SlideState {
+        ZERO, LOW, MEDIUM, HIGH
+    }
+
+    enum ArmState {
+        GROUNDFRONT, MANEUVERING, OUTTAKEBACK, GROUNDBACK
+    }
+
+    enum GrabberState {
+        OPEN, CLOSE
+    }
+
+    enum WristState {
+        DOWN, UP
+    }
 
     public void runOpMode() throws InterruptedException
     {
@@ -48,8 +73,8 @@ public class MainTeleOp1 extends LinearOpMode {
             }
         }); //done initializing camera
 
-        // drive init
-        Drive6417 drive = new Drive6417(hardwareMap);
+        // hardware init
+        Hardware6417 robot = new Hardware6417(hardwareMap);
 
         // motor declarations
 
@@ -61,10 +86,7 @@ public class MainTeleOp1 extends LinearOpMode {
         wrist = hardwareMap.get(Servo.class, "wrist");
         grabber = hardwareMap.get(Servo.class,"grabber");
 
-        /*backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);*/
         slider.setDirection(DcMotorSimple.Direction.REVERSE);
-
         slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slider.setTargetPosition(0);
         slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -76,9 +98,14 @@ public class MainTeleOp1 extends LinearOpMode {
         arm.setPower(0);
 
         waitForStart();
+        webcam.stopStreaming();
         resetRuntime();
 
         while(opModeIsActive()){
+            // safety for switching controllers
+            if(gamepad2.start || gamepad1.start){
+                continue;
+            }
 
             // drive calculations
             double vert = -gamepad1.left_stick_y;
@@ -94,10 +121,10 @@ public class MainTeleOp1 extends LinearOpMode {
 
             // only drives when input is there
             if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1){
-                drive.setPowers(vert,horz,rotate,driveSpeed);
+                robot.mecanumDrive(vert,horz,rotate,driveSpeed);
             }
             else{
-                drive.setPowers(0,0,0, 0);
+                robot.mecanumDrive(0,0,0, 0);
             }
 
             // grabber closed preset
@@ -170,24 +197,5 @@ public class MainTeleOp1 extends LinearOpMode {
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();
         }
-    }
-
-    // drive calculations
-
-
-    public void Drive(double vert, double horz, double rotate){
-        double frdrive = (-vert - horz - rotate) * Constants.driveTuningFR;
-        double fldrive = (-vert + horz + rotate) * Constants.driveTuningFL;
-        double brdrive = (-vert + horz - rotate) * Constants.driveTuningBR;
-        double bldrive = (-vert - horz + rotate) * Constants.driveTuningBL;
-
-        // finding maximum drive for division below
-        double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
-
-        // power calculations
-        frontRight.setPower(driveSpeed  * frdrive / max);
-        frontLeft.setPower(driveSpeed * fldrive / max);
-        backRight.setPower(driveSpeed * brdrive / max);
-        backLeft.setPower(driveSpeed * bldrive / max);
     }
 }

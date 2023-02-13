@@ -21,7 +21,7 @@ public class MainTeleOp2 extends LinearOpMode {
     {
 
         // motor declarations
-        Drive6417 drive = new Drive6417(hardwareMap);
+        Hardware6417 drive = new Hardware6417(hardwareMap);
         //distance =  hardwareMap.get(DistanceSensor.class, "distance");
         slider = hardwareMap.get(DcMotorEx.class, "slider");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
@@ -49,6 +49,11 @@ public class MainTeleOp2 extends LinearOpMode {
 
         while(opModeIsActive()){
 
+            // safety for switching controllers
+            if(gamepad2.start || gamepad1.start){
+                continue;
+            }
+
             // drive calculations
             double vert = -gamepad1.left_stick_y;
             double horz = gamepad1.left_stick_x;
@@ -65,10 +70,10 @@ public class MainTeleOp2 extends LinearOpMode {
 
             // only drives when input is there
             if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1){
-                drive.setPowers(vert,horz,rotate,driveSpeed);
+                drive.mecanumDrive(vert,horz,rotate,driveSpeed);
             }
             else{
-                drive.setPowers(0,0,0,0);
+                drive.mecanumDrive(0,0,0,0);
             }
 
 
@@ -163,23 +168,5 @@ public class MainTeleOp2 extends LinearOpMode {
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();
         }
-    }
-
-    // drive calculations
-
-    public void Drive(double vert, double horz, double rotate){
-        double frdrive = (-vert - horz - rotate) * Constants.driveTuningFR;
-        double fldrive = (-vert + horz + rotate) * Constants.driveTuningFL;
-        double brdrive = (-vert + horz - rotate) * Constants.driveTuningBR;
-        double bldrive = (-vert - horz + rotate) * Constants.driveTuningBL;
-
-        // finding maximum drive for division below
-        double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
-
-        // power calculations
-        frontRight.setPower(driveSpeed  * frdrive / max);
-        frontLeft.setPower(driveSpeed * fldrive / max);
-        backRight.setPower(driveSpeed * brdrive / max);
-        backLeft.setPower(driveSpeed * bldrive / max);
     }
 }
