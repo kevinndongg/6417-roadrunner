@@ -21,7 +21,7 @@ public class MainTeleOp2 extends LinearOpMode {
 
     // High level enums
     enum ROBOTSTATE {
-        INTAKE, MANEUVERING, OUTTAKEGROUND, OUTTAKEUP
+        INTAKE, MANEUVERING, OUTTAKE
     }
 
     // Lower level enums
@@ -32,14 +32,6 @@ public class MainTeleOp2 extends LinearOpMode {
 
     enum ARMSTATE {
         GROUNDFRONT, MANEUVERING, OUTTAKEBACK, GROUNDBACK
-    }
-
-    enum GRABBERSTATE {
-        OPEN, CLOSE
-    }
-
-    enum WRISTSTATE {
-        DOWN, UP
     }
 
     public void runOpMode() throws InterruptedException
@@ -72,9 +64,8 @@ public class MainTeleOp2 extends LinearOpMode {
         ROBOTSTATE robotState = ROBOTSTATE.INTAKE;
 
         SLIDESTATE slideState = SLIDESTATE.ZERO;
+        SLIDESTATE prevSlideState = SLIDESTATE.ZERO;
         ARMSTATE armState = ARMSTATE.GROUNDFRONT;
-        GRABBERSTATE grabberState = GRABBERSTATE.OPEN;
-        WRISTSTATE wristState = WRISTSTATE.DOWN;
 
         // setup servos
         grabber.setPosition(Constants.grabberOpen);

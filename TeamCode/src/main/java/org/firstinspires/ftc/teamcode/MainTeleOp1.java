@@ -38,14 +38,6 @@ public class MainTeleOp1 extends LinearOpMode {
         GROUNDFRONT, MANEUVERING, OUTTAKEBACK, GROUNDBACK
     }
 
-    enum GRABBERSTATE {
-        OPEN, CLOSE
-    }
-
-    enum WRISTSTATE {
-        DOWN, UP
-    }
-
     public void runOpMode() throws InterruptedException
     {
         // set states
@@ -53,8 +45,6 @@ public class MainTeleOp1 extends LinearOpMode {
 
         SLIDESTATE slideState = SLIDESTATE.ZERO;
         ARMSTATE armState = ARMSTATE.GROUNDFRONT;
-        GRABBERSTATE grabberState = GRABBERSTATE.OPEN;
-        WRISTSTATE wristState = WRISTSTATE.DOWN;
 
         // setup servos
         grabber.setPosition(Constants.grabberOpen);
