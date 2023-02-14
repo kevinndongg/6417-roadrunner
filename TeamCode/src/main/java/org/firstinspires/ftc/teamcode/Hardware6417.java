@@ -61,21 +61,37 @@ public class Hardware6417 {
         }
     }
 
-    public void autoSlide(int position) {
+    public void wristDown() {
+        if(wrist.getPosition() != Constants.wristDown) {
+            wrist.setPosition(Constants.wristDown);
+        }
+    }
 
+    public void wristUp() {
+        if(wrist.getPosition() != Constants.wristUp) {
+            wrist.setPosition(Constants.wristUp);
+        }
+    }
+
+    public void autoSlide(int position) {
         // check if slider goes up or down
         if(slider.getCurrentPosition() > position) {
             slider.setPower(Constants.slideDownPower);
-            slider.setTargetPosition(position);
+
         } else if(slider.getCurrentPosition() < position) {
             slider.setPower(Constants.slideUpPower);
+        }
+
+        if(slider.getTargetPosition() != position) {
             slider.setTargetPosition(position);
         }
     }
 
     public void autoArm(double power, int position) {
         arm.setPower(power);
-        arm.setTargetPosition(position);
+        if(arm.getCurrentPosition() != position && arm.getTargetPosition() != position) {
+            arm.setTargetPosition(position);
+        }
     }
 
     public boolean armPastTop() {

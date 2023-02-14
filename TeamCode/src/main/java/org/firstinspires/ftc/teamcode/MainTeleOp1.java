@@ -130,8 +130,12 @@ public class MainTeleOp1 extends LinearOpMode {
             // drive
             robot.clipJoyMecanumDrive(vert,horz,rotate,driveSpeed);
 
+
             switch (robotState) {
                 case INTAKE:
+                    slideState = SLIDESTATE.ZERO;
+                    armState = ARMSTATE.GROUNDFRONT;
+
                     // set drive speeds
                     if(gamepad1.left_trigger > 0.1) {
                         driveSpeed = Constants.driveSpeedIntakeSlow;
@@ -139,38 +143,15 @@ public class MainTeleOp1 extends LinearOpMode {
                         driveSpeed = Constants.driveSpeedIntake;
                     }
 
-                    slideState = SLIDESTATE.ZERO;
-
                     if(gamepad1.x) {
-                        wrist.setPosition(Constants.wristUp);
+                        robot.wristUp();
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.MANEUVERING;
                     }
 
 
                     // low preset
-                    if(gamepad1.b) {
-                        lastRobotState = robotState;
-                        robotState = ROBOTSTATE.OUTTAKEUP;
 
-                        lastSlideState = slideState;
-                        slideState = SLIDESTATE.LOW;
-
-                        lastArmState = armState;
-                        armState = ARMSTATE.OUTTAKEBACK;
-                    }
-
-                    // medium preset
-                    if(gamepad1.y) {
-                        lastRobotState = robotState;
-                        robotState = ROBOTSTATE.OUTTAKEUP;
-
-                        lastSlideState = slideState;
-                        slideState = SLIDESTATE.MEDIUM;
-
-                        lastArmState = armState;
-                        armState = ARMSTATE.OUTTAKEBACK;
-                    }
                     break;
                 case MANEUVERING:
 
@@ -226,12 +207,41 @@ public class MainTeleOp1 extends LinearOpMode {
 
             // grabber closed preset
             if(gamepad1.left_bumper){
-                grabber.setPosition(Constants.grabberClose);
+                robot.closeGrabber();
             }
 
             // grabber open preset
             if(gamepad1.right_bumper){
-                grabber.setPosition(Constants.grabberOpen);
+                robot.openGrabber();
+            }
+
+            if(gamepad1.a) {
+                robot.wristDown();
+                lastRobotState = robotState;
+                robotState = ROBOTSTATE.INTAKE;
+            }
+
+            if(gamepad1.b) {
+                lastRobotState = robotState;
+                robotState = ROBOTSTATE.OUTTAKEUP;
+
+                lastSlideState = slideState;
+                slideState = SLIDESTATE.LOW;
+
+                lastArmState = armState;
+                armState = ARMSTATE.OUTTAKEBACK;
+            }
+
+            // medium preset
+            if(gamepad1.y) {
+                lastRobotState = robotState;
+                robotState = ROBOTSTATE.OUTTAKEUP;
+
+                lastSlideState = slideState;
+                slideState = SLIDESTATE.MEDIUM;
+
+                lastArmState = armState;
+                armState = ARMSTATE.OUTTAKEBACK;
             }
 
             if(gamepad1.dpad_up) {
