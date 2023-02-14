@@ -73,8 +73,13 @@ public class Hardware6417 {
         }
     }
 
-    public void autoArm(int position) {
+    public void autoArm(double power, int position) {
+        arm.setPower(power);
         arm.setTargetPosition(position);
+    }
+
+    public boolean armPastTop() {
+        return arm.getCurrentPosition() > 700;
     }
 
     // sets powers to drive motors

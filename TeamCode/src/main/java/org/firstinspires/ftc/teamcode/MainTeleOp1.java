@@ -214,10 +214,14 @@ public class MainTeleOp1 extends LinearOpMode {
 
             switch (armState) {
                 case GROUNDFRONT:
-                    robot.autoArm(0);
+                    robot.autoArm(0.7,0);
                     break;
                 case MOVINGUP:
-                    robot.autoArm(Constants.armBack);
+                    if(robot.armPastTop()) {
+                        robot.autoArm(Constants.armSlowPower,Constants.armBack);
+                    } else {
+                        robot.autoArm(Constants.armSlowPower, Constants.armBack);
+                    }
             }
 
             // grabber closed preset
@@ -241,7 +245,7 @@ public class MainTeleOp1 extends LinearOpMode {
             // while arm is going up and is past -750
             if(armGoingUp && arm.getCurrentPosition() > Constants.armTop) {
                 // arm is slow
-                arm.setPower(Constants.armSlowSpeed);
+                arm.setPower(Constants.armSlowPower);
                 armGoingUp = false;
             }
 
