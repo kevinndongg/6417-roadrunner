@@ -15,11 +15,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @TeleOp(name = "Main TeleOp 1", group = "TeleOp")
 public class MainTeleOp1 extends LinearOpMode {
-    DcMotorEx slider, arm;
-    Servo grabber, wrist;
     //DistanceSensor distance;
     double driveSpeed;
-    boolean armGoingUp = false;
 
     // Enums for state machine
 
@@ -31,11 +28,11 @@ public class MainTeleOp1 extends LinearOpMode {
     // Lower level enums
 
     enum SLIDESTATE {
-        ZERO, LOW, MEDIUM, HIGH
+        ZERO, LOW, MEDIUM
     }
 
     enum ARMSTATE {
-        GROUNDFRONT, MANEUVERING, MOVINGUP,OUTTAKEBACK, GROUNDBACK
+        GROUNDFRONT, MOVINGUP,OUTTAKEBACK, GROUNDBACK
     }
 
     public void runOpMode() throws InterruptedException
@@ -81,30 +78,7 @@ public class MainTeleOp1 extends LinearOpMode {
                 telemetry.update();
             }
         }); //done initializing camera
-
-
-
-        // motor declarations
-
-        //distance =  hardwareMap.get(DistanceSensor.class, "distance");
-        slider = hardwareMap.get(DcMotorEx.class, "slider");
-        arm = hardwareMap.get(DcMotorEx.class, "arm");
-
-        // servo declarations
-        wrist = hardwareMap.get(Servo.class, "wrist");
-        grabber = hardwareMap.get(Servo.class,"grabber");
-
-        slider.setDirection(DcMotorSimple.Direction.REVERSE);
-        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slider.setTargetPosition(0);
-        slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setDirection(DcMotorSimple.Direction.REVERSE);
-        arm.setTargetPosition(0);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(0);
-
+        
         waitForStart();
         webcam.stopStreaming();
         resetRuntime();
