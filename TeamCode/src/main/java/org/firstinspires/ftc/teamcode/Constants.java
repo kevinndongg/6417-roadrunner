@@ -18,8 +18,10 @@ public class Constants {
     public static double driveSpeedIntakeSlow = 0.35;
     public static double driveSpeedManeuvering = 0.8;
     public static double driveSpeedManeuveringSlow = 0.5;
-    public static double driveSpeedOuttake = 0.4;
-    public static double driveSpeedOuttakeSlow = 0.3;
+    public static double driveSpeedOuttakeUp = 0.4;
+    public static double driveSpeedOuttakeUpSlow = 0.3;
+    public static double driveSpeedOuttakeGround = 0.5;
+    public static double driveSpeedOuttakeGroundSlow = 0.35;
 
     public static double driveTuningFR = 1.0;
     public static double driveTuningFL = 0.95;

@@ -166,7 +166,25 @@ public class MainTeleOp1 extends LinearOpMode {
                     }
                     break;
                 case MANEUVERING:
-
+                    if(gamepad1.left_trigger > 0.1) {
+                        driveSpeed = Constants.driveSpeedManeuveringSlow;
+                    } else {
+                        driveSpeed = Constants.driveSpeedManeuvering;
+                    }
+                    break;
+                case OUTTAKEGROUND:
+                    if(gamepad1.left_trigger > 0.1) {
+                        driveSpeed = Constants.driveSpeedOuttakeGroundSlow;
+                    } else {
+                        driveSpeed = Constants.driveSpeedOuttakeGround;
+                    }
+                    break;
+                case OUTTAKEUP:
+                    if(gamepad1.left_trigger > 0.1) {
+                        driveSpeed = Constants.driveSpeedOuttakeUpSlow;
+                    } else {
+                        driveSpeed = Constants.driveSpeedOuttakeUp;
+                    }
 
             }
 
