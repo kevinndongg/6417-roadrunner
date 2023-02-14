@@ -23,7 +23,7 @@ public class MainTeleOp1 extends LinearOpMode {
     // Lower level enums
 
     enum SLIDESTATE {
-        ZERO, LOW, MEDIUM
+        ZERO, LOW, MEDIUM, BOBBING
     }
 
     enum ARMSTATE {
@@ -97,7 +97,13 @@ public class MainTeleOp1 extends LinearOpMode {
             switch (robotState) {
                 case INTAKE:
                     lastSlideState = slideState;
-                    slideState = SLIDESTATE.ZERO;
+                    // slides bob to make space for the wrist to go down correctly
+                    if(lastRobotState == ROBOTSTATE.MANEUVERING) {
+                        slideState = SLIDESTATE.BOBBING;
+                    } else {
+                        slideState = SLIDESTATE.ZERO;
+                    }
+
                     lastArmState = armState;
                     armState = ARMSTATE.GROUNDFRONT;
 
@@ -156,6 +162,13 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
                 case MEDIUM:
                     robot.autoSlide(Constants.slideMediumPos);
+                    break;
+                case BOBBING:
+                    robot.bobSlide();
+                    if(robot.bobDone()) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.INTAKE;
+                    }
                     break;
             }
 

@@ -69,11 +69,11 @@ public class Debug extends LinearOpMode {
             // arm adjustments
 
             if(gamepad1.a){
-                arm.setTargetPosition(arm.getCurrentPosition() + 50);
+                arm.setTargetPosition(arm.getCurrentPosition() - 50);
             }
             if(gamepad1.b)
             {
-                arm.setTargetPosition(arm.getCurrentPosition() - 50);
+                arm.setTargetPosition(arm.getCurrentPosition() + 50);
             }
 
             // grabber adjustments
@@ -105,6 +105,17 @@ public class Debug extends LinearOpMode {
                 wrist.setPosition(Constants.wristUp);
             }
 
+            if(gamepad1.x) {
+                wrist.setPosition(Constants.wristDown);
+            }
+
+            if(gamepad1.left_bumper){
+                grabber.setPosition(Constants.grabberClose);
+            }
+
+            if(gamepad1.right_bumper) {
+                grabber.setPosition(Constants.grabberOpen);
+            }
             // RESET ENCODERS
 
             /*

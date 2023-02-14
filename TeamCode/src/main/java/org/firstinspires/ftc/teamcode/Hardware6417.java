@@ -78,7 +78,6 @@ public class Hardware6417 {
         // check if slider goes up or down
         if(slider.getCurrentPosition() > position) {
             slider.setPower(Constants.slideDownPower);
-
         } else if(slider.getCurrentPosition() < position) {
             slider.setPower(Constants.slideUpPower);
         }
@@ -96,7 +95,16 @@ public class Hardware6417 {
     }
 
     public boolean armPastTop() {
-        return arm.getCurrentPosition() > 700;
+        return arm.getCurrentPosition() > Constants.armTop;
+    }
+
+    public void bobSlide() {
+        slider.setPower(0.3);
+        slider.setTargetPosition(Constants.slideBobPos + 50);
+    }
+
+    public boolean bobDone() {
+        return slider.getCurrentPosition() > Constants.slideBobPos;
     }
 
     public void telemetry(Telemetry tele) {
