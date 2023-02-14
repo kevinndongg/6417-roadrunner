@@ -34,6 +34,7 @@ public class MainTeleOp1 extends LinearOpMode {
     {
         // hardware init
         Hardware6417 robot = new Hardware6417(hardwareMap);
+        robot.resetMotors();
 
         // set states
         ROBOTSTATE robotState = ROBOTSTATE.INTAKE;

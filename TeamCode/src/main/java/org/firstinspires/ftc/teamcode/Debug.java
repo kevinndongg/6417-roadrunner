@@ -19,7 +19,7 @@ public class Debug extends LinearOpMode {
 
     public double armPower = 0.2;
 
-    double driveSpeed = Constants.driveSpeedSlow;
+    double driveSpeed = 0.35;
 
     public void runOpMode() throws InterruptedException
     {
