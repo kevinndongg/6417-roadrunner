@@ -61,8 +61,20 @@ public class Hardware6417 {
         }
     }
 
-    public void autoSlide() {
-        
+    public void autoSlide(int position) {
+
+        // check if slider goes up or down
+        if(slider.getCurrentPosition() > position) {
+            slider.setPower(Constants.slideDownPower);
+            slider.setTargetPosition(position);
+        } else if(slider.getCurrentPosition() < position) {
+            slider.setPower(Constants.slideUpPower);
+            slider.setTargetPosition(position);
+        }
+    }
+
+    public void autoArm(int position) {
+        arm.setTargetPosition(position);
     }
 
     // sets powers to drive motors

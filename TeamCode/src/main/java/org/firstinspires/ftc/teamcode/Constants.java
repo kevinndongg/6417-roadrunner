@@ -13,6 +13,8 @@ public class Constants {
 
     public static int slideLow = 250;
     public static int slideMedium = 1070;
+    public static double slideDownPower = 0.9;
+    public static double slideUpPower = 0.7;
 
     public static double driveSpeedIntake = 0.5;
     public static double driveSpeedIntakeSlow = 0.35;

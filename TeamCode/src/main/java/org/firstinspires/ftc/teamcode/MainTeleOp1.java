@@ -35,11 +35,14 @@ public class MainTeleOp1 extends LinearOpMode {
     }
 
     enum ARMSTATE {
-        GROUNDFRONT, MANEUVERING, OUTTAKEBACK, GROUNDBACK
+        GROUNDFRONT, MANEUVERING, MOVINGUP,OUTTAKEBACK, GROUNDBACK
     }
 
     public void runOpMode() throws InterruptedException
     {
+        // hardware init
+        Hardware6417 robot = new Hardware6417(hardwareMap);
+
         // set states
         ROBOTSTATE robotState = ROBOTSTATE.INTAKE;
         ROBOTSTATE lastRobotState = ROBOTSTATE.INTAKE;
@@ -51,8 +54,8 @@ public class MainTeleOp1 extends LinearOpMode {
         ARMSTATE lastArmState = ARMSTATE.GROUNDFRONT;
 
         // setup servos
-        grabber.setPosition(Constants.grabberOpen);
-        wrist.setPosition(Constants.wristDown);
+        robot.openGrabber();
+        robot.closeGrabber();
 
         //camera declaration
         OpenCvCamera webcam;
@@ -79,8 +82,7 @@ public class MainTeleOp1 extends LinearOpMode {
             }
         }); //done initializing camera
 
-        // hardware init
-        Hardware6417 robot = new Hardware6417(hardwareMap);
+
 
         // motor declarations
 
@@ -137,7 +139,7 @@ public class MainTeleOp1 extends LinearOpMode {
                         driveSpeed = Constants.driveSpeedIntake;
                     }
 
-
+                    slideState = SLIDESTATE.ZERO;
 
                     if(gamepad1.x) {
                         wrist.setPosition(Constants.wristUp);
@@ -158,7 +160,7 @@ public class MainTeleOp1 extends LinearOpMode {
                         armState = ARMSTATE.OUTTAKEBACK;
                     }
 
-                    // medium preset,
+                    // medium preset
                     if(gamepad1.y) {
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.OUTTAKEUP;
@@ -196,7 +198,26 @@ public class MainTeleOp1 extends LinearOpMode {
                     } else {
                         driveSpeed = Constants.driveSpeedOuttakeUp;
                     }
+                    break;
+            }
 
+            switch (slideState) {
+                case ZERO:
+                    robot.autoSlide(0);
+                    break;
+                case LOW:
+                    robot.autoSlide(Constants.slideLow);
+                    break;
+                case MEDIUM:
+                    robot.autoSlide(Constants.slideMedium);
+            }
+
+            switch (armState) {
+                case GROUNDFRONT:
+                    robot.autoArm(0);
+                    break;
+                case MOVINGUP:
+                    robot.autoArm(Constants.armBack);
             }
 
             // grabber closed preset
