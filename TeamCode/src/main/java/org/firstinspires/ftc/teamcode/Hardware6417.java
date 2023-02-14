@@ -61,6 +61,10 @@ public class Hardware6417 {
         }
     }
 
+    public void autoSlide() {
+        
+    }
+
     // sets powers to drive motors
     public void clipJoyMecanumDrive(double vert, double horz, double rotate, double driveSpeed){
         double frDrive = (-vert - horz - rotate) * Constants.driveTuningFR;

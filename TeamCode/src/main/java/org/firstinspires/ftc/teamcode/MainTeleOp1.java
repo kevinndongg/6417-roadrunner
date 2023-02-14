@@ -137,12 +137,16 @@ public class MainTeleOp1 extends LinearOpMode {
                         driveSpeed = Constants.driveSpeedIntake;
                     }
 
+
+
                     if(gamepad1.x) {
                         wrist.setPosition(Constants.wristUp);
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.MANEUVERING;
                     }
 
+
+                    // low preset
                     if(gamepad1.b) {
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.OUTTAKEUP;
@@ -154,6 +158,7 @@ public class MainTeleOp1 extends LinearOpMode {
                         armState = ARMSTATE.OUTTAKEBACK;
                     }
 
+                    // medium preset,
                     if(gamepad1.y) {
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.OUTTAKEUP;
@@ -166,6 +171,8 @@ public class MainTeleOp1 extends LinearOpMode {
                     }
                     break;
                 case MANEUVERING:
+
+                    // drive
                     if(gamepad1.left_trigger > 0.1) {
                         driveSpeed = Constants.driveSpeedManeuveringSlow;
                     } else {
@@ -173,6 +180,8 @@ public class MainTeleOp1 extends LinearOpMode {
                     }
                     break;
                 case OUTTAKEGROUND:
+
+                    // drive
                     if(gamepad1.left_trigger > 0.1) {
                         driveSpeed = Constants.driveSpeedOuttakeGroundSlow;
                     } else {
@@ -180,6 +189,8 @@ public class MainTeleOp1 extends LinearOpMode {
                     }
                     break;
                 case OUTTAKEUP:
+
+                    // drive
                     if(gamepad1.left_trigger > 0.1) {
                         driveSpeed = Constants.driveSpeedOuttakeUpSlow;
                     } else {
