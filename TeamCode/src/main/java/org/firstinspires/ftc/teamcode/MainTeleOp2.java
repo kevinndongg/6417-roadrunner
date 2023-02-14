@@ -167,9 +167,9 @@ public class MainTeleOp2 extends LinearOpMode {
                 armGoingUp = true;
                 wristDownSlider = false;
                 slider.setPower(0.7);
-                slider.setTargetPosition(Constants.slideLow);
+                slider.setTargetPosition(Constants.slideLowPos);
                 arm.setPower(0.65);
-                arm.setTargetPosition(Constants.armBack);
+                arm.setTargetPosition(Constants.armBackPos);
                 wrist.setPosition(Constants.wristUp);
 
             }
@@ -178,9 +178,9 @@ public class MainTeleOp2 extends LinearOpMode {
                 armGoingUp = true;
                 wristDownSlider = false;
                 slider.setPower(0.75);
-                slider.setTargetPosition(Constants.slideMedium);
+                slider.setTargetPosition(Constants.slideMediumPos);
                 arm.setPower(0.65);
-                arm.setTargetPosition(Constants.armBack);
+                arm.setTargetPosition(Constants.armBackPos);
                 wrist.setPosition(Constants.wristUp);
 
             }

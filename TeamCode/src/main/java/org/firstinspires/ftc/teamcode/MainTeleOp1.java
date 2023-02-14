@@ -2,12 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -156,10 +151,10 @@ public class MainTeleOp1 extends LinearOpMode {
                     robot.autoSlide(0);
                     break;
                 case LOW:
-                    robot.autoSlide(Constants.slideLow);
+                    robot.autoSlide(Constants.slideLowPos);
                     break;
                 case MEDIUM:
-                    robot.autoSlide(Constants.slideMedium);
+                    robot.autoSlide(Constants.slideMediumPos);
                     break;
             }
 
@@ -169,15 +164,17 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
                 case MOVINGUP:
                     if(robot.armPastTop()) {
-                        robot.autoArm(Constants.armSlowPower,Constants.armBack);
+                        robot.autoArm(Constants.armSlowPower,Constants.armBackPos);
                     } else {
                         lastArmState = armState;
                         armState = ARMSTATE.OUTTAKEBACK;
                     }
                     break;
                 case OUTTAKEBACK:
-                    robot.autoArm(Constants.armSlowPower, Constants.armBack);
+                    robot.autoArm(Constants.armSlowPower, Constants.armBackPos);
                     break;
+                /*case GROUNDBACK:
+                    robot.autoArm(Constants.armFastPower, Constants.armGroundBackPos);*/
             }
 
             // grabber closed preset
@@ -206,6 +203,7 @@ public class MainTeleOp1 extends LinearOpMode {
 
             // low preset
             if(gamepad1.b) {
+                robot.wristUp();
                 lastRobotState = robotState;
                 robotState = ROBOTSTATE.OUTTAKEUP;
 
@@ -215,6 +213,7 @@ public class MainTeleOp1 extends LinearOpMode {
 
             // medium preset
             if(gamepad1.y) {
+                robot.wristUp();
                 lastRobotState = robotState;
                 robotState = ROBOTSTATE.OUTTAKEUP;
 
