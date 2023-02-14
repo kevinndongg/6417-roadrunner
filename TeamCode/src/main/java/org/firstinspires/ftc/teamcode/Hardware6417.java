@@ -49,7 +49,7 @@ public class Hardware6417 {
     }
 
     // sets powers to drive motors
-    public void mecanumDrive(double vert, double horz, double rotate, double driveSpeed){
+    public void clipJoyMecanumDrive(double vert, double horz, double rotate, double driveSpeed){
         double frDrive = (-vert - horz - rotate) * Constants.driveTuningFR;
         double flDrive = (-vert + horz + rotate) * Constants.driveTuningFL;
         double brDrive = (-vert + horz - rotate) * Constants.driveTuningBR;
@@ -59,9 +59,16 @@ public class Hardware6417 {
         double max = Math.abs(Math.max(Math.abs(frDrive),Math.max(Math.abs(flDrive),Math.max(Math.abs(brDrive),Math.abs(blDrive)))));
 
         // power calculations
-        frontRight.setPower(driveSpeed  * frDrive / max);
-        frontLeft.setPower(driveSpeed * flDrive / max);
-        backRight.setPower(driveSpeed * brDrive / max);
-        backLeft.setPower(driveSpeed * blDrive / max);
+        if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1) {
+            frontRight.setPower(driveSpeed * frDrive / max);
+            frontLeft.setPower(driveSpeed * flDrive / max);
+            backRight.setPower(driveSpeed * brDrive / max);
+            backLeft.setPower(driveSpeed * blDrive / max);
+        } else {
+            frontRight.setPower(0);
+            frontLeft.setPower(0);
+            backRight.setPower(0);
+            backLeft.setPower(0);
+        }
     }
 }

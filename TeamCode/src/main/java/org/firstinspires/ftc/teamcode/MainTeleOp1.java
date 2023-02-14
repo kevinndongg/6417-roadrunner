@@ -127,10 +127,10 @@ public class MainTeleOp1 extends LinearOpMode {
 
             // only drives when input is there
             if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1){
-                robot.mecanumDrive(vert,horz,rotate,driveSpeed);
+                robot.clipJoyMecanumDrive(vert,horz,rotate,driveSpeed);
             }
             else{
-                robot.mecanumDrive(0,0,0, 0);
+                robot.clipJoyMecanumDrive(0,0,0, 0);
             }
 
             switch (robotState) {
