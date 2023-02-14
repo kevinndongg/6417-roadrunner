@@ -38,6 +38,7 @@ public class Hardware6417 {
         slider.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
+    // resets encoders, sets runmode
     public void resetMotors() {
         slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slider.setTargetPosition(0);
@@ -46,6 +47,18 @@ public class Hardware6417 {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void openGrabber() {
+        if(grabber.getPosition() != Constants.grabberOpen) {
+            grabber.setPosition(Constants.grabberOpen);
+        }
+    }
+
+    public void closeGrabber() {
+        if(grabber.getPosition() != Constants.grabberClose) {
+            grabber.setPosition(Constants.grabberClose);
+        }
     }
 
     // sets powers to drive motors

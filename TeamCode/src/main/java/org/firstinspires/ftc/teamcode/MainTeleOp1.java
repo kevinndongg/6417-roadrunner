@@ -125,22 +125,44 @@ public class MainTeleOp1 extends LinearOpMode {
                 driveSpeed = Constants.driveSpeedNormal;
             }*/
 
-            // only drives when input is there
-            if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1){
-                robot.clipJoyMecanumDrive(vert,horz,rotate,driveSpeed);
-            }
-            else{
-                robot.clipJoyMecanumDrive(0,0,0, 0);
-            }
+            // drive
+            robot.clipJoyMecanumDrive(vert,horz,rotate,driveSpeed);
 
             switch (robotState) {
                 case INTAKE:
+                    // set drive speeds
                     if(gamepad1.left_trigger > 0.1) {
+                        driveSpeed = Constants.driveSpeedIntakeSlow;
+                    } else {
+                        driveSpeed = Constants.driveSpeedIntake;
                     }
-                    if(gamepad1.a) {
+
+                    if(gamepad1.x) {
                         wrist.setPosition(Constants.wristUp);
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.MANEUVERING;
+                    }
+
+                    if(gamepad1.b) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEUP;
+
+                        lastSlideState = slideState;
+                        slideState = SLIDESTATE.LOW;
+
+                        lastArmState = armState;
+                        armState = ARMSTATE.OUTTAKEBACK;
+                    }
+
+                    if(gamepad1.y) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEUP;
+
+                        lastSlideState = slideState;
+                        slideState = SLIDESTATE.MEDIUM;
+
+                        lastArmState = armState;
+                        armState = ARMSTATE.OUTTAKEBACK;
                     }
                     break;
                 case MANEUVERING:
