@@ -119,13 +119,6 @@ public class MainTeleOp1 extends LinearOpMode {
             double vert = -gamepad1.left_stick_y;
             double horz = gamepad1.left_stick_x;
             double rotate = gamepad1.right_stick_x;
-            /*if(gamepad1.left_trigger > 0.15) {
-                driveSpeed = Constants.driveSpeedSlow + (1.0-gamepad1.left_trigger) * (Constants.driveSpeedNormal-Constants.driveSpeedSlow);
-            } else  if(gamepad1.right_trigger > 0.1){
-                driveSpeed = Constants.driveSpeedNormal + gamepad1.right_trigger * (Constants.driveSpeedFast - Constants.driveSpeedNormal);
-            } else {
-                driveSpeed = Constants.driveSpeedNormal;
-            }*/
 
             // drive
             robot.clipJoyMecanumDrive(vert,horz,rotate,driveSpeed);
@@ -133,7 +126,9 @@ public class MainTeleOp1 extends LinearOpMode {
 
             switch (robotState) {
                 case INTAKE:
+                    lastSlideState = slideState;
                     slideState = SLIDESTATE.ZERO;
+                    lastArmState = armState;
                     armState = ARMSTATE.GROUNDFRONT;
 
                     // set drive speeds
@@ -142,18 +137,12 @@ public class MainTeleOp1 extends LinearOpMode {
                     } else {
                         driveSpeed = Constants.driveSpeedIntake;
                     }
-
-                    if(gamepad1.x) {
-                        robot.wristUp();
-                        lastRobotState = robotState;
-                        robotState = ROBOTSTATE.MANEUVERING;
-                    }
-
-
-                    // low preset
-
                     break;
                 case MANEUVERING:
+                    lastSlideState = slideState;
+                    slideState = SLIDESTATE.ZERO;
+                    lastArmState = armState;
+                    armState = ARMSTATE.GROUNDFRONT;
 
                     // drive
                     if(gamepad1.left_trigger > 0.1) {
@@ -163,6 +152,10 @@ public class MainTeleOp1 extends LinearOpMode {
                     }
                     break;
                 case OUTTAKEGROUND:
+                    lastArmState = armState;
+                    armState = ARMSTATE.GROUNDBACK;
+                    lastSlideState = slideState;
+                    slideState = SLIDESTATE.ZERO;
 
                     // drive
                     if(gamepad1.left_trigger > 0.1) {
@@ -172,6 +165,8 @@ public class MainTeleOp1 extends LinearOpMode {
                     }
                     break;
                 case OUTTAKEUP:
+                    lastArmState = armState;
+                    armState = ARMSTATE.OUTTAKEBACK;
 
                     // drive
                     if(gamepad1.left_trigger > 0.1) {
@@ -191,6 +186,7 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
                 case MEDIUM:
                     robot.autoSlide(Constants.slideMedium);
+                    break;
             }
 
             switch (armState) {
@@ -207,6 +203,7 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
                 case OUTTAKEBACK:
                     robot.autoArm(Constants.armSlowPower, Constants.armBack);
+                    break;
             }
 
             // grabber closed preset
@@ -217,6 +214,13 @@ public class MainTeleOp1 extends LinearOpMode {
             // grabber open preset
             if(gamepad1.right_bumper){
                 robot.openGrabber();
+            }
+
+            // sets state to maneuvering
+            if(gamepad1.x) {
+                robot.wristUp();
+                lastRobotState = robotState;
+                robotState = ROBOTSTATE.MANEUVERING;
             }
 
             // intake
@@ -233,9 +237,6 @@ public class MainTeleOp1 extends LinearOpMode {
 
                 lastSlideState = slideState;
                 slideState = SLIDESTATE.LOW;
-
-                lastArmState = armState;
-                armState = ARMSTATE.OUTTAKEBACK;
             }
 
             // medium preset
@@ -245,9 +246,6 @@ public class MainTeleOp1 extends LinearOpMode {
 
                 lastSlideState = slideState;
                 slideState = SLIDESTATE.MEDIUM;
-
-                lastArmState = armState;
-                armState = ARMSTATE.OUTTAKEBACK;
             }
 
             /*// while arm is going up and is past -750
