@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 /*
@@ -96,6 +97,16 @@ public class Hardware6417 {
 
     public boolean armPastTop() {
         return arm.getCurrentPosition() > 700;
+    }
+
+    public void telemetry(Telemetry tele) {
+        tele.addData("slider position", slider.getCurrentPosition());
+        tele.addData("slider power", slider.getPower());
+        tele.addData("Grabber position: ", grabber.getPosition());
+        tele.addData("Wrist position: ", wrist.getPosition());
+        tele.addData("Arm position: ", arm.getCurrentPosition());
+        tele.addData("Arm Power: ", arm.getPower());
+        tele.update();
     }
 
     // sets powers to drive motors

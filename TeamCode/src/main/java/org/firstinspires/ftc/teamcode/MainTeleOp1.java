@@ -195,14 +195,18 @@ public class MainTeleOp1 extends LinearOpMode {
 
             switch (armState) {
                 case GROUNDFRONT:
-                    robot.autoArm(0.7,0);
+                    robot.autoArm(Constants.armFastPower,0);
                     break;
                 case MOVINGUP:
                     if(robot.armPastTop()) {
                         robot.autoArm(Constants.armSlowPower,Constants.armBack);
                     } else {
-                        robot.autoArm(Constants.armSlowPower, Constants.armBack);
+                        lastArmState = armState;
+                        armState = ARMSTATE.OUTTAKEBACK;
                     }
+                    break;
+                case OUTTAKEBACK:
+                    robot.autoArm(Constants.armSlowPower, Constants.armBack);
             }
 
             // grabber closed preset
@@ -215,12 +219,14 @@ public class MainTeleOp1 extends LinearOpMode {
                 robot.openGrabber();
             }
 
+            // intake
             if(gamepad1.a) {
                 robot.wristDown();
                 lastRobotState = robotState;
                 robotState = ROBOTSTATE.INTAKE;
             }
 
+            // low preset
             if(gamepad1.b) {
                 lastRobotState = robotState;
                 robotState = ROBOTSTATE.OUTTAKEUP;
@@ -244,15 +250,7 @@ public class MainTeleOp1 extends LinearOpMode {
                 armState = ARMSTATE.OUTTAKEBACK;
             }
 
-            if(gamepad1.dpad_up) {
-                wrist.setPosition(Constants.wristUp);
-            }
-
-            if(gamepad1.dpad_down) {
-                wrist.setPosition(Constants.wristDown);
-            }
-
-            // while arm is going up and is past -750
+            /*// while arm is going up and is past -750
             if(armGoingUp && arm.getCurrentPosition() > Constants.armTop) {
                 // arm is slow
                 arm.setPower(Constants.armSlowPower);
@@ -291,17 +289,14 @@ public class MainTeleOp1 extends LinearOpMode {
                 arm.setTargetPosition(Constants.armBack);
                 wrist.setPosition(Constants.wristUp);
             }
-
+*/
             // telemetry for testing
-            telemetry.addData("slider position", slider.getCurrentPosition());
-            telemetry.addData("slider power", slider.getPower());
-            telemetry.addData("Grabber position: ", grabber.getPosition());
-            telemetry.addData("Wrist position: ", wrist.getPosition());
-            telemetry.addData("Arm position: ", arm.getCurrentPosition());
-            telemetry.addData("Arm Power: ", arm.getPower());
+
             telemetry.addData("robotState: ", robotState);
             telemetry.addData("slideState: ", slideState);
             telemetry.addData("armState: ", armState);
+
+            robot.telemetry(telemetry);
             // telemetry.addData("armGoingUp: ", armGoingUp);
             //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
