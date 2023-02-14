@@ -78,7 +78,7 @@ public class MainTeleOp1 extends LinearOpMode {
                 telemetry.update();
             }
         }); //done initializing camera
-        
+
         waitForStart();
         webcam.stopStreaming();
         resetRuntime();
