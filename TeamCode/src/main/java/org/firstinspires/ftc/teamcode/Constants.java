@@ -14,9 +14,9 @@ public class Constants {
     public static int slideLow = 250;
     public static int slideMedium = 1070;
 
-    public static double driveSpeedNormal = 0.75;
-    public static double driveSpeedSlow = 0.4;
-    public static double driveSpeedFast = 1.0;
+    public static double driveSpeedIntake = 0.5;
+    public static double driveSpeedManeuvering = 0.8;
+    public static double driveSpeedOuttake = 0.35;
 
     public static double driveTuningFR = 1.0;
     public static double driveTuningFL = 0.95;

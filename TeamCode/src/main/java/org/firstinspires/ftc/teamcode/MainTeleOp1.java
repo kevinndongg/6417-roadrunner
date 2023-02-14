@@ -42,9 +42,13 @@ public class MainTeleOp1 extends LinearOpMode {
     {
         // set states
         ROBOTSTATE robotState = ROBOTSTATE.INTAKE;
+        ROBOTSTATE lastRobotState = ROBOTSTATE.INTAKE;
 
         SLIDESTATE slideState = SLIDESTATE.ZERO;
+        SLIDESTATE lastSlideState = SLIDESTATE.ZERO;
+
         ARMSTATE armState = ARMSTATE.GROUNDFRONT;
+        ARMSTATE lastArmState = ARMSTATE.GROUNDFRONT;
 
         // setup servos
         grabber.setPosition(Constants.grabberOpen);
@@ -113,13 +117,13 @@ public class MainTeleOp1 extends LinearOpMode {
             double vert = -gamepad1.left_stick_y;
             double horz = gamepad1.left_stick_x;
             double rotate = gamepad1.right_stick_x;
-            if(gamepad1.left_trigger > 0.15) {
+            /*if(gamepad1.left_trigger > 0.15) {
                 driveSpeed = Constants.driveSpeedSlow + (1.0-gamepad1.left_trigger) * (Constants.driveSpeedNormal-Constants.driveSpeedSlow);
             } else  if(gamepad1.right_trigger > 0.1){
                 driveSpeed = Constants.driveSpeedNormal + gamepad1.right_trigger * (Constants.driveSpeedFast - Constants.driveSpeedNormal);
             } else {
                 driveSpeed = Constants.driveSpeedNormal;
-            }
+            }*/
 
             // only drives when input is there
             if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1){
@@ -127,6 +131,21 @@ public class MainTeleOp1 extends LinearOpMode {
             }
             else{
                 robot.mecanumDrive(0,0,0, 0);
+            }
+
+            switch (robotState) {
+                case INTAKE:
+                    if(gamepad1.left_trigger > 0.1) {
+                    }
+                    if(gamepad1.a) {
+                        wrist.setPosition(Constants.wristUp);
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.MANEUVERING;
+                    }
+                    break;
+                case MANEUVERING:
+
+
             }
 
             // grabber closed preset
@@ -194,7 +213,10 @@ public class MainTeleOp1 extends LinearOpMode {
             telemetry.addData("Wrist position: ", wrist.getPosition());
             telemetry.addData("Arm position: ", arm.getCurrentPosition());
             telemetry.addData("Arm Power: ", arm.getPower());
-            telemetry.addData("armGoingUp: ", armGoingUp);
+            telemetry.addData("robotState: ", robotState);
+            telemetry.addData("slideState: ", slideState);
+            telemetry.addData("armState: ", armState);
+            // telemetry.addData("armGoingUp: ", armGoingUp);
             //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();
