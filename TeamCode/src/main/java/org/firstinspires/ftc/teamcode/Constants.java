@@ -9,7 +9,7 @@ public class Constants {
 
     public static double armSlowPower = 0.3;
     public static double armFastPower = 0.7;
-    public static int armTop = 800;
+    public static int armTop = 700;
     public static int armBackPos = 1300;
 
     public static int slideLowPos = 250;
