@@ -76,7 +76,7 @@ public class MainTeleOp2 extends LinearOpMode {
 
         while(opModeIsActive()){
 
-            // safety for switching controllers
+            /*// safety for switching controllers
             if(gamepad2.start || gamepad1.start){
                 continue;
             }
@@ -193,7 +193,7 @@ public class MainTeleOp2 extends LinearOpMode {
             telemetry.addData("Arm position: ", + arm.getCurrentPosition());
             //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
-            telemetry.update();
+            telemetry.update();*/
         }
     }
 }
