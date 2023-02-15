@@ -95,6 +95,7 @@ public class MainTeleOp1 extends LinearOpMode {
 
 
             switch (robotState) {
+                // INTAKE for when the robot is ready to pick up cones
                 case INTAKE:
                     // change slideState based on previous robotstate
                     lastSlideState = slideState;
@@ -166,16 +167,23 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
             }
 
+            // slide control
             switch (slideState) {
+                // ZERO for slide bottom
                 case ZERO:
                     robot.autoSlide(0);
                     break;
+                // LOW for slide to low junction preset
                 case LOW:
                     robot.autoSlide(Constants.slideLowPos);
                     break;
+
+                // MEDIUM for slide to medium junction preset
                 case MEDIUM:
                     robot.autoSlide(Constants.slideMediumPos);
                     break;
+
+                // BOBBING for when robot shifting from MANEUVERING to INTAKE
                 case BOBBING:
                     robot.bobSlide();
                     if(robot.bobDone()) {
