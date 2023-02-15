@@ -193,20 +193,34 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
             }
 
+            // arm control
             switch (armState) {
+
+                // GROUNDFRONT for when robot is INTAKE and MANEUVERING
                 case GROUNDFRONT:
                     robot.autoArm(Constants.armFastPower,0);
                     break;
+
+                // MOVINGUP for when arm is going to OUTTAKEUP
+                // arm should be fast until past top position
                 case MOVINGUP:
+
+                    // checks if arm is past top position
                     if(robot.armPastTop()) {
+
+                        // switch state to OUTTAKEBACK;
                         lastArmState = armState;
                         armState = ARMSTATE.OUTTAKEBACK;
 
                     } else {
+                        // if arm is not past top, arm fast to back
                         robot.autoArm(Constants.armFastPower,Constants.armBackUpPos);
                     }
                     break;
+                // OUTTAKEBACK for when arm is past top position
+                // and should proceed to back position slowly
                 case OUTTAKEBACK:
+                    // slow arm to back position
                     robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos);
                     break;
                 /*case GROUNDBACK:
