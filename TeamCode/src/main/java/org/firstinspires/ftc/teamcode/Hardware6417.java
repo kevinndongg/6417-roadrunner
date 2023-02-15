@@ -94,6 +94,12 @@ public class Hardware6417 {
         }
     }
 
+    public void autoWrist(double position) {
+        if(wrist.getPosition() != position) {
+            wrist.setPosition(position);
+        }
+    }
+
     public boolean armPastTop() {
         return arm.getCurrentPosition() > Constants.armTop;
     }

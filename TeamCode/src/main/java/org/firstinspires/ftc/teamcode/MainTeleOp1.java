@@ -30,6 +30,10 @@ public class MainTeleOp1 extends LinearOpMode {
         GROUNDFRONT, MOVINGUP,OUTTAKEBACK, GROUNDBACK
     }
 
+    enum WRISTSTATE {
+        DOWN, UP
+    }
+
     public void runOpMode() throws InterruptedException
     {
         // hardware init
@@ -46,9 +50,10 @@ public class MainTeleOp1 extends LinearOpMode {
         ARMSTATE armState = ARMSTATE.GROUNDFRONT;
         ARMSTATE lastArmState = ARMSTATE.GROUNDFRONT;
 
+        WRISTSTATE wristState = WRISTSTATE.DOWN;
+
         // setup servos
         robot.openGrabber();
-        robot.closeGrabber();
 
         //camera declaration
         OpenCvCamera webcam;
@@ -110,6 +115,8 @@ public class MainTeleOp1 extends LinearOpMode {
                     lastArmState = armState;
                     armState = ARMSTATE.GROUNDFRONT;
 
+                    wristState = WRISTSTATE.DOWN;
+
                     // set drive speeds
                     if(gamepad1.left_trigger > 0.1) {
                         driveSpeed = Constants.driveSpeedIntakeSlow;
@@ -127,6 +134,8 @@ public class MainTeleOp1 extends LinearOpMode {
                     // set arm to front
                     lastArmState = armState;
                     armState = ARMSTATE.GROUNDFRONT;
+
+                    wristState = WRISTSTATE.UP;
 
                     // drive
                     if(gamepad1.left_trigger > 0.1) {
@@ -146,6 +155,8 @@ public class MainTeleOp1 extends LinearOpMode {
                     lastSlideState = slideState;
                     slideState = SLIDESTATE.ZERO;
 
+                    wristState = WRISTSTATE.UP;
+
                     // drive
                     if(gamepad1.left_trigger > 0.1) {
                         driveSpeed = Constants.driveSpeedOuttakeGroundSlow;
@@ -157,6 +168,8 @@ public class MainTeleOp1 extends LinearOpMode {
                 case OUTTAKEUP:
                     lastArmState = armState;
                     armState = ARMSTATE.OUTTAKEBACK;
+
+                    wristState = WRISTSTATE.UP;
 
                     // drive
                     if(gamepad1.left_trigger > 0.1) {
@@ -227,6 +240,15 @@ public class MainTeleOp1 extends LinearOpMode {
                     robot.autoArm(Constants.armFastPower, Constants.armGroundBackPos);*/
             }
 
+            // wrist control
+            switch (wristState) {
+                case DOWN:
+                    robot.autoWrist(Constants.wristDown);
+                    break;
+                case UP:
+                    robot.autoWrist(Constants.wristUp);
+            }
+
             // grabber closed preset
             if(gamepad1.left_bumper){
                 robot.closeGrabber();
@@ -239,21 +261,18 @@ public class MainTeleOp1 extends LinearOpMode {
 
             // sets state to maneuvering
             if(gamepad1.x) {
-                robot.wristUp();
                 lastRobotState = robotState;
                 robotState = ROBOTSTATE.MANEUVERING;
             }
 
             // intake
             if(gamepad1.a) {
-                robot.wristDown();
                 lastRobotState = robotState;
                 robotState = ROBOTSTATE.INTAKE;
             }
 
             // low preset
             if(gamepad1.b) {
-                robot.wristUp();
                 lastRobotState = robotState;
                 robotState = ROBOTSTATE.OUTTAKEUP;
 
@@ -263,7 +282,6 @@ public class MainTeleOp1 extends LinearOpMode {
 
             // medium preset
             if(gamepad1.y) {
-                robot.wristUp();
                 lastRobotState = robotState;
                 robotState = ROBOTSTATE.OUTTAKEUP;
 
