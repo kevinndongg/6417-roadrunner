@@ -100,7 +100,7 @@ public class Hardware6417 {
 
     public void bobSlide() {
         slider.setPower(0.3);
-        slider.setTargetPosition(Constants.slideBobPos + 50);
+        slider.setTargetPosition(Constants.slideBobPos + 20);
     }
 
     public boolean bobDone() {

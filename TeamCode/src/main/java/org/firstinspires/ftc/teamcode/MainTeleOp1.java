@@ -178,14 +178,14 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
                 case MOVINGUP:
                     if(robot.armPastTop()) {
-                        robot.autoArm(Constants.armSlowPower,Constants.armBackPos);
+                        robot.autoArm(Constants.armSlowPower,Constants.armBackUpPos);
                     } else {
                         lastArmState = armState;
                         armState = ARMSTATE.OUTTAKEBACK;
                     }
                     break;
                 case OUTTAKEBACK:
-                    robot.autoArm(Constants.armSlowPower, Constants.armBackPos);
+                    robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos);
                     break;
                 /*case GROUNDBACK:
                     robot.autoArm(Constants.armFastPower, Constants.armGroundBackPos);*/
