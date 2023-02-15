@@ -62,18 +62,6 @@ public class Hardware6417 {
         }
     }
 
-    public void wristDown() {
-        if(wrist.getPosition() != Constants.wristDown) {
-            wrist.setPosition(Constants.wristDown);
-        }
-    }
-
-    public void wristUp() {
-        if(wrist.getPosition() != Constants.wristUp) {
-            wrist.setPosition(Constants.wristUp);
-        }
-    }
-
     public void autoSlide(int position) {
         // check if slider goes up or down
         if(slider.getCurrentPosition() > position) {
