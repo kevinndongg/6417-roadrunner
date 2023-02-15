@@ -96,6 +96,7 @@ public class MainTeleOp1 extends LinearOpMode {
 
             switch (robotState) {
                 case INTAKE:
+                    // change slideState based on previous robotstate
                     lastSlideState = slideState;
                     // slides bob to make space for the wrist to go down correctly
                     if(lastRobotState == ROBOTSTATE.MANEUVERING) {
@@ -104,6 +105,7 @@ public class MainTeleOp1 extends LinearOpMode {
                         slideState = SLIDESTATE.ZERO;
                     }
 
+                    // arm to the front
                     lastArmState = armState;
                     armState = ARMSTATE.GROUNDFRONT;
 
@@ -114,9 +116,14 @@ public class MainTeleOp1 extends LinearOpMode {
                         driveSpeed = Constants.driveSpeedIntake;
                     }
                     break;
+
+                // MANEUVERING case for when robot has cone and is moving to score
                 case MANEUVERING:
+                    // set slide to bottom
                     lastSlideState = slideState;
                     slideState = SLIDESTATE.ZERO;
+
+                    // set arm to front
                     lastArmState = armState;
                     armState = ARMSTATE.GROUNDFRONT;
 
@@ -127,9 +134,14 @@ public class MainTeleOp1 extends LinearOpMode {
                         driveSpeed = Constants.driveSpeedManeuvering;
                     }
                     break;
+
+                // OUTTAKEGROUND for when dropping a cone to ground junction or terminal on ground
                 case OUTTAKEGROUND:
+                    // set arm to ground back position
                     lastArmState = armState;
                     armState = ARMSTATE.GROUNDBACK;
+
+                    // set slides to 0
                     lastSlideState = slideState;
                     slideState = SLIDESTATE.ZERO;
 
@@ -140,6 +152,7 @@ public class MainTeleOp1 extends LinearOpMode {
                         driveSpeed = Constants.driveSpeedOuttakeGround;
                     }
                     break;
+                // OUTTAKEUP for dropping cones on low, med, high poles
                 case OUTTAKEUP:
                     lastArmState = armState;
                     armState = ARMSTATE.OUTTAKEBACK;
@@ -178,10 +191,11 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
                 case MOVINGUP:
                     if(robot.armPastTop()) {
-                        robot.autoArm(Constants.armSlowPower,Constants.armBackUpPos);
-                    } else {
                         lastArmState = armState;
                         armState = ARMSTATE.OUTTAKEBACK;
+
+                    } else {
+                        robot.autoArm(Constants.armFastPower,Constants.armBackUpPos);
                     }
                     break;
                 case OUTTAKEBACK:
