@@ -45,10 +45,8 @@ public class MainTeleOp1 extends LinearOpMode {
         ROBOTSTATE lastRobotState = ROBOTSTATE.INTAKE;
 
         SLIDESTATE slideState = SLIDESTATE.ZERO;
-        SLIDESTATE lastSlideState = SLIDESTATE.ZERO;
 
         ARMSTATE armState = ARMSTATE.GROUNDFRONT;
-        ARMSTATE lastArmState = ARMSTATE.GROUNDFRONT;
 
         WRISTSTATE wristState = WRISTSTATE.DOWN;
 
@@ -103,7 +101,6 @@ public class MainTeleOp1 extends LinearOpMode {
                 // INTAKE for when the robot is ready to pick up cones
                 case INTAKE:
                     // change slideState based on previous robotstate
-                    lastSlideState = slideState;
                     // slides bob to make space for the wrist to go down correctly
                     if(lastRobotState == ROBOTSTATE.MANEUVERING) {
                         slideState = SLIDESTATE.BOBBING;
@@ -112,7 +109,6 @@ public class MainTeleOp1 extends LinearOpMode {
                     }
 
                     // arm to the front
-                    lastArmState = armState;
                     armState = ARMSTATE.GROUNDFRONT;
 
                     wristState = WRISTSTATE.DOWN;
@@ -128,14 +124,18 @@ public class MainTeleOp1 extends LinearOpMode {
                 // MANEUVERING case for when robot has cone and is moving to score
                 case MANEUVERING:
                     // set slide to bottom
-                    lastSlideState = slideState;
-                    slideState = SLIDESTATE.ZERO;
+                    if(slideState != SLIDESTATE.ZERO) {
+                        slideState = SLIDESTATE.ZERO;
+                    }
 
                     // set arm to front
-                    lastArmState = armState;
-                    armState = ARMSTATE.GROUNDFRONT;
+                    if(armState != ARMSTATE.GROUNDFRONT) {
+                        armState = ARMSTATE.GROUNDFRONT;
+                    }
 
-                    wristState = WRISTSTATE.UP;
+                    if(wristState != WRISTSTATE.UP) {
+                        wristState = WRISTSTATE.UP;
+                    }
 
                     // drive
                     if(gamepad1.left_trigger > 0.1) {
@@ -146,16 +146,20 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
 
                 // OUTTAKEGROUND for when dropping a cone to ground junction or terminal on ground
-                case OUTTAKEGROUND:
+                /*case OUTTAKEGROUND:
                     // set arm to ground back position
-                    lastArmState = armState;
-                    armState = ARMSTATE.GROUNDBACK;
+                    if(armState != ARMSTATE.GROUNDBACK) {
+                        armState = ARMSTATE.GROUNDBACK;
+                    }
 
                     // set slides to 0
-                    lastSlideState = slideState;
-                    slideState = SLIDESTATE.ZERO;
+                    if(slideState != SLIDESTATE.ZERO) {
+                        slideState = SLIDESTATE.ZERO;
+                    }
 
-                    wristState = WRISTSTATE.UP;
+                    if(wristState != WRISTSTATE.UP) {
+                        wristState = WRISTSTATE.UP;
+                    }
 
                     // drive
                     if(gamepad1.left_trigger > 0.1) {
@@ -163,10 +167,9 @@ public class MainTeleOp1 extends LinearOpMode {
                     } else {
                         driveSpeed = Constants.driveSpeedOuttakeGround;
                     }
-                    break;
+                    break;*/
                 // OUTTAKEUP for dropping cones on low, med, high poles
                 case OUTTAKEUP:
-                    lastArmState = armState;
                     armState = ARMSTATE.OUTTAKEBACK;
 
                     wristState = WRISTSTATE.UP;
@@ -270,7 +273,6 @@ public class MainTeleOp1 extends LinearOpMode {
                 }
 
                 if(slideState != SLIDESTATE.LOW) {
-                    lastSlideState = slideState;
                     slideState = SLIDESTATE.LOW;
                 }
             }
@@ -283,7 +285,6 @@ public class MainTeleOp1 extends LinearOpMode {
                 }
 
                 if(slideState != SLIDESTATE.MEDIUM) {
-                    lastSlideState = slideState;
                     slideState = SLIDESTATE.MEDIUM;
                 }
             }
