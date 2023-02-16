@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 /*
     THIS IS THE HARDWARE CLASS FOR NEILBOT IN THE 2023 POWER PLAY SEASON
@@ -88,8 +87,8 @@ public class Hardware6417 {
         }
     }
 
-    public boolean armPastTop() {
-        return arm.getCurrentPosition() > Constants.armTop;
+    public boolean armNearBack() {
+        return Math.abs(arm.getCurrentPosition() - Constants.armNearBack) < 250;
     }
 
     public void bobSlide() {

@@ -27,7 +27,7 @@ public class MainTeleOp1 extends LinearOpMode {
     }
 
     enum ARMSTATE {
-        GROUNDFRONT, MOVINGUP,OUTTAKEBACK, GROUNDBACK
+        GROUNDFRONT,OUTTAKEBACK, GROUNDBACK
     }
 
     enum WRISTSTATE {
@@ -216,25 +216,15 @@ public class MainTeleOp1 extends LinearOpMode {
 
                 // MOVINGUP for when arm is going to OUTTAKEUP
                 // arm should be fast until past top position
-                case MOVINGUP:
+                case OUTTAKEBACK:
 
-                    // checks if arm is past top position
-                    if(robot.armPastTop()) {
-
-                        // switch state to OUTTAKEBACK;
-                        lastArmState = armState;
-                        armState = ARMSTATE.OUTTAKEBACK;
-
+                    // checks if arm is near back position
+                    if(robot.armNearBack()) {
+                        robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos);
                     } else {
                         // if arm is not past top, arm fast to back
                         robot.autoArm(Constants.armFastPower,Constants.armBackUpPos);
                     }
-                    break;
-                // OUTTAKEBACK for when arm is past top position
-                // and should proceed to back position slowly
-                case OUTTAKEBACK:
-                    // slow arm to back position
-                    robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos);
                     break;
                 /*case GROUNDBACK:
                     robot.autoArm(Constants.armFastPower, Constants.armGroundBackPos);*/
