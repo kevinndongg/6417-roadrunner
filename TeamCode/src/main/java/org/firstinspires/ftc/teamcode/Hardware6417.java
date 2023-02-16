@@ -88,7 +88,7 @@ public class Hardware6417 {
     }
 
     public boolean armNearBack() {
-        return Math.abs(arm.getCurrentPosition() - Constants.armNearBack) < 250;
+        return Math.abs(arm.getCurrentPosition() - Constants.armBackUpPos) < Constants.armNearBack;
     }
 
     public void bobSlide() {
