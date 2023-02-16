@@ -237,6 +237,7 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
                 case UP:
                     robot.autoWrist(Constants.wristUp);
+                    break;
             }
 
             // grabber closed preset
@@ -250,33 +251,41 @@ public class MainTeleOp1 extends LinearOpMode {
             }
 
             // sets state to maneuvering
-            if(gamepad1.x) {
+            if(gamepad1.x && robotState != ROBOTSTATE.MANEUVERING) {
                 lastRobotState = robotState;
                 robotState = ROBOTSTATE.MANEUVERING;
             }
 
             // intake
-            if(gamepad1.a) {
+            if(gamepad1.a && robotState != ROBOTSTATE.INTAKE) {
                 lastRobotState = robotState;
                 robotState = ROBOTSTATE.INTAKE;
             }
 
             // low preset
             if(gamepad1.b) {
-                lastRobotState = robotState;
-                robotState = ROBOTSTATE.OUTTAKEUP;
+                if(robotState != ROBOTSTATE.OUTTAKEUP) {
+                    lastRobotState = robotState;
+                    robotState = ROBOTSTATE.OUTTAKEUP;
+                }
 
-                lastSlideState = slideState;
-                slideState = SLIDESTATE.LOW;
+                if(slideState != SLIDESTATE.LOW) {
+                    lastSlideState = slideState;
+                    slideState = SLIDESTATE.LOW;
+                }
             }
 
             // medium preset
             if(gamepad1.y) {
-                lastRobotState = robotState;
-                robotState = ROBOTSTATE.OUTTAKEUP;
+                if(robotState != ROBOTSTATE.OUTTAKEUP) {
+                    lastRobotState = robotState;
+                    robotState = ROBOTSTATE.OUTTAKEUP;
+                }
 
-                lastSlideState = slideState;
-                slideState = SLIDESTATE.MEDIUM;
+                if(slideState != SLIDESTATE.MEDIUM) {
+                    lastSlideState = slideState;
+                    slideState = SLIDESTATE.MEDIUM;
+                }
             }
 
             /*// while arm is going up and is past -750
