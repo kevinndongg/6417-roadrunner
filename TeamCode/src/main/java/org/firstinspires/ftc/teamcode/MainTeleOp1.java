@@ -168,8 +168,8 @@ public class MainTeleOp1 extends LinearOpMode {
                         slideState = SLIDESTATE.ZERO;
                     }
 
-                    if(wristState != WRISTSTATE.UP) {
-                        wristState = WRISTSTATE.UP;
+                    if(wristState != WRISTSTATE.DOWN) {
+                        wristState = WRISTSTATE.DOWN;
                     }
 
                     // drive
@@ -248,7 +248,8 @@ public class MainTeleOp1 extends LinearOpMode {
                     }
                     break;
                 /*case GROUNDBACK:
-                    robot.autoArm(Constants.armFastPower, Constants.armGroundBackPos);*/
+                    robot.autoArm(Constants.armFastPower, Constants.armGroundBackPos);
+                    break;*/
             }
 
 
@@ -322,6 +323,15 @@ public class MainTeleOp1 extends LinearOpMode {
                     gamepad1.rumble(0.3,0.3,50);
                 }
 
+                // sets state to outtakeground
+                /*if(gamepad1.right_trigger > 0.1) {
+                    if(robotState != ROBOTSTATE.OUTTAKEGROUND) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEGROUND;
+                    }
+                    gamepad1.rumble(0.3,0.3,50);
+                }*/
+
             // TWO CONTROLLER CONTROLS
             } else {
                 if (gamepad1.left_bumper) {
@@ -371,6 +381,14 @@ public class MainTeleOp1 extends LinearOpMode {
 
                     if (slideState != SLIDESTATE.MEDIUM) {
                         slideState = SLIDESTATE.MEDIUM;
+                    }
+                    gamepad2.rumble(0.3,0.3,50);
+                }
+
+                if(gamepad2.x) {
+                    if(robotState != ROBOTSTATE.OUTTAKEGROUND) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEGROUND;
                     }
                     gamepad2.rumble(0.3,0.3,50);
                 }
