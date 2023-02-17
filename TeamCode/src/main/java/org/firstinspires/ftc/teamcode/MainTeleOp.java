@@ -8,8 +8,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@TeleOp(name = "Main TeleOp 1", group = "TeleOp")
-public class MainTeleOp1 extends LinearOpMode {
+@TeleOp(name = "Main TeleOp", group = "TeleOp")
+public class MainTeleOp extends LinearOpMode {
     //DistanceSensor distance;
     double driveSpeed;
     boolean singleController = true;
@@ -18,17 +18,17 @@ public class MainTeleOp1 extends LinearOpMode {
 
     // High level enums
     enum ROBOTSTATE {
-        INTAKE, MANEUVERING, OUTTAKEGROUND, OUTTAKEUP
+        INTAKE, MANEUVERING, OUTTAKEGROUND, OUTTAKEUPHIGH,OUTTAKEUPLOW
     }
 
     // Lower level enums
 
     enum SLIDESTATE {
-        ZERO, LOW, MEDIUM, BOBBING
+        ZERO, LOW, MEDIUM, HIGH,BOBBING
     }
 
     enum ARMSTATE {
-        GROUNDFRONT,OUTTAKEBACK, GROUNDBACK
+        GROUNDFRONT,OUTTAKEBACKHIGH, OUTTAKEBACKLOW, GROUNDBACK
     }
 
     enum WRISTSTATE {
@@ -90,11 +90,11 @@ public class MainTeleOp1 extends LinearOpMode {
             }
 
             // detect number of controllers connected
-            /*if(gamepad2.getGamepadId() == null) {
+            if(gamepad2.getGamepadId() == -1) {
                 singleController = true;
             } else {
                 singleController = false;
-            }*/
+            }
 
             // drive calculations
             double vert = -gamepad1.left_stick_y;
@@ -179,9 +179,9 @@ public class MainTeleOp1 extends LinearOpMode {
                         driveSpeed = Constants.driveSpeedOuttakeGround;
                     }
                     break;*/
-                // OUTTAKEUP for dropping cones on low, med, high poles
-                case OUTTAKEUP:
-                    armState = ARMSTATE.OUTTAKEBACK;
+                // OUTTAKEUP for dropping cones on med, high poles
+                case OUTTAKEUPHIGH:
+                    armState = ARMSTATE.OUTTAKEBACKHIGH;
 
                     wristState = WRISTSTATE.UP;
 
@@ -192,6 +192,18 @@ public class MainTeleOp1 extends LinearOpMode {
                         driveSpeed = Constants.driveSpeedOuttakeUp;
                     }
                     break;
+                // OUTTAKEUPLOW for dropping cones on low poles
+                case OUTTAKEUPLOW:
+                    armState = ARMSTATE.OUTTAKEBACKLOW;
+
+                    wristState = WRISTSTATE.UP;
+
+                    // drive
+                    if(gamepad1.left_trigger > 0.1) {
+                        driveSpeed = Constants.driveSpeedOuttakeUpSlow;
+                    } else {
+                        driveSpeed = Constants.driveSpeedOuttakeUp;
+                    }
             }
 
 
@@ -212,7 +224,9 @@ public class MainTeleOp1 extends LinearOpMode {
                 case MEDIUM:
                     robot.autoSlide(Constants.slideMediumPos);
                     break;
-
+                case HIGH:
+                    robot.autoSlide(Constants.slideHighPos);
+                    break;
                 // BOBBING for when robot shifting from MANEUVERING to INTAKE
                 case BOBBING:
                     // makes slides go up
@@ -238,13 +252,21 @@ public class MainTeleOp1 extends LinearOpMode {
 
                 // MOVINGUP for when arm is going to OUTTAKEUP
                 // arm should be fast until past top position
-                case OUTTAKEBACK:
-                    if(robot.armNearBack()) {
+                case OUTTAKEBACKHIGH:
+                    if(robot.armNear(Constants.armBackUpPos)) {
                         // if arm is past top, slow arm to back
                         robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos);
                     } else {
                         // if arm is not past top, arm fast to back
                         robot.autoArm(Constants.armFastPower,Constants.armBackUpPos);
+                    }
+                    break;
+                case OUTTAKEBACKLOW:
+                    if(robot.armNear(Constants.armBackLowPos)) {
+                        robot.autoArm(Constants.armSlowPower, Constants.armBackLowPos);
+                    } else {
+                        // if arm is not past top, arm fast to back
+                        robot.autoArm(Constants.armFastPower, Constants.armBackLowPos);
                     }
                     break;
                 /*case GROUNDBACK:
@@ -274,132 +296,132 @@ public class MainTeleOp1 extends LinearOpMode {
                 // grabber closed preset
                 if (gamepad1.left_bumper) {
                     robot.closeGrabber();
-                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // grabber open preset
                 if (gamepad1.right_bumper) {
                     robot.openGrabber();
-                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // sets state to maneuvering
                 if (gamepad1.x && robotState != ROBOTSTATE.MANEUVERING) {
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.MANEUVERING;
-                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // intake
                 if (gamepad1.a && robotState != ROBOTSTATE.INTAKE) {
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.INTAKE;
-                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // low preset
                 if (gamepad1.b) {
-                    if (robotState != ROBOTSTATE.OUTTAKEUP) {
+                    if (robotState != ROBOTSTATE.OUTTAKEUPLOW) {
                         lastRobotState = robotState;
-                        robotState = ROBOTSTATE.OUTTAKEUP;
+                        robotState = ROBOTSTATE.OUTTAKEUPLOW;
                     }
 
                     if (slideState != SLIDESTATE.LOW) {
                         slideState = SLIDESTATE.LOW;
                     }
-                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // medium preset
                 if (gamepad1.y) {
-                    if (robotState != ROBOTSTATE.OUTTAKEUP) {
+                    if (robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
                         lastRobotState = robotState;
-                        robotState = ROBOTSTATE.OUTTAKEUP;
+                        robotState = ROBOTSTATE.OUTTAKEUPHIGH;
                     }
 
                     if (slideState != SLIDESTATE.MEDIUM) {
                         slideState = SLIDESTATE.MEDIUM;
                     }
-                    gamepad1.rumble(0.3,0.3,50);
                 }
 
+                if(gamepad1.options) {
+                    if(robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEUPHIGH;
+                    }
+
+                    if(slideState != SLIDESTATE.HIGH) {
+                        slideState = SLIDESTATE.HIGH;
+                    }
+                }
                 // sets state to outtakeground
                 /*if(gamepad1.right_trigger > 0.1) {
                     if(robotState != ROBOTSTATE.OUTTAKEGROUND) {
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.OUTTAKEGROUND;
                     }
-                    gamepad1.rumble(0.3,0.3,50);
                 }*/
 
             // TWO CONTROLLER CONTROLS
             } else {
                 if (gamepad1.left_bumper) {
                     robot.closeGrabber();
-                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // grabber open preset
                 if (gamepad1.right_bumper) {
                     robot.openGrabber();
-                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // sets state to maneuvering
                 if (gamepad1.a && robotState != ROBOTSTATE.MANEUVERING) {
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.MANEUVERING;
-                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // intake
                 if (gamepad2.a && robotState != ROBOTSTATE.INTAKE) {
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.INTAKE;
-                    gamepad2.rumble(0.3,0.3,50);
                 }
 
                 // low preset
                 if (gamepad2.b) {
-                    if (robotState != ROBOTSTATE.OUTTAKEUP) {
+                    if (robotState != ROBOTSTATE.OUTTAKEUPLOW) {
                         lastRobotState = robotState;
-                        robotState = ROBOTSTATE.OUTTAKEUP;
+                        robotState = ROBOTSTATE.OUTTAKEUPLOW;
                     }
 
                     if (slideState != SLIDESTATE.LOW) {
                         slideState = SLIDESTATE.LOW;
                     }
-                    gamepad2.rumble(0.3,0.3,50);
                 }
 
                 // medium preset
                 if (gamepad2.y) {
-                    if (robotState != ROBOTSTATE.OUTTAKEUP) {
+                    if (robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
                         lastRobotState = robotState;
-                        robotState = ROBOTSTATE.OUTTAKEUP;
+                        robotState = ROBOTSTATE.OUTTAKEUPHIGH;
                     }
 
                     if (slideState != SLIDESTATE.MEDIUM) {
                         slideState = SLIDESTATE.MEDIUM;
                     }
-                    gamepad2.rumble(0.3,0.3,50);
                 }
 
                 if(gamepad2.x) {
-                    if(robotState != ROBOTSTATE.OUTTAKEGROUND) {
+                    if(robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
                         lastRobotState = robotState;
-                        robotState = ROBOTSTATE.OUTTAKEGROUND;
+                        robotState = ROBOTSTATE.OUTTAKEUPHIGH;
                     }
-                    gamepad2.rumble(0.3,0.3,50);
+
+                    if(slideState != SLIDESTATE.HIGH) {
+                        slideState = SLIDESTATE.HIGH;
+                    }
                 }
             }
 
             // telemetry for testing
+            telemetry.addData("singleController", singleController);
             telemetry.addData("lastRobotState", lastRobotState);
             telemetry.addData("robotState: ", robotState);
             telemetry.addData("slideState: ", slideState);
             telemetry.addData("armState: ", armState);
-
             robot.telemetry(telemetry);
             // telemetry.addData("armGoingUp: ", armGoingUp);
             //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
