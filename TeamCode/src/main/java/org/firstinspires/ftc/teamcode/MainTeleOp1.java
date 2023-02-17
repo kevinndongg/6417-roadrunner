@@ -105,6 +105,9 @@ public class MainTeleOp1 extends LinearOpMode {
             robot.clipJoyMecanumDrive(vert,horz,rotate,driveSpeed);
 
 
+            // ROBOT STATE MACHINE
+
+
             switch (robotState) {
                 // INTAKE for when the robot is ready to pick up cones
                 case INTAKE:
@@ -191,7 +194,10 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
             }
 
-            // slide control
+
+            // SLIDE CONTROL
+
+
             switch (slideState) {
                 // ZERO for slide bottom
                 case ZERO:
@@ -217,7 +223,10 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
             }
 
-            // arm control
+
+            // ARM CONTROL
+
+
             switch (armState) {
 
                 // GROUNDFRONT for when robot is INTAKE and MANEUVERING
@@ -241,7 +250,10 @@ public class MainTeleOp1 extends LinearOpMode {
                     robot.autoArm(Constants.armFastPower, Constants.armGroundBackPos);*/
             }
 
-            // wrist control
+
+            // WRIST CONTROL
+
+
             switch (wristState) {
                 case DOWN:
                     robot.autoWrist(Constants.wristDown);
@@ -252,7 +264,7 @@ public class MainTeleOp1 extends LinearOpMode {
             }
 
 
-            // CONTROLS
+            // GAMEPAD CONTROLS
 
 
             // ONE CONTROLLER CONTROLS
