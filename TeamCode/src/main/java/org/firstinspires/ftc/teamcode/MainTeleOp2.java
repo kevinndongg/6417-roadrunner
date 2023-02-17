@@ -195,6 +195,8 @@ public class MainTeleOp2 extends LinearOpMode {
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();*/
             telemetry.addData("getGamepadId: ", gamepad2.getGamepadId());
+            telemetry.addData("getUser: ", gamepad2.getUser());
+            telemetry.addData("id: ", gamepad2.id);
             telemetry.update();
         }
     }
