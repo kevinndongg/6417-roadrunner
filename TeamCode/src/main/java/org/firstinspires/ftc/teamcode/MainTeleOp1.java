@@ -251,7 +251,11 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
             }
 
-            // determine controls based on number of controllers active
+
+            // CONTROLS
+
+
+            // ONE CONTROLLER CONTROLS
             if(singleController) {
                 // grabber closed preset
                 if (gamepad1.left_bumper) {
@@ -304,6 +308,8 @@ public class MainTeleOp1 extends LinearOpMode {
                     }
                     gamepad1.rumble(0.3,0.3,50);
                 }
+
+            // TWO CONTROLLER CONTROLS
             } else {
                 if (gamepad1.left_bumper) {
                     robot.closeGrabber();
