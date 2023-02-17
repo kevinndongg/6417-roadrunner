@@ -256,23 +256,27 @@ public class MainTeleOp1 extends LinearOpMode {
                 // grabber closed preset
                 if (gamepad1.left_bumper) {
                     robot.closeGrabber();
+                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // grabber open preset
                 if (gamepad1.right_bumper) {
                     robot.openGrabber();
+                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // sets state to maneuvering
                 if (gamepad1.x && robotState != ROBOTSTATE.MANEUVERING) {
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.MANEUVERING;
+                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // intake
                 if (gamepad1.a && robotState != ROBOTSTATE.INTAKE) {
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.INTAKE;
+                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // low preset
@@ -285,6 +289,7 @@ public class MainTeleOp1 extends LinearOpMode {
                     if (slideState != SLIDESTATE.LOW) {
                         slideState = SLIDESTATE.LOW;
                     }
+                    gamepad1.rumble(0.3,0.3,50);
                 }
 
                 // medium preset
@@ -297,9 +302,59 @@ public class MainTeleOp1 extends LinearOpMode {
                     if (slideState != SLIDESTATE.MEDIUM) {
                         slideState = SLIDESTATE.MEDIUM;
                     }
+                    gamepad1.rumble(0.3,0.3,50);
                 }
             } else {
-                
+                if (gamepad1.left_bumper) {
+                    robot.closeGrabber();
+                    gamepad1.rumble(0.3,0.3,50);
+                }
+
+                // grabber open preset
+                if (gamepad1.right_bumper) {
+                    robot.openGrabber();
+                    gamepad1.rumble(0.3,0.3,50);
+                }
+
+                // sets state to maneuvering
+                if (gamepad1.a && robotState != ROBOTSTATE.MANEUVERING) {
+                    lastRobotState = robotState;
+                    robotState = ROBOTSTATE.MANEUVERING;
+                    gamepad1.rumble(0.3,0.3,50);
+                }
+
+                // intake
+                if (gamepad2.a && robotState != ROBOTSTATE.INTAKE) {
+                    lastRobotState = robotState;
+                    robotState = ROBOTSTATE.INTAKE;
+                    gamepad2.rumble(0.3,0.3,50);
+                }
+
+                // low preset
+                if (gamepad2.b) {
+                    if (robotState != ROBOTSTATE.OUTTAKEUP) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEUP;
+                    }
+
+                    if (slideState != SLIDESTATE.LOW) {
+                        slideState = SLIDESTATE.LOW;
+                    }
+                    gamepad2.rumble(0.3,0.3,50);
+                }
+
+                // medium preset
+                if (gamepad2.y) {
+                    if (robotState != ROBOTSTATE.OUTTAKEUP) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEUP;
+                    }
+
+                    if (slideState != SLIDESTATE.MEDIUM) {
+                        slideState = SLIDESTATE.MEDIUM;
+                    }
+                    gamepad2.rumble(0.3,0.3,50);
+                }
             }
 
             // telemetry for testing
