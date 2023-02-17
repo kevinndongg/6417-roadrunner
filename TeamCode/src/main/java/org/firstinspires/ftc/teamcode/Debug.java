@@ -15,11 +15,11 @@ public class Debug extends LinearOpMode {
     //DistanceSensor distance;
 
     // list of power values
-    public double slidePower = 0.2;
+    public double slidePower = 0.3;
 
-    public double armPower = 0.2;
+    public double armPower = 0.3;
 
-    double driveSpeed = 0.35;
+    double driveSpeed = 0.4;
 
     public void runOpMode() throws InterruptedException
     {

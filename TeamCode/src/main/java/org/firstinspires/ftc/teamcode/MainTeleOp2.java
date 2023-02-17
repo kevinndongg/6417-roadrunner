@@ -20,19 +20,6 @@ public class MainTeleOp2 extends LinearOpMode {
     // Enums for state machine
 
     // High level enums
-    enum ROBOTSTATE {
-        INTAKE, MANEUVERING, OUTTAKE
-    }
-
-    // Lower level enums
-
-    enum SLIDESTATE {
-        ZERO, LOW, MEDIUM, HIGH
-    }
-
-    enum ARMSTATE {
-        GROUNDFRONT, MANEUVERING, OUTTAKEBACK, GROUNDBACK
-    }
 
     public void runOpMode() throws InterruptedException
     {
@@ -59,13 +46,6 @@ public class MainTeleOp2 extends LinearOpMode {
         arm.setDirection(DcMotorSimple.Direction.REVERSE);
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // set states
-        ROBOTSTATE robotState = ROBOTSTATE.INTAKE;
-
-        SLIDESTATE slideState = SLIDESTATE.ZERO;
-        SLIDESTATE prevSlideState = SLIDESTATE.ZERO;
-        ARMSTATE armState = ARMSTATE.GROUNDFRONT;
 
         // setup servos
         grabber.setPosition(Constants.grabberOpen);
