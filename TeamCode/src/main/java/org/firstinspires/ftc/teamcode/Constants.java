@@ -16,12 +16,13 @@ public class Constants {
     public static int slideLowPos = 0;
     public static int slideMediumPos = 800;
     public static int slideBobPos = 150;
-    public static double slideDownPower = 0.9;
-    public static double slideUpPower = 0.7;
+    public static double slideDownPower = 0.95;
+    public static double slideUpPower = 0.75;
+    public static double slideBobPower = 0.25;
 
     public static double driveSpeedIntake = 0.6;
     public static double driveSpeedIntakeSlow = 0.35;
-    public static double driveSpeedManeuvering = 0.75;
+    public static double driveSpeedManeuvering = 0.7;
     public static double driveSpeedManeuveringSlow = 0.5;
     public static double driveSpeedOuttakeUp = 0.4;
     public static double driveSpeedOuttakeUpSlow = 0.25;

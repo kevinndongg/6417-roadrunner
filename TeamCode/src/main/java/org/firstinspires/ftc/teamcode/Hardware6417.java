@@ -62,7 +62,8 @@ public class Hardware6417 {
     }
 
     public void autoSlide(int position) {
-        // check if slider goes up or down
+        // check if slider goes up or down and
+        // set power accordingly
         if(slider.getCurrentPosition() > position) {
             slider.setPower(Constants.slideDownPower);
         } else if(slider.getCurrentPosition() < position) {
@@ -92,7 +93,7 @@ public class Hardware6417 {
     }
 
     public void bobSlide() {
-        slider.setPower(0.3);
+        slider.setPower(Constants.slideBobPower);
         slider.setTargetPosition(Constants.slideBobPos + 20);
     }
 
@@ -107,7 +108,6 @@ public class Hardware6417 {
         tele.addData("Arm Power: ", arm.getPower());
         tele.addData("Grabber position: ", grabber.getPosition());
         tele.addData("Wrist position: ", wrist.getPosition());
-        tele.update();
     }
 
     // sets powers to drive motors

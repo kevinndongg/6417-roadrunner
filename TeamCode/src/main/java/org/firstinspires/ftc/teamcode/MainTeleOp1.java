@@ -376,7 +376,7 @@ public class MainTeleOp1 extends LinearOpMode {
             }
 
             // telemetry for testing
-
+            telemetry.addData("lastRobotState", lastRobotState);
             telemetry.addData("robotState: ", robotState);
             telemetry.addData("slideState: ", slideState);
             telemetry.addData("armState: ", armState);
