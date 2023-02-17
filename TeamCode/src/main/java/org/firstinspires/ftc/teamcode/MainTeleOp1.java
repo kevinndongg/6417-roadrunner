@@ -12,6 +12,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class MainTeleOp1 extends LinearOpMode {
     //DistanceSensor distance;
     double driveSpeed;
+    boolean singleController = true;
 
     // Enums for state machine
 
@@ -87,6 +88,13 @@ public class MainTeleOp1 extends LinearOpMode {
             if(gamepad2.start || gamepad1.start){
                 continue;
             }
+
+            // detect number of controllers connected
+            /*if(gamepad2.getGamepadId() == null) {
+                singleController = true;
+            } else {
+                singleController = false;
+            }*/
 
             // drive calculations
             double vert = -gamepad1.left_stick_y;
@@ -243,92 +251,57 @@ public class MainTeleOp1 extends LinearOpMode {
                     break;
             }
 
-            // grabber closed preset
-            if(gamepad1.left_bumper){
-                robot.closeGrabber();
-            }
+            // determine controls based on number of controllers active
+            if(singleController) {
+                // grabber closed preset
+                if (gamepad1.left_bumper) {
+                    robot.closeGrabber();
+                }
 
-            // grabber open preset
-            if(gamepad1.right_bumper){
-                robot.openGrabber();
-            }
+                // grabber open preset
+                if (gamepad1.right_bumper) {
+                    robot.openGrabber();
+                }
 
-            // sets state to maneuvering
-            if(gamepad1.x && robotState != ROBOTSTATE.MANEUVERING) {
-                lastRobotState = robotState;
-                robotState = ROBOTSTATE.MANEUVERING;
-            }
-
-            // intake
-            if(gamepad1.a && robotState != ROBOTSTATE.INTAKE) {
-                lastRobotState = robotState;
-                robotState = ROBOTSTATE.INTAKE;
-            }
-
-            // low preset
-            if(gamepad1.b) {
-                if(robotState != ROBOTSTATE.OUTTAKEUP) {
+                // sets state to maneuvering
+                if (gamepad1.x && robotState != ROBOTSTATE.MANEUVERING) {
                     lastRobotState = robotState;
-                    robotState = ROBOTSTATE.OUTTAKEUP;
+                    robotState = ROBOTSTATE.MANEUVERING;
                 }
 
-                if(slideState != SLIDESTATE.LOW) {
-                    slideState = SLIDESTATE.LOW;
-                }
-            }
-
-            // medium preset
-            if(gamepad1.y) {
-                if(robotState != ROBOTSTATE.OUTTAKEUP) {
+                // intake
+                if (gamepad1.a && robotState != ROBOTSTATE.INTAKE) {
                     lastRobotState = robotState;
-                    robotState = ROBOTSTATE.OUTTAKEUP;
+                    robotState = ROBOTSTATE.INTAKE;
                 }
 
-                if(slideState != SLIDESTATE.MEDIUM) {
-                    slideState = SLIDESTATE.MEDIUM;
+                // low preset
+                if (gamepad1.b) {
+                    if (robotState != ROBOTSTATE.OUTTAKEUP) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEUP;
+                    }
+
+                    if (slideState != SLIDESTATE.LOW) {
+                        slideState = SLIDESTATE.LOW;
+                    }
                 }
-            }
 
-            /*// while arm is going up and is past -750
-            if(armGoingUp && arm.getCurrentPosition() > Constants.armTop) {
-                // arm is slow
-                arm.setPower(Constants.armSlowPower);
-                armGoingUp = false;
-            }
+                // medium preset
+                if (gamepad1.y) {
+                    if (robotState != ROBOTSTATE.OUTTAKEUP) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEUP;
+                    }
 
-            // Everything down
-            if(gamepad1.a) {
-                armGoingUp = false;
-                slider.setPower(0.9);
-                slider.setTargetPosition(0);
-                arm.setPower(0.6);
-                arm.setTargetPosition(0);
-                wrist.setPosition(Constants.wristDown);
-            }
-
-            // arm back + slider up to low
-            if(gamepad1.b) {
-                armGoingUp = true;
-                if(slider.getCurrentPosition() > Constants.slideLow){
-                    slider.setPower(0.6);
-                } else {
-                    slider.setPower(0.4);
+                    if (slideState != SLIDESTATE.MEDIUM) {
+                        slideState = SLIDESTATE.MEDIUM;
+                    }
                 }
-                slider.setTargetPosition(Constants.slideLow);
-                arm.setPower(0.7);
-                arm.setTargetPosition(Constants.armBack);
-                wrist.setPosition(Constants.wristUp);
+            } else {
+                
             }
 
-            if(gamepad1.y) {
-                armGoingUp = true;
-                slider.setPower(0.6);
-                slider.setTargetPosition(Constants.slideMedium);
-                arm.setPower(0.6);
-                arm.setTargetPosition(Constants.armBack);
-                wrist.setPosition(Constants.wristUp);
-            }
-*/
             // telemetry for testing
 
             telemetry.addData("robotState: ", robotState);
