@@ -165,15 +165,8 @@ public class MainTeleOp2 extends LinearOpMode {
 
             }
 
-
+            */
             // telemetry for testing
-            telemetry.addData("slider position", slider.getCurrentPosition());
-            telemetry.addData("Grabber position: ", grabber.getPosition());
-            telemetry.addData("Wrist position: ", wrist.getPosition());
-            telemetry.addData("Arm position: ", + arm.getCurrentPosition());
-            //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
-            //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
-            telemetry.update();*/
             telemetry.addData("getGamepadId: ", gamepad2.getGamepadId());
             telemetry.addData("getUser: ", gamepad2.getUser());
             telemetry.addData("id: ", gamepad2.id);
