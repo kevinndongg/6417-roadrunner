@@ -215,7 +215,9 @@ public class MainTeleOp1 extends LinearOpMode {
 
                 // BOBBING for when robot shifting from MANEUVERING to INTAKE
                 case BOBBING:
+                    // makes slides go up
                     robot.bobSlide();
+                    // once the slides reach position, change state to INTAKE
                     if(robot.bobDone()) {
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.INTAKE;
@@ -237,9 +239,8 @@ public class MainTeleOp1 extends LinearOpMode {
                 // MOVINGUP for when arm is going to OUTTAKEUP
                 // arm should be fast until past top position
                 case OUTTAKEBACK:
-
-                    // checks if arm is near back position
                     if(robot.armNearBack()) {
+                        // if arm is past top, slow arm to back
                         robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos);
                     } else {
                         // if arm is not past top, arm fast to back
