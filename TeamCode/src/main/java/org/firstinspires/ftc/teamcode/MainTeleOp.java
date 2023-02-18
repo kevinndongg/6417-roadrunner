@@ -12,7 +12,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class MainTeleOp extends LinearOpMode {
     //DistanceSensor distance;
     double driveSpeed;
-    boolean singleController = true;
+    boolean singleController;
 
     // Enums for state machine
 
