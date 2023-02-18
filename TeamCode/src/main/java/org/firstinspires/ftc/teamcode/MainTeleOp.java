@@ -13,6 +13,7 @@ public class MainTeleOp extends LinearOpMode {
     //DistanceSensor distance;
     double driveSpeed;
     boolean singleController;
+    int armDunk;
 
     // Enums for state machine
 
@@ -255,18 +256,18 @@ public class MainTeleOp extends LinearOpMode {
                 case OUTTAKEBACKHIGH:
                     if(robot.armNear(Constants.armBackUpPos)) {
                         // if arm is past top, slow arm to back
-                        robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos);
+                        robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos, armDunk);
                     } else {
                         // if arm is not past top, arm fast to back
-                        robot.autoArm(Constants.armFastPower,Constants.armBackUpPos);
+                        robot.autoArm(Constants.armFastPower,Constants.armBackUpPos, armDunk);
                     }
                     break;
                 case OUTTAKEBACKLOW:
                     if(robot.armNear(Constants.armBackLowPos)) {
-                        robot.autoArm(Constants.armSlowPower, Constants.armBackLowPos);
+                        robot.autoArm(Constants.armSlowPower, Constants.armBackLowPos, armDunk);
                     } else {
                         // if arm is not past top, arm fast to back
-                        robot.autoArm(Constants.armFastPower, Constants.armBackLowPos);
+                        robot.autoArm(Constants.armFastPower, Constants.armBackLowPos, armDunk);
                     }
                     break;
                 /*case GROUNDBACK:
@@ -339,6 +340,7 @@ public class MainTeleOp extends LinearOpMode {
                     }
                 }
 
+                // high preset
                 if(gamepad1.options) {
                     if(robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
                         lastRobotState = robotState;
@@ -356,6 +358,12 @@ public class MainTeleOp extends LinearOpMode {
                         robotState = ROBOTSTATE.OUTTAKEGROUND;
                     }
                 }*/
+
+                if(gamepad1.right_trigger > 0.1) {
+                    armDunk = Constants.armDunk;
+                } else {
+                    armDunk = 0;
+                }
 
             // TWO CONTROLLER CONTROLS
             } else {
@@ -404,6 +412,7 @@ public class MainTeleOp extends LinearOpMode {
                     }
                 }
 
+                // high preset
                 if(gamepad2.x) {
                     if(robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
                         lastRobotState = robotState;
@@ -413,6 +422,13 @@ public class MainTeleOp extends LinearOpMode {
                     if(slideState != SLIDESTATE.HIGH) {
                         slideState = SLIDESTATE.HIGH;
                     }
+                }
+
+                // dunk arm
+                if(gamepad2.left_trigger > 0.1) {
+                    armDunk = Constants.armDunk;
+                } else {
+                    armDunk = 0;
                 }
             }
 
