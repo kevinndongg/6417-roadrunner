@@ -83,7 +83,7 @@ public class Hardware6417 {
     }
 
     public void autoArm(double power, int position, int dunk) {
-        int target = position - dunk;
+        int target = position + dunk;
         arm.setPower(power);
         if(arm.getCurrentPosition() != target && arm.getTargetPosition() != target) {
             arm.setTargetPosition(target);
