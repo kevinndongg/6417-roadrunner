@@ -15,6 +15,17 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
+/*
+Questions for Andrew:
+-lastDU2 & other booleans
+-trajectorySequences
+-headings, angle of robot
+    -field centric
+    -auto align
+-using setWeightedDrivePower vs setting powers directly
+-extending SampleMecanumDrive
+ */
+
 @Autonomous(name = "Auto")
 public class Auto extends LinearOpMode {
     DcMotorEx FrontLeft,FrontRight,BackLeft,BackRight, slider, arm;
