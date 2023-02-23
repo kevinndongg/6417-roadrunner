@@ -7,25 +7,25 @@ public class Constants {
     public static double wristDown = 0.91;
     public static double wristUp = 0.29;
 
-    public static double armSlowPower = 0.3;
-    public static double armFastPower = 0.7;
+    public static double armSlowPower = 0.5;
+    public static double armFastPower = 0.9;
     public static int armNearBack = 350;
     public static int armBackUpPos = 1050;
-    public static int armBackLowPos = 1160;
+    public static int armBackLowPos = 1200;
     public static int armBackGroundPos = 1850;
     public static int armDunk = 170;
 
     public static int slideLowPos = 0;
-    public static int slideMediumPos = 600;
+    public static int slideMediumPos = 570;
     public static int slideHighPos = 1450;
     public static int slideBobPos = 150;
-    public static double slideDownPower = 0.95;
-    public static double slideUpPower = 0.75;
+    public static double slideDownPower = 1.0;
+    public static double slideUpPower = 0.9;
     public static double slideBobPower = 0.25;
 
     public static double driveSpeedIntake = 0.6;
     public static double driveSpeedIntakeSlow = 0.35;
-    public static double driveSpeedManeuvering = 0.7;
+    public static double driveSpeedManeuvering = 0.8;
     public static double driveSpeedManeuveringSlow = 0.5;
     public static double driveSpeedOuttakeUp = 0.4;
     public static double driveSpeedOuttakeUpSlow = 0.25;
@@ -33,7 +33,7 @@ public class Constants {
     public static double driveSpeedOuttakeGroundSlow = 0.35;
 
     public static double driveTuningFR = 1.0;
-    public static double driveTuningFL = 0.95;
+    public static double driveTuningFL = 1.0;
     public static double driveTuningBR = 1.0;
-    public static double driveTuningBL = 0.95;
+    public static double driveTuningBL = 1.0;
 }

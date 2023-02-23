@@ -305,7 +305,7 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 // sets state to maneuvering
-                if (gamepad1.x && robotState != ROBOTSTATE.MANEUVERING) {
+                if (gamepad1.right_trigger > 0.1 && robotState != ROBOTSTATE.MANEUVERING) {
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.MANEUVERING;
                 }
@@ -377,9 +377,14 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 // sets state to maneuvering
-                if (gamepad1.a && robotState != ROBOTSTATE.MANEUVERING) {
+                if (gamepad1.right_trigger > 0.1 && robotState != ROBOTSTATE.MANEUVERING) {
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.MANEUVERING;
+                }
+
+                if (gamepad1.a && robotState != ROBOTSTATE.INTAKE) {
+                    lastRobotState = robotState;
+                    robotState = ROBOTSTATE.INTAKE;
                 }
 
                 // intake
