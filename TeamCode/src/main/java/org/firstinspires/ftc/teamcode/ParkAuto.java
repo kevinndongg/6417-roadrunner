@@ -26,8 +26,8 @@ Questions for Andrew:
 -extending SampleMecanumDrive
  */
 
-@Autonomous(name = "Auto")
-public class Auto extends LinearOpMode {
+@Autonomous(name = "Park Auto")
+public class ParkAuto extends LinearOpMode {
     DcMotorEx FrontLeft,FrontRight,BackLeft,BackRight, slider, arm;
     Servo grabber;
     Servo wrist;
