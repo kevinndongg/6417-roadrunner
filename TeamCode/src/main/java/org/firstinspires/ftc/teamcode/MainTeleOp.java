@@ -8,6 +8,44 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
+/*
+    CONTROLS:
+        One controller (gamepad 1):
+            left joystick: strafe
+            right joystick: turn
+            left trigger: slower driving (hold)
+
+            left bumper: close grabber
+            right bumper: open grabber
+
+            a (cross): intake position
+            b (circle): outtake on low junction
+            x (square): wrist up, fast driving
+            y (triangle): outtake on medium junction
+            options: outtake on high junction
+            right trigger: dunk arm
+
+        Two Controllers:
+            gamepad 1:
+                left joystick: strafe
+                right joystick: turn
+                right trigger: slower driving (hold)
+
+                left bumper: close grabber
+                right bumper: open grabber
+
+                b (circle): wrist up, fast driving
+                a (cross): intake position
+
+            gamepad 2:
+                a (cross): intake position
+                b (circle): outtake on low junction
+                x (square): outtake on high junction
+                y (triangle): outtake on medium junction
+
+                right trigger: dunk arm
+ */
+
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
     //DistanceSensor distance;
@@ -380,8 +418,13 @@ public class MainTeleOp extends LinearOpMode {
                     robot.openGrabber();
                 }
 
+                if (gamepad1.a && robotState != ROBOTSTATE.INTAKE) {
+                    lastRobotState = robotState;
+                    robotState = ROBOTSTATE.INTAKE;
+                }
+
                 // sets state to maneuvering
-                if (gamepad1.a && robotState != ROBOTSTATE.MANEUVERING) {
+                if (gamepad1.b && robotState != ROBOTSTATE.MANEUVERING) {
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.MANEUVERING;
                 }
