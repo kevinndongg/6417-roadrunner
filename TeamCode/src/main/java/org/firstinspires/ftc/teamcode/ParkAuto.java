@@ -28,9 +28,6 @@ Questions for Andrew:
 
 @Autonomous(name = "Park Auto")
 public class ParkAuto extends LinearOpMode {
-    DcMotorEx FrontLeft,FrontRight,BackLeft,BackRight, slider, arm;
-    Servo grabber;
-    Servo wrist;
 
     int position;
 
@@ -63,7 +60,7 @@ public class ParkAuto extends LinearOpMode {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         Trajectory forwardPush = drive.trajectoryBuilder(new Pose2d())
-                .forward(37)
+                .forward(20)
                 .build();
 
         Trajectory back = drive.trajectoryBuilder(forwardPush.end())
@@ -79,29 +76,10 @@ public class ParkAuto extends LinearOpMode {
                 .build();
 
 
-        // motor declarations
-        FrontLeft = hardwareMap.get(DcMotorEx.class,"front left");
-        FrontRight = hardwareMap.get(DcMotorEx.class, "front right");
-        BackLeft = hardwareMap.get(DcMotorEx.class, "back left");
-        BackRight = hardwareMap.get(DcMotorEx.class, "back right");
-        //distance =  hardwareMap.get(DistanceSensor.class, "distance");
-        slider = hardwareMap.get(DcMotorEx.class, "slider");
-        arm = hardwareMap.get(DcMotorEx.class, "arm");
+        Hardware6417 robot = new Hardware6417(hardwareMap);
+        robot.resetMotors();
 
-        // servo declarations
-        wrist = hardwareMap.get(Servo.class, "wrist");
-        grabber = hardwareMap.get(Servo.class,"grabber");
-
-        slider.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slider.setTargetPosition(0);
-        slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setTargetPosition(0);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(0);
+        robot.closeGrabber();
 
         while(opModeInInit()) {
             position = pipeline.position;
@@ -121,38 +99,36 @@ public class ParkAuto extends LinearOpMode {
 
         drive.setPoseEstimate(new Pose2d());
 
+        drive.followTrajectory(forwardPush);
 
-        switch(position) {
+        /*switch(position) {
             case 0:
-                grabber.setPosition(Constants.grabberClose);
-                wrist.setPosition(Constants.wristUp);
-                arm.setPower(0.25);
-                arm.setTargetPosition(-900);
+                robot.autoWrist(Constants.wristUp);
+                robot.autoArm(Constants.armSlowPower,Constants.armNearBack);
                 drive.followTrajectory(forwardPush);
                 drive.followTrajectory(back);
                 drive.followTrajectory(strafeL);
-                arm.setTargetPosition(0);
-                wrist.setPosition(Constants.wristDown);
+                robot.autoArm(Constants.armSlowPower,0);
+                robot.autoWrist(Constants.wristDown);
                 break;
             case 1:
-                grabber.setPosition(Constants.grabberClose);
-                wrist.setPosition(Constants.wristUp);
+                robot.autoWrist(Constants.wristUp);
+                robot.autoArm(Constants.armSlowPower,Constants.armNearBack);
                 drive.followTrajectory(forwardPush);
                 drive.followTrajectory(back);
-                wrist.setPosition(Constants.wristDown);
+                robot.autoArm(Constants.armSlowPower,0);
+                robot.autoWrist(Constants.wristDown);
                 break;
             case 2:
-                grabber.setPosition(Constants.grabberClose);
-                wrist.setPosition(Constants.wristUp);
-                arm.setPower(0.25);
-                arm.setTargetPosition(-900);
+                robot.autoWrist(Constants.wristUp);
+                robot.autoArm(Constants.armSlowPower, Constants.armNearBack);
                 drive.followTrajectory(forwardPush);
                 drive.followTrajectory(back);
                 drive.followTrajectory(strafeR);
-                arm.setTargetPosition(0);
-                wrist.setPosition(Constants.wristDown);
+                robot.autoArm(Constants.armSlowPower,0);
+                robot.autoWrist(Constants.wristDown);
                 break;
-        }
+        }*/
 
 
 
@@ -161,10 +137,7 @@ public class ParkAuto extends LinearOpMode {
 
             // telemetry for testing
             telemetry.addData("position: ", position);
-            telemetry.addData("slider position", slider.getCurrentPosition());
-            telemetry.addData("Grabber position: ", grabber.getPosition());
-            telemetry.addData("Wrist position: ", wrist.getPosition());
-            telemetry.addData("Arm position: ", + arm.getCurrentPosition());
+            robot.telemetry(telemetry);
             //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
             //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();

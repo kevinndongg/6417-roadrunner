@@ -32,8 +32,8 @@ public class Hardware6417 {
         wrist = hwMap.get(Servo.class, "wrist");
         grabber = hwMap.get(Servo.class,"grabber");
 
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         arm.setDirection(DcMotorSimple.Direction.REVERSE);
         slider.setDirection(DcMotorSimple.Direction.REVERSE);
     }
@@ -100,6 +100,10 @@ public class Hardware6417 {
         return Math.abs(arm.getCurrentPosition() - target) < Constants.armNearBack;
     }
 
+    public boolean slideAbove(int target) {
+        return slider.getCurrentPosition() > target;
+    }
+
     public void bobSlide() {
         slider.setPower(Constants.slideBobPower);
         slider.setTargetPosition(Constants.slideBobPos + 20);
@@ -120,10 +124,10 @@ public class Hardware6417 {
 
     // sets powers to drive motors
     public void clipJoyMecanumDrive(double vert, double horz, double rotate, double driveSpeed){
-        double frDrive = (-vert - horz - rotate) * Constants.driveTuningFR;
-        double flDrive = (-vert + horz + rotate) * Constants.driveTuningFL;
-        double brDrive = (-vert + horz - rotate) * Constants.driveTuningBR;
-        double blDrive = (-vert - horz + rotate) * Constants.driveTuningBL;
+        double frDrive = (-vert + horz + rotate) * Constants.driveTuningFR;
+        double flDrive = (-vert - horz - rotate) * Constants.driveTuningFL;
+        double brDrive = (-vert - horz + rotate) * Constants.driveTuningBR;
+        double blDrive = (-vert + horz - rotate) * Constants.driveTuningBL;
 
         // finding maximum drive for division below
         double max = Math.abs(Math.max(Math.abs(frDrive),Math.max(Math.abs(flDrive),Math.max(Math.abs(brDrive),Math.abs(blDrive)))));

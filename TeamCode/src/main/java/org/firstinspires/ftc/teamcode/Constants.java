@@ -19,6 +19,7 @@ public class Constants {
     public static int slideMediumPos = 600;
     public static int slideHighPos = 1450;
     public static int slideBobPos = 150;
+    public static int slideNearBottomPos = 200;
     public static double slideDownPower = 0.95;
     public static double slideUpPower = 0.75;
     public static double slideBobPower = 0.25;

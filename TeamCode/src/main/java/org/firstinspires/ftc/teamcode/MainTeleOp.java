@@ -248,7 +248,11 @@ public class MainTeleOp extends LinearOpMode {
 
                 // GROUNDFRONT for when robot is INTAKE and MANEUVERING
                 case GROUNDFRONT:
-                    robot.autoArm(Constants.armFastPower,0);
+                    if(robot.slideAbove(Constants.slideNearBottomPos)) {
+                        robot.autoArm(Constants.armFastPower,50);
+                    } else {
+                        robot.autoArm(Constants.armFastPower, 0);
+                    }
                     break;
 
                 // MOVINGUP for when arm is going to OUTTAKEUP
