@@ -44,7 +44,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
                 x (square): outtake on high junction
                 y (triangle): outtake on medium junction
 
-                right trigger: dunk arm
+                left trigger: dunk arm
+                right bumper: reset slider
  */
 
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
@@ -475,6 +476,10 @@ public class MainTeleOp extends LinearOpMode {
                     armDunk = Constants.armDunk;
                 } else {
                     armDunk = 0;
+                }
+
+                if(gamepad2.right_bumper && slideState == SLIDESTATE.ZERO) {
+                    robot.resetSlider();
                 }
             }
 
