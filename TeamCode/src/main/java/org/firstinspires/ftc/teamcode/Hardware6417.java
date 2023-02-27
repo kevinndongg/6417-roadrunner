@@ -39,11 +39,13 @@ public class Hardware6417 {
     }
 
     // resets encoders, sets runmode
-    public void resetMotors() {
+    public void resetSlider() {
         slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slider.setTargetPosition(0);
         slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
 
+    public void resetArm() {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -61,7 +63,7 @@ public class Hardware6417 {
         }
     }
 
-    public void autoSlide(int position) {
+    public void autoSlider(int position) {
         // check if slider goes up or down and
         // set power accordingly
         if(slider.getCurrentPosition() > position) {
@@ -100,11 +102,11 @@ public class Hardware6417 {
         return Math.abs(arm.getCurrentPosition() - target) < Constants.armNearBack;
     }
 
-    public boolean slideAbove(int target) {
+    public boolean sliderAbove(int target) {
         return slider.getCurrentPosition() > target;
     }
 
-    public void bobSlide() {
+    public void bobSlider() {
         slider.setPower(Constants.slideBobPower);
         slider.setTargetPosition(Constants.slideBobPos + 20);
     }

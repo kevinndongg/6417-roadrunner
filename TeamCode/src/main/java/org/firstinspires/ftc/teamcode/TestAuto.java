@@ -47,32 +47,13 @@ public class TestAuto extends LinearOpMode {
                 .build();
 
 
-        // motor declarations
-        FrontLeft = hardwareMap.get(DcMotorEx.class,"front left");
-        FrontRight = hardwareMap.get(DcMotorEx.class, "front right");
-        BackLeft = hardwareMap.get(DcMotorEx.class, "back left");
-        BackRight = hardwareMap.get(DcMotorEx.class, "back right");
-        //distance =  hardwareMap.get(DistanceSensor.class, "distance");
-        slider = hardwareMap.get(DcMotorEx.class, "slider");
-        arm = hardwareMap.get(DcMotorEx.class, "arm");
-
-        // servo declarations
-        wrist = hardwareMap.get(Servo.class, "wrist");
-        grabber = hardwareMap.get(Servo.class,"grabber");
-
-        slider.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slider.setTargetPosition(0);
-        slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setTargetPosition(0);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(0);
 
         while(opModeInInit()) {
         }
+
+        Hardware6417 robot = new Hardware6417(hardwareMap);
+        robot.resetArm();
+        robot.resetSlider();
 
         waitForStart();
         resetRuntime();

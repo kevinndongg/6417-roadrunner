@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.openftc.easyopencv.OpenCvCamera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -53,6 +54,8 @@ public class MainTeleOp extends LinearOpMode {
     boolean singleController;
     int armDunk;
 
+    ElapsedTime sliderTimer;
+
     // Enums for state machine
 
     // High level enums
@@ -78,7 +81,8 @@ public class MainTeleOp extends LinearOpMode {
     {
         // hardware init
         Hardware6417 robot = new Hardware6417(hardwareMap);
-        robot.resetMotors();
+        robot.resetSlider();
+        robot.resetArm();
 
         // set states
         ROBOTSTATE robotState = ROBOTSTATE.INTAKE;
@@ -123,11 +127,6 @@ public class MainTeleOp extends LinearOpMode {
         resetRuntime();
 
         while(opModeIsActive()){
-            // safety for switching controllers
-            if(gamepad2.start || gamepad1.start){
-                continue;
-            }
-
             // detect number of controllers connected
             if(gamepad2.getGamepadId() == -1) {
                 singleController = true;
@@ -252,24 +251,24 @@ public class MainTeleOp extends LinearOpMode {
             switch (slideState) {
                 // ZERO for slide bottom
                 case ZERO:
-                    robot.autoSlide(0);
+                    robot.autoSlider(0);
                     break;
                 // LOW for slide to low junction preset
                 case LOW:
-                    robot.autoSlide(Constants.slideLowPos);
+                    robot.autoSlider(Constants.slideLowPos);
                     break;
 
                 // MEDIUM for slide to medium junction preset
                 case MEDIUM:
-                    robot.autoSlide(Constants.slideMediumPos);
+                    robot.autoSlider(Constants.slideMediumPos);
                     break;
                 case HIGH:
-                    robot.autoSlide(Constants.slideHighPos);
+                    robot.autoSlider(Constants.slideHighPos);
                     break;
                 // BOBBING for when robot shifting from MANEUVERING to INTAKE
                 case BOBBING:
                     // makes slides go up
-                    robot.bobSlide();
+                    robot.bobSlider();
                     // once the slides reach position, change state to INTAKE
                     if(robot.bobDone()) {
                         lastRobotState = robotState;
@@ -286,7 +285,7 @@ public class MainTeleOp extends LinearOpMode {
 
                 // GROUNDFRONT for when robot is INTAKE and MANEUVERING
                 case GROUNDFRONT:
-                    if(robot.slideAbove(Constants.slideNearBottomPos)) {
+                    if(robot.sliderAbove(Constants.slideNearBottomPos)) {
                         robot.autoArm(Constants.armFastPower,50);
                     } else {
                         robot.autoArm(Constants.armFastPower, 0);
