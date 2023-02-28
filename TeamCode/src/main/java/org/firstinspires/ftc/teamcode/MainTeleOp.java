@@ -252,7 +252,7 @@ public class MainTeleOp extends LinearOpMode {
             switch (slideState) {
                 // ZERO for slide bottom
                 case ZERO:
-                    if(sliderTimer.seconds() > 2) {
+                    if(sliderTimer.seconds() < 3.5 && sliderTimer.seconds() > 2) {
                         robot.resetSlider();
                     } else {
                         robot.autoSlider(0);

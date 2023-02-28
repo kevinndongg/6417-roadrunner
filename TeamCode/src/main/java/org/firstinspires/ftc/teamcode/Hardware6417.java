@@ -79,6 +79,11 @@ public class Hardware6417 {
         }
     }
 
+    public void autoSlider(double power, int position) {
+        slider.setPower(power);
+        slider.setTargetPosition(position);
+    }
+
     public void autoArm(double power, int position) {
         arm.setPower(power);
         if(arm.getCurrentPosition() != position && arm.getTargetPosition() != position) {
