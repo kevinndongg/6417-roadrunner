@@ -55,7 +55,7 @@ public class MainTeleOp extends LinearOpMode {
     boolean singleController;
     int armDunk;
 
-    ElapsedTime sliderTimer;
+    ElapsedTime sliderTimer = new ElapsedTime(0);
 
     // Enums for state machine
 
@@ -67,7 +67,7 @@ public class MainTeleOp extends LinearOpMode {
     // Lower level enums
 
     enum SLIDESTATE {
-        ZERO, LOW, MEDIUM, HIGH,BOBBING
+        ZERO, MEDIUM, HIGH,BOBBING
     }
 
     enum ARMSTATE {
@@ -252,13 +252,12 @@ public class MainTeleOp extends LinearOpMode {
             switch (slideState) {
                 // ZERO for slide bottom
                 case ZERO:
-                    robot.autoSlider(0);
+                    if(sliderTimer.seconds() > 2) {
+                        robot.resetSlider();
+                    } else {
+                        robot.autoSlider(0);
+                    }
                     break;
-                // LOW for slide to low junction preset
-                case LOW:
-                    robot.autoSlider(Constants.slideLowPos);
-                    break;
-
                 // MEDIUM for slide to medium junction preset
                 case MEDIUM:
                     robot.autoSlider(Constants.slideMediumPos);
@@ -294,23 +293,11 @@ public class MainTeleOp extends LinearOpMode {
                     break;
 
                 // MOVINGUP for when arm is going to OUTTAKEUP
-                // arm should be fast until past top position
                 case OUTTAKEBACKHIGH:
-                    if(robot.armNear(Constants.armBackUpPos)) {
-                        // if arm is past top, slow arm to back
-                        robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos, armDunk);
-                    } else {
-                        // if arm is not past top, arm fast to back
-                        robot.autoArm(Constants.armFastPower,Constants.armBackUpPos, armDunk);
-                    }
+                    robot.autoArm(Constants.armFastPower,Constants.armBackUpPos, armDunk);
                     break;
                 case OUTTAKEBACKLOW:
-                    if(robot.armNear(Constants.armBackLowPos)) {
-                        robot.autoArm(Constants.armSlowPower, Constants.armBackLowPos, armDunk);
-                    } else {
-                        // if arm is not past top, arm fast to back
-                        robot.autoArm(Constants.armFastPower, Constants.armBackLowPos, armDunk);
-                    }
+                    robot.autoArm(Constants.armFastPower, Constants.armBackLowPos, armDunk);
                     break;
                 /*case GROUNDBACK:
                     robot.autoArm(Constants.armFastPower, Constants.armGroundBackPos);
@@ -348,12 +335,14 @@ public class MainTeleOp extends LinearOpMode {
 
                 // sets state to maneuvering
                 if (gamepad1.x && robotState != ROBOTSTATE.MANEUVERING) {
+                    sliderTimer.reset();
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.MANEUVERING;
                 }
 
                 // intake
                 if (gamepad1.a && robotState != ROBOTSTATE.INTAKE) {
+                    sliderTimer.reset();
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.INTAKE;
                 }
@@ -361,12 +350,9 @@ public class MainTeleOp extends LinearOpMode {
                 // low preset
                 if (gamepad1.b) {
                     if (robotState != ROBOTSTATE.OUTTAKEUPLOW) {
+                        sliderTimer.reset();
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.OUTTAKEUPLOW;
-                    }
-
-                    if (slideState != SLIDESTATE.LOW) {
-                        slideState = SLIDESTATE.LOW;
                     }
                 }
 
@@ -419,18 +405,21 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 if (gamepad1.a && robotState != ROBOTSTATE.INTAKE) {
+                    sliderTimer.reset();
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.INTAKE;
                 }
 
                 // sets state to maneuvering
                 if (gamepad1.b && robotState != ROBOTSTATE.MANEUVERING) {
+                    sliderTimer.reset();
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.MANEUVERING;
                 }
 
                 // intake
                 if (gamepad2.a && robotState != ROBOTSTATE.INTAKE) {
+                    sliderTimer.reset();
                     lastRobotState = robotState;
                     robotState = ROBOTSTATE.INTAKE;
                 }
@@ -438,12 +427,9 @@ public class MainTeleOp extends LinearOpMode {
                 // low preset
                 if (gamepad2.b) {
                     if (robotState != ROBOTSTATE.OUTTAKEUPLOW) {
+                        sliderTimer.reset();
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.OUTTAKEUPLOW;
-                    }
-
-                    if (slideState != SLIDESTATE.LOW) {
-                        slideState = SLIDESTATE.LOW;
                     }
                 }
 

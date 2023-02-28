@@ -41,12 +41,14 @@ public class Hardware6417 {
     // resets encoders, sets runmode
     public void resetSlider() {
         slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slider.setPower(0);
         slider.setTargetPosition(0);
         slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void resetArm() {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setPower(0);
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
