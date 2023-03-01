@@ -16,8 +16,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
             right joystick: turn
             left trigger: slower driving (hold)
 
-            left bumper: close grabber
-            right bumper: open grabber
+            left bumper: open/close grabber (toggle)
 
             a (cross): intake position
             b (circle): outtake on low junction
@@ -32,8 +31,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
                 right joystick: turn
                 right trigger: slower driving (hold)
 
-                left bumper: close grabber
-                right bumper: open grabber
+                left bumper: open/close grabber (toggle)
 
                 b (circle): wrist up, fast driving
                 a (cross): intake position
@@ -53,6 +51,8 @@ public class MainTeleOp extends LinearOpMode {
     //DistanceSensor distance;
     double driveSpeed;
     boolean singleController;
+    boolean lastLB1 = false;
+    boolean grabbing = true;
     int armDunk;
 
     ElapsedTime sliderTimer = new ElapsedTime(0);
@@ -98,33 +98,7 @@ public class MainTeleOp extends LinearOpMode {
         // setup servos
         robot.openGrabber();
 
-        //camera declaration
-        OpenCvCamera webcam;
-        SignalDetectorPipeline pipeline;
-
-        //initialize camera
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"); // put your camera's name here
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        pipeline = new SignalDetectorPipeline();
-        webcam.setPipeline(pipeline);
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
-            @Override
-            public void onOpened()
-            {
-                webcam.startStreaming(640, 360, OpenCvCameraRotation.SIDEWAYS_RIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode) {
-                telemetry.addData("Camera Failed","");
-                telemetry.update();
-            }
-        }); //done initializing camera
-
         waitForStart();
-        webcam.stopStreaming();
         resetRuntime();
 
         while(opModeIsActive()){
@@ -323,13 +297,16 @@ public class MainTeleOp extends LinearOpMode {
 
             // ONE CONTROLLER CONTROLS
             if(singleController) {
-                // grabber closed preset
-                if (gamepad1.left_bumper) {
+                // GRABBER CONTROL
+                if(gamepad1.left_bumper && !lastLB1){
+                    grabbing = !grabbing;
+                }
+                lastLB1 = gamepad1.left_bumper;
+
+                if(grabbing){
                     robot.closeGrabber();
                 }
-
-                // grabber open preset
-                if (gamepad1.right_bumper) {
+                else{
                     robot.openGrabber();
                 }
 
@@ -395,12 +372,16 @@ public class MainTeleOp extends LinearOpMode {
 
             // TWO CONTROLLER CONTROLS
             } else {
-                if (gamepad1.left_bumper) {
+                // GRABBER CONTROLS
+                if(gamepad1.left_bumper && !lastLB1){
+                    grabbing = !grabbing;
+                }
+                lastLB1 = gamepad1.left_bumper;
+
+                if(grabbing){
                     robot.closeGrabber();
                 }
-
-                // grabber open preset
-                if (gamepad1.right_bumper) {
+                else{
                     robot.openGrabber();
                 }
 

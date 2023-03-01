@@ -7,6 +7,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+
 @TeleOp(name = "Debug", group = "TeleOp")
 public class Debug extends LinearOpMode {
     DcMotorEx frontLeft, frontRight, backLeft, backRight, slider, arm;
@@ -57,9 +62,33 @@ public class Debug extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(armPower);
 
+        //camera declaration
+        OpenCvCamera webcam;
+        SignalDetectorPipeline pipeline;
 
+        //initialize camera
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1"); // put your camera's name here
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        pipeline = new SignalDetectorPipeline();
+        webcam.setPipeline(pipeline);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                webcam.startStreaming(640, 360, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                telemetry.addData("Camera Failed","");
+                telemetry.update();
+            }
+        }); //done initializing camera
 
         waitForStart();
+        webcam.stopStreaming();
 
         while(opModeIsActive()){
             // drive calculations
