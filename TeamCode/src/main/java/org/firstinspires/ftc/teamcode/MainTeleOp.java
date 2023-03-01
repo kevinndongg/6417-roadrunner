@@ -211,6 +211,8 @@ public class MainTeleOp extends LinearOpMode {
 
                     wristState = WRISTSTATE.UP;
 
+                    slideState = SLIDESTATE.ZERO;
+
                     // drive
                     if(gamepad1.left_trigger > 0.1) {
                         driveSpeed = Constants.driveSpeedOuttakeUpSlow;
@@ -310,7 +312,37 @@ public class MainTeleOp extends LinearOpMode {
                     robot.openGrabber();
                 }
 
-                // sets state to maneuvering
+                if(gamepad1.right_trigger > 0.1) {
+                    if(robotState == ROBOTSTATE.INTAKE) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.MANEUVERING;
+                    }
+
+                    if(gamepad1.b && robotState != ROBOTSTATE.OUTTAKEUPLOW) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEUPLOW;
+                    }
+
+                    if(gamepad1.y && robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEUPHIGH;
+
+                        slideState = SLIDESTATE.MEDIUM;
+                    }
+
+                    if(gamepad1.x && robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.OUTTAKEUPHIGH;
+
+                        slideState = SLIDESTATE.HIGH;
+                    }
+                } else {
+                    if(robotState != ROBOTSTATE.INTAKE) {
+                        lastRobotState = robotState;
+                        robotState = ROBOTSTATE.INTAKE;
+                    }
+                }
+                /*// sets state to maneuvering
                 if (gamepad1.x && robotState != ROBOTSTATE.MANEUVERING) {
                     sliderTimer.reset();
                     lastRobotState = robotState;
@@ -357,14 +389,14 @@ public class MainTeleOp extends LinearOpMode {
                     }
                 }
                 // sets state to outtakeground
-                /*if(gamepad1.right_trigger > 0.1) {
+                *//*if(gamepad1.right_trigger > 0.1) {
                     if(robotState != ROBOTSTATE.OUTTAKEGROUND) {
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.OUTTAKEGROUND;
                     }
                 }*/
 
-                if(gamepad1.right_trigger > 0.1) {
+                if(gamepad1.right_bumper) {
                     armDunk = Constants.armDunk;
                 } else {
                     armDunk = 0;
