@@ -17,13 +17,12 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
             left trigger: slower driving (hold)
 
             left bumper: open/close grabber (toggle)
+            right bumper: dunk arm
 
-            a (cross): intake position
-            b (circle): outtake on low junction
-            x (square): wrist up, fast driving
-            y (triangle): outtake on medium junction
-            options: outtake on high junction
-            right trigger: dunk arm
+            right trigger: wrist up, fast driving + 2nd controls
+            2nd b (circle): outtake on low junction
+            2nd x (square): outtake on high junction
+            2nd y (triangle): outtake on medium junction
 
         Two Controllers:
             gamepad 1:
