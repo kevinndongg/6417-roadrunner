@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /*
@@ -91,9 +92,13 @@ public class Hardware6417 {
         }
     }
 
-    public void autoArm(double power, int position, int dunk) {
+    public void autoArm(int position, int dunk) {
         int target = position + dunk;
-        arm.setPower(power);
+        if(dunk == 0) {
+            arm.setPower(Constants.armFastPower);
+        } else {
+            arm.setPower(Constants.armSlowPower);
+        }
         if(arm.getCurrentPosition() != target && arm.getTargetPosition() != target) {
             arm.setTargetPosition(target);
         }

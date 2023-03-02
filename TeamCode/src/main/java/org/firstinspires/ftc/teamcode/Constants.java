@@ -7,7 +7,7 @@ public class Constants {
     public static double wristDown = 0.91;
     public static double wristUp = 0.29;
 
-    public static double armSlowPower = 0.3;
+    public static double armSlowPower = 0.4;
     public static double armFastPower = 0.7;
     public static int armNearBack = 350;
     public static int armBackUpPos = 1050;

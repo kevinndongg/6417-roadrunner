@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
             left bumper: open/close grabber (toggle)
             right bumper: dunk arm
 
-            right trigger: wrist up, fast driving + enables scoring via *2nd controls*
+            right trigger: wrist up, fast driving + enables outtake via *2ND CONTROLS*
             (release right trigger: intake position)
             *2nd* b (circle): outtake on low junction
             *2nd* x (square): outtake on high junction
@@ -263,11 +263,11 @@ public class MainTeleOp extends LinearOpMode {
                     break;
 
                 case OUTTAKEBACKHIGH:
-                    robot.autoArm(Constants.armFastPower,Constants.armBackUpPos, armDunk);
+                    robot.autoArm(Constants.armBackUpPos, armDunk);
                     break;
 
                 case OUTTAKEBACKLOW:
-                    robot.autoArm(Constants.armFastPower, Constants.armBackLowPos, armDunk);
+                    robot.autoArm(Constants.armBackLowPos, armDunk);
                     break;
 
                 /*case GROUNDBACK:
