@@ -94,7 +94,7 @@ public class Hardware6417 {
 
     public void autoArm(int position, int dunk) {
         int target = position + dunk;
-        if(dunk == 0) {
+        if(dunk == 0 || !armNear(target,Constants.armNear)) {
             arm.setPower(Constants.armFastPower);
         } else {
             arm.setPower(Constants.armSlowPower);
@@ -110,8 +110,8 @@ public class Hardware6417 {
         }
     }
 
-    public boolean armNear(int target) {
-        return Math.abs(arm.getCurrentPosition() - target) < Constants.armNearBack;
+    public boolean armNear(int target, int range) {
+        return Math.abs(arm.getCurrentPosition() - target) < range;
     }
 
     public boolean sliderAbove(int target) {
