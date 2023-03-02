@@ -311,7 +311,9 @@ public class MainTeleOp extends LinearOpMode {
                     robot.openGrabber();
                 }
 
-                if(gamepad1.right_trigger > 0.1) {
+
+                // HOLD RIGHT TRIGGER CONTROLS
+                /*if(gamepad1.right_trigger > 0.1) {
                     if(robotState == ROBOTSTATE.INTAKE) {
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.MANEUVERING;
@@ -322,16 +324,20 @@ public class MainTeleOp extends LinearOpMode {
                         robotState = ROBOTSTATE.OUTTAKEUPLOW;
                     }
 
-                    if(gamepad1.y && robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
-                        lastRobotState = robotState;
-                        robotState = ROBOTSTATE.OUTTAKEUPHIGH;
+                    if(gamepad1.y) {
+                        if(robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
+                            lastRobotState = robotState;
+                            robotState = ROBOTSTATE.OUTTAKEUPHIGH;
+                        }
 
                         slideState = SLIDESTATE.MEDIUM;
                     }
 
-                    if(gamepad1.x && robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
-                        lastRobotState = robotState;
-                        robotState = ROBOTSTATE.OUTTAKEUPHIGH;
+                    if(gamepad1.x) {
+                        if(robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
+                            lastRobotState = robotState;
+                            robotState = ROBOTSTATE.OUTTAKEUPHIGH;
+                        }
 
                         slideState = SLIDESTATE.HIGH;
                     }
@@ -340,13 +346,8 @@ public class MainTeleOp extends LinearOpMode {
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.INTAKE;
                     }
-                }
-                /*// sets state to maneuvering
-                if (gamepad1.x && robotState != ROBOTSTATE.MANEUVERING) {
-                    sliderTimer.reset();
-                    lastRobotState = robotState;
-                    robotState = ROBOTSTATE.MANEUVERING;
-                }
+                }*/
+                // sets state to maneuvering
 
                 // intake
                 if (gamepad1.a && robotState != ROBOTSTATE.INTAKE) {
@@ -377,7 +378,7 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 // high preset
-                if(gamepad1.options) {
+                if(gamepad1.x) {
                     if(robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.OUTTAKEUPHIGH;
@@ -388,14 +389,14 @@ public class MainTeleOp extends LinearOpMode {
                     }
                 }
                 // sets state to outtakeground
-                *//*if(gamepad1.right_trigger > 0.1) {
+                /*if(gamepad1.right_trigger > 0.1) {
                     if(robotState != ROBOTSTATE.OUTTAKEGROUND) {
                         lastRobotState = robotState;
                         robotState = ROBOTSTATE.OUTTAKEGROUND;
                     }
                 }*/
 
-                if(gamepad1.right_bumper) {
+                if(gamepad1.right_trigger > 0.1) {
                     armDunk = Constants.armDunk;
                 } else {
                     armDunk = 0;
