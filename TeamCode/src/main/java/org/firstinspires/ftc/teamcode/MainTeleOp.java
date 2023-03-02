@@ -19,10 +19,11 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
             left bumper: open/close grabber (toggle)
             right bumper: dunk arm
 
-            right trigger: wrist up, fast driving + 2nd controls
-            2nd b (circle): outtake on low junction
-            2nd x (square): outtake on high junction
-            2nd y (triangle): outtake on medium junction
+            right trigger: wrist up, fast driving + enables scoring via *2nd controls*
+            (release right trigger: intake position)
+            *2nd* b (circle): outtake on low junction
+            *2nd* x (square): outtake on high junction
+            *2nd* y (triangle): outtake on medium junction
 
         Two Controllers:
             gamepad 1:
@@ -51,7 +52,7 @@ public class MainTeleOp extends LinearOpMode {
     double driveSpeed;
     boolean singleController;
     boolean lastLB1 = false;
-    boolean grabbing = true;
+    boolean grabbing = false;
     int armDunk;
 
     ElapsedTime sliderTimer = new ElapsedTime(0);
@@ -267,13 +268,14 @@ public class MainTeleOp extends LinearOpMode {
                     }
                     break;
 
-                // MOVINGUP for when arm is going to OUTTAKEUP
                 case OUTTAKEBACKHIGH:
                     robot.autoArm(Constants.armFastPower,Constants.armBackUpPos, armDunk);
                     break;
+
                 case OUTTAKEBACKLOW:
                     robot.autoArm(Constants.armFastPower, Constants.armBackLowPos, armDunk);
                     break;
+
                 /*case GROUNDBACK:
                     robot.autoArm(Constants.armFastPower, Constants.armGroundBackPos);
                     break;*/
@@ -488,6 +490,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("robotState: ", robotState);
             telemetry.addData("slideState: ", slideState);
             telemetry.addData("armState: ", armState);
+            telemetry.addData("sliderTimer secs: ", sliderTimer.seconds());
             robot.telemetry(telemetry);
             // telemetry.addData("armGoingUp: ", armGoingUp);
             //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
