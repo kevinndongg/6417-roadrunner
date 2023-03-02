@@ -4,11 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.openftc.easyopencv.OpenCvCamera;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-
 /*
     CONTROLS:
         One controller (gamepad 1):
@@ -114,12 +109,11 @@ public class MainTeleOp extends LinearOpMode {
             double horz = gamepad1.left_stick_x;
             double rotate = gamepad1.right_stick_x;
 
-            // drive
+            // move wheels
             robot.clipJoyMecanumDrive(vert,horz,rotate,driveSpeed);
 
 
             // ROBOT STATE MACHINE
-
 
             switch (robotState) {
                 // INTAKE for when the robot is ready to pick up cones
@@ -349,7 +343,6 @@ public class MainTeleOp extends LinearOpMode {
                         robotState = ROBOTSTATE.INTAKE;
                     }
                 }*/
-                // sets state to maneuvering
 
                 // intake
                 if (gamepad1.a && robotState != ROBOTSTATE.INTAKE) {
