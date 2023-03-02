@@ -37,6 +37,9 @@ public class Hardware6417 {
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         arm.setDirection(DcMotorSimple.Direction.REVERSE);
         slider.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     // resets encoders, sets runmode
@@ -94,7 +97,7 @@ public class Hardware6417 {
 
     public void autoArm(int position, int dunk) {
         int target = position + dunk;
-        if(dunk == 0 || !armNear(target,Constants.armNear)) {
+        if(dunk == 0 || arm.getCurrentPosition() < position) {
             arm.setPower(Constants.armFastPower);
         } else {
             arm.setPower(Constants.armSlowPower);
