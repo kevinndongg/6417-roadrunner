@@ -54,6 +54,7 @@ public class MainTeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException
     {
         States6417 states = new States6417(hardwareMap);
+        states.resetRobot();
 
         waitForStart();
         resetRuntime();
