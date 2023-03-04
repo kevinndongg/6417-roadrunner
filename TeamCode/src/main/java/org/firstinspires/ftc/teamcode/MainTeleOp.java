@@ -90,43 +90,34 @@ public class MainTeleOp extends LinearOpMode {
                 }
                 lastLB1 = gamepad1.left_bumper;
 
+                if(gamepad1.left_trigger > 0.1) {
+                    slowDrive = true;
+                } else {
+                    slowDrive = false;
+                }
+
                 // HOLD RIGHT TRIGGER CONTROLS
-                /*if(gamepad1.right_trigger > 0.1) {
-                    if(robotState == ROBOTSTATE.INTAKE) {
-                        lastRobotState = robotState;
-                        robotState = ROBOTSTATE.MANEUVERING;
+                if(gamepad1.right_trigger > 0.1) {
+                    if(states.getRobotState() == States6417.ROBOTSTATE.INTAKE) {
+                        states.setRobotState(States6417.ROBOTSTATE.MANEUVERING);
                     }
 
-                    if(gamepad1.b && robotState != ROBOTSTATE.OUTTAKEUPLOW) {
-                        lastRobotState = robotState;
-                        robotState = ROBOTSTATE.OUTTAKEUPLOW;
+                    if(gamepad1.b) {
+                        states.setRobotState(States6417.ROBOTSTATE.OUTTAKELOW);
                     }
 
                     if(gamepad1.y) {
-                        if(robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
-                            lastRobotState = robotState;
-                            robotState = ROBOTSTATE.OUTTAKEUPHIGH;
-                        }
-
-                        slideState = SLIDESTATE.MEDIUM;
+                        states.setRobotState(States6417.ROBOTSTATE.OUTTAKEMED);
                     }
 
                     if(gamepad1.x) {
-                        if(robotState != ROBOTSTATE.OUTTAKEUPHIGH) {
-                            lastRobotState = robotState;
-                            robotState = ROBOTSTATE.OUTTAKEUPHIGH;
-                        }
-
-                        slideState = SLIDESTATE.HIGH;
+                        states.setRobotState(States6417.ROBOTSTATE.OUTTAKEHIGH);
                     }
                 } else {
-                    if(robotState != ROBOTSTATE.INTAKE) {
-                        lastRobotState = robotState;
-                        robotState = ROBOTSTATE.INTAKE;
-                    }
-                }*/
+                    states.setRobotState(States6417.ROBOTSTATE.INTAKE);
+                }
 
-                // intake
+                /*// intake
                 if (gamepad1.a) {
                     states.setRobotState(States6417.ROBOTSTATE.INTAKE);
                 }
@@ -144,7 +135,7 @@ public class MainTeleOp extends LinearOpMode {
                 // high preset
                 if(gamepad1.x) {
                     states.setRobotState(States6417.ROBOTSTATE.OUTTAKEHIGH);
-                }
+                }*/
 
                 if(gamepad1.right_trigger > 0.1) {
                     armDunk = Constants.armDunk;
@@ -159,6 +150,12 @@ public class MainTeleOp extends LinearOpMode {
                     grabbing = !grabbing;
                 }
                 lastLB1 = gamepad1.left_bumper;
+
+                if (gamepad1.left_trigger > 0.1) {
+                    slowDrive = true;
+                } else {
+                    slowDrive = false;
+                }
 
                 if (gamepad1.a) {
                     states.setRobotState(States6417.ROBOTSTATE.INTAKE);

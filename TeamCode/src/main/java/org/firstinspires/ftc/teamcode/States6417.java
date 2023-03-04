@@ -199,6 +199,10 @@ public class States6417 {
         }
     }
 
+    public ROBOTSTATE getRobotState() {
+        return robotState;
+    }
+
     public void openGrabber() {
         robot.openGrabber();
     }
