@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /*
-    THIS IS THE HARDWARE CLASS FOR NEILBOT IN THE 2023 POWER PLAY SEASON
+    HARDWARE CLASS FOR NEILBOT IN THE 2023 POWER PLAY SEASON
 
     This class is where the motors and servos are declared and called.
     All of the physical movements of the robot are in this class
