@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
                 right trigger: *HOLD FOR 2nd CONTROLS* wrist up, fast driving
                 (release right trigger: intake position)
-                
+
                 *2nd* a (cross): maneuvering position
                 *2nd* b (circle): outtake on low junction
                 *2nd* x (square): outtake on high junction
@@ -63,6 +63,8 @@ public class MainTeleOp extends LinearOpMode {
     boolean slowDrive;
     boolean singleController;
     boolean lastLB1 = false;
+    boolean lastOpDD1 = false;
+
     boolean grabbing = false;
     int armDunk;
 
@@ -109,10 +111,10 @@ public class MainTeleOp extends LinearOpMode {
 
             // CONTROLS
 
-            // ONE CONTROLLER CONTROLS
+            // ONE CONTROLLER
             if(singleController) {
                 // SWITCH CONTROL TYPE
-                if (gamepad1.options && gamepad1.dpad_down) {
+                if (gamepad1.options && gamepad1.dpad_down && !lastOpDD1) {
                     if(controls1 == SINGLECONTROL.RIGHTTRIGGER) {
                         controls1 = SINGLECONTROL.SIMPLE;
                     }
@@ -120,7 +122,10 @@ public class MainTeleOp extends LinearOpMode {
                         controls1 = SINGLECONTROL.RIGHTTRIGGER;
                     }
                 }
+                lastOpDD1 = gamepad1.options && gamepad1.dpad_down;
+
                 switch(controls1) {
+                    // RIGHTTRIGGER CONTROLS
                     case RIGHTTRIGGER:
                         // GRABBER CONTROL
                         if (gamepad1.left_bumper && !lastLB1) {
@@ -263,8 +268,10 @@ public class MainTeleOp extends LinearOpMode {
             // moves the robot lol
             states.moveRobot(slowDrive, vert, horz, rotate, armDunk);
 
-            // telemetry for testing
-            telemetry.addData("singleController", singleController);
+            // telemetry
+            telemetry.addData("singleController: ", singleController);
+            telemetry.addData("controls1: ", controls1);
+            telemetry.addData("controls2: ", controls2);
             states.telemetry(telemetry);
             telemetry.update();
         }
