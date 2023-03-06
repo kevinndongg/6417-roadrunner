@@ -6,19 +6,36 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 /*
     CONTROLS:
         One controller (gamepad 1):
-            left joystick: strafe
-            right joystick: turn
-            left trigger: slower driving (hold)
+            options + dpad down: SWITCH CONTROL TYPE
 
-            left bumper: open/close grabber (toggle)
-            right bumper: dunk arm
+            RIGHTTRIGGER controls:
+                left joystick: strafe
+                right joystick: turn
+                left trigger: slower driving (hold)
 
-            right trigger: wrist up, fast driving + enables outtake via *2ND CONTROLS*
-            (release right trigger: intake position)
-            *2nd* b (circle): outtake on low junction
-            *2nd* x (square): outtake on high junction
-            *2nd* y (triangle): outtake on medium junction
+                left bumper: open/close grabber (toggle)
+                right bumper: dunk arm
 
+                right trigger: *HOLD FOR 2nd CONTROLS* wrist up, fast driving
+                (release right trigger: intake position)
+                
+                *2nd* a (cross): maneuvering position
+                *2nd* b (circle): outtake on low junction
+                *2nd* x (square): outtake on high junction
+                *2nd* y (triangle): outtake on medium junction
+
+            SIMPLE controls:
+                left joystick: strafe
+                right joystick: turn
+                left trigger: slower driving (hold)
+
+                left bumper: open/close grabber (toggle)
+                right bumper: dunk arm
+
+                a (cross): intake position
+                b (circle): outtake on low junction
+                x (square): outtake on high junction
+                y (triangle): outtake on medium junction
         Two Controllers:
             gamepad 1:
                 left joystick: strafe
@@ -49,6 +66,16 @@ public class MainTeleOp extends LinearOpMode {
     boolean grabbing = false;
     int armDunk;
 
+    enum SINGLECONTROL {
+        SIMPLE, RIGHTTRIGGER
+    }
+
+    enum DOUBLECONTROL {
+        SIMPLE
+    }
+
+    SINGLECONTROL controls1 = SINGLECONTROL.RIGHTTRIGGER;
+    DOUBLECONTROL controls2 = DOUBLECONTROL.SIMPLE;
 
 
     public void runOpMode() throws InterruptedException
@@ -84,65 +111,104 @@ public class MainTeleOp extends LinearOpMode {
 
             // ONE CONTROLLER CONTROLS
             if(singleController) {
-                // GRABBER CONTROL
-                if(gamepad1.left_bumper && !lastLB1){
-                    grabbing = !grabbing;
-                }
-                lastLB1 = gamepad1.left_bumper;
-
-                if(gamepad1.left_trigger > 0.1) {
-                    slowDrive = true;
-                } else {
-                    slowDrive = false;
-                }
-
-                // HOLD RIGHT TRIGGER CONTROLS
-                if(gamepad1.right_trigger > 0.1) {
-                    if(states.getRobotState() == States6417.ROBOTSTATE.INTAKE) {
-                        states.setRobotState(States6417.ROBOTSTATE.MANEUVERING);
+                // SWITCH CONTROL TYPE
+                if (gamepad1.options && gamepad1.dpad_down) {
+                    if(controls1 == SINGLECONTROL.RIGHTTRIGGER) {
+                        controls1 = SINGLECONTROL.SIMPLE;
                     }
-
-                    if(gamepad1.b) {
-                        states.setRobotState(States6417.ROBOTSTATE.OUTTAKELOW);
+                    else {
+                        controls1 = SINGLECONTROL.RIGHTTRIGGER;
                     }
-
-                    if(gamepad1.y) {
-                        states.setRobotState(States6417.ROBOTSTATE.OUTTAKEMED);
-                    }
-
-                    if(gamepad1.x) {
-                        states.setRobotState(States6417.ROBOTSTATE.OUTTAKEHIGH);
-                    }
-                } else {
-                    states.setRobotState(States6417.ROBOTSTATE.INTAKE);
                 }
+                switch(controls1) {
+                    case RIGHTTRIGGER:
+                        // GRABBER CONTROL
+                        if (gamepad1.left_bumper && !lastLB1) {
+                            grabbing = !grabbing;
+                        }
+                        lastLB1 = gamepad1.left_bumper;
 
-                /*// intake
-                if (gamepad1.a) {
-                    states.setRobotState(States6417.ROBOTSTATE.INTAKE);
+                        // slow drive
+                        if (gamepad1.left_trigger > 0.1) {
+                            slowDrive = true;
+                        } else {
+                            slowDrive = false;
+                        }
+
+                        // HOLD RIGHT TRIGGER CONTROLS
+                        if (gamepad1.right_trigger > 0.1) {
+                            if (states.getRobotState() == States6417.ROBOTSTATE.INTAKE) {
+                                states.setRobotState(States6417.ROBOTSTATE.MANEUVERING);
+                            }
+
+                            if(gamepad1.a) {
+                                states.setRobotState(States6417.ROBOTSTATE.MANEUVERING);
+                            }
+
+                            if (gamepad1.b) {
+                                states.setRobotState(States6417.ROBOTSTATE.OUTTAKELOW);
+                            }
+
+                            if (gamepad1.y) {
+                                states.setRobotState(States6417.ROBOTSTATE.OUTTAKEMED);
+                            }
+
+                            if (gamepad1.x) {
+                                states.setRobotState(States6417.ROBOTSTATE.OUTTAKEHIGH);
+                            }
+                        } else {
+                            states.setRobotState(States6417.ROBOTSTATE.INTAKE);
+                        }
+
+                        // dunk arm
+                        if (gamepad1.right_bumper) {
+                            armDunk = Constants.armDunk;
+                        } else {
+                            armDunk = 0;
+                        }
+                        break;
+                    case SIMPLE:
+                        // grab
+                        if (gamepad1.left_bumper && !lastLB1) {
+                            grabbing = !grabbing;
+                        }
+                        lastLB1 = gamepad1.left_bumper;
+
+                        // slow drive
+                        if (gamepad1.left_trigger > 0.1) {
+                            slowDrive = true;
+                        } else {
+                            slowDrive = false;
+                        }
+
+                        // intake
+                        if (gamepad1.a) {
+                            states.setRobotState(States6417.ROBOTSTATE.INTAKE);
+                        }
+
+                        // low preset
+                        if (gamepad1.b) {
+                            states.setRobotState(States6417.ROBOTSTATE.OUTTAKELOW);
+                        }
+
+                        // medium preset
+                        if (gamepad1.y) {
+                            states.setRobotState(States6417.ROBOTSTATE.OUTTAKEMED);
+                        }
+
+                        // high preset
+                        if(gamepad1.x) {
+                            states.setRobotState(States6417.ROBOTSTATE.OUTTAKEHIGH);
+                        }
+
+                        // dunk arm
+                        if (gamepad1.right_bumper) {
+                            armDunk = Constants.armDunk;
+                        } else {
+                            armDunk = 0;
+                        }
+                        break;
                 }
-
-                // low preset
-                if (gamepad1.b) {
-                    states.setRobotState(States6417.ROBOTSTATE.OUTTAKELOW);
-                }
-
-                // medium preset
-                if (gamepad1.y) {
-                    states.setRobotState(States6417.ROBOTSTATE.OUTTAKEMED);
-                }
-
-                // high preset
-                if(gamepad1.x) {
-                    states.setRobotState(States6417.ROBOTSTATE.OUTTAKEHIGH);
-                }*/
-
-                if(gamepad1.right_trigger > 0.1) {
-                    armDunk = Constants.armDunk;
-                } else {
-                    armDunk = 0;
-                }
-
             // TWO CONTROLLER CONTROLS
             } else {
                 // GRABBER CONTROLS
