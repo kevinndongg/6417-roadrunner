@@ -113,10 +113,6 @@ public class Hardware6417 {
         }
     }
 
-    public boolean armNear(int target, int range) {
-        return Math.abs(arm.getCurrentPosition() - target) < range;
-    }
-
     public boolean sliderAbove(int target) {
         return slider.getCurrentPosition() > target;
     }
