@@ -70,7 +70,7 @@ public class MainTeleOp extends LinearOpMode {
 
     boolean grabbing = false;
     int armDunk;
-    int manualSlideDelta = 0;
+    int manualSliderDelta = 0;
 
     enum SINGLECONTROL {
         SIMPLE, RIGHTTRIGGER
@@ -262,11 +262,11 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 if(gamepad2.dpad_up) {
-                    manualSlideDelta = 100;
+                    manualSliderDelta = 100;
                 } else if(gamepad2.dpad_down) {
-                    manualSlideDelta = -100;
+                    manualSliderDelta = -100;
                 } else {
-                    manualSlideDelta = 0;
+                    manualSliderDelta = 0;
                 }
 
                 // dunk arm
@@ -278,7 +278,7 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // moves the robot lol
-            states.moveRobot(slowDrive, vert, horz, rotate, armDunk, manualSlideDelta);
+            states.moveRobot(slowDrive, vert, horz, rotate, armDunk, manualSliderDelta);
 
             // telemetry
             telemetry.addData("singleController: ", singleController);
