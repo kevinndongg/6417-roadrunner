@@ -40,7 +40,10 @@ public class Debug extends LinearOpMode {
         slider = hardwareMap.get(DcMotorEx.class, "slider");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
 
+        // imu declaration
         imu = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        imu.initialize(parameters);
 
         // servo declarations
         wrist = hardwareMap.get(Servo.class, "wrist");
@@ -169,7 +172,7 @@ public class Debug extends LinearOpMode {
             telemetry.addData("grabber position: ", grabber.getPosition());
             telemetry.addData("wrist position: ", wrist.getPosition());
             telemetry.addData("Arm position: ", arm.getCurrentPosition());
-            telemetry.addData("", "");
+            telemetry.addData("angular orientation:", imu.getAngularOrientation());
             telemetry.update();
         }
     }

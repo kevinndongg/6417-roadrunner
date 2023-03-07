@@ -44,7 +44,7 @@ public class States6417 {
         driveSpeed = 0;
     }
 
-    public void moveRobot(boolean slowDrive, double vert, double horz, double rotate, int armDunk) {
+    public void moveRobot(boolean slowDrive, double vert, double horz, double rotate, int armDunk, int manualSlideDelta) {
         robot.clipJoyMecanumDrive(vert, horz, rotate, driveSpeed);
 
         switch (robotState) {
@@ -138,10 +138,10 @@ public class States6417 {
                 break;
             // MEDIUM for slide to medium junction preset
             case MEDIUM:
-                robot.autoSlider(Constants.slideMediumPos);
+                robot.autoSlider(Constants.slideMediumPos + manualSlideDelta);
                 break;
             case HIGH:
-                robot.autoSlider(Constants.slideHighPos);
+                robot.autoSlider(Constants.slideHighPos + manualSlideDelta);
                 break;
             // BOBBING for when robot shifting from MANEUVERING to INTAKE
             case BOBBING:
