@@ -55,6 +55,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
                 left trigger: dunk arm
                 right bumper: reset slider
+
+                dpad up: raise slider (hold)
+                dpad down: lower slider (hold)
  */
 
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
