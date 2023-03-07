@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,6 +18,7 @@ public class Debug extends LinearOpMode {
     DcMotorEx frontLeft, frontRight, backLeft, backRight, slider, arm;
     Servo grabber;
     Servo wrist;
+    BNO055IMU imu;
     //DistanceSensor distance;
 
     // list of power values
@@ -37,6 +39,8 @@ public class Debug extends LinearOpMode {
         //distance =  hardwareMap.get(DistanceSensor.class, "distance");
         slider = hardwareMap.get(DcMotorEx.class, "slider");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         // servo declarations
         wrist = hardwareMap.get(Servo.class, "wrist");
@@ -164,9 +168,8 @@ public class Debug extends LinearOpMode {
             telemetry.addData("Slider position", slider.getCurrentPosition());
             telemetry.addData("grabber position: ", grabber.getPosition());
             telemetry.addData("wrist position: ", wrist.getPosition());
-            telemetry.addData("Arm position: ", + arm.getCurrentPosition());
-            //telemetry.addData("range", String.format("%.01f mm", distance.getDistance(DistanceUnit.MM)));
-            //telemetry.addData("range", String.format("%.01f in", distance.getDistance(DistanceUnit.INCH)));
+            telemetry.addData("Arm position: ", arm.getCurrentPosition());
+            telemetry.addData("", "");
             telemetry.update();
         }
     }
