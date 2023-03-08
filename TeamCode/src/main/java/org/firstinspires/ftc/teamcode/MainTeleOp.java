@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
 
 /*
 
@@ -158,26 +159,26 @@ public class MainTeleOp extends LinearOpMode {
                         // HOLD RIGHT TRIGGER CONTROLS
                         if (gamepad1.right_trigger > 0.1) {
                             if (states.getRobotState() == States6417.ROBOTSTATE.INTAKE) {
-                                states.setRobotState(States6417.ROBOTSTATE.MANEUVERING);
+                                states.setRobotState(ROBOTSTATE.MANEUVERING);
                             }
 
                             if(gamepad1.a) {
-                                states.setRobotState(States6417.ROBOTSTATE.MANEUVERING);
+                                states.setRobotState(ROBOTSTATE.MANEUVERING);
                             }
 
                             if (gamepad1.b) {
-                                states.setRobotState(States6417.ROBOTSTATE.OUTTAKELOW);
+                                states.setRobotState(ROBOTSTATE.OUTTAKELOW);
                             }
 
                             if (gamepad1.y) {
-                                states.setRobotState(States6417.ROBOTSTATE.OUTTAKEMED);
+                                states.setRobotState(ROBOTSTATE.OUTTAKEMED);
                             }
 
                             if (gamepad1.x) {
-                                states.setRobotState(States6417.ROBOTSTATE.OUTTAKEHIGH);
+                                states.setRobotState(ROBOTSTATE.OUTTAKEHIGH);
                             }
                         } else {
-                            states.setRobotState(States6417.ROBOTSTATE.INTAKE);
+                            states.setRobotState(ROBOTSTATE.INTAKE);
                         }
 
                         // dunk arm
@@ -203,22 +204,22 @@ public class MainTeleOp extends LinearOpMode {
 
                         // intake
                         if (gamepad1.a) {
-                            states.setRobotState(States6417.ROBOTSTATE.INTAKE);
+                            states.setRobotState(ROBOTSTATE.INTAKE);
                         }
 
                         // low preset
                         if (gamepad1.b) {
-                            states.setRobotState(States6417.ROBOTSTATE.OUTTAKELOW);
+                            states.setRobotState(ROBOTSTATE.OUTTAKELOW);
                         }
 
                         // medium preset
                         if (gamepad1.y) {
-                            states.setRobotState(States6417.ROBOTSTATE.OUTTAKEMED);
+                            states.setRobotState(ROBOTSTATE.OUTTAKEMED);
                         }
 
                         // high preset
                         if(gamepad1.x) {
-                            states.setRobotState(States6417.ROBOTSTATE.OUTTAKEHIGH);
+                            states.setRobotState(ROBOTSTATE.OUTTAKEHIGH);
                         }
 
                         // dunk arm
@@ -244,32 +245,32 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 if (gamepad1.a) {
-                    states.setRobotState(States6417.ROBOTSTATE.INTAKE);
+                    states.setRobotState(ROBOTSTATE.INTAKE);
                 }
 
                 // sets state to maneuvering
                 if (gamepad1.b) {
-                    states.setRobotState(States6417.ROBOTSTATE.MANEUVERING);
+                    states.setRobotState(ROBOTSTATE.MANEUVERING);
                 }
 
                 // intake
                 if (gamepad2.a) {
-                    states.setRobotState(States6417.ROBOTSTATE.INTAKE);
+                    states.setRobotState(ROBOTSTATE.INTAKE);
                 }
 
                 // low preset
                 if (gamepad2.b) {
-                    states.setRobotState(States6417.ROBOTSTATE.OUTTAKELOW);
+                    states.setRobotState(ROBOTSTATE.OUTTAKELOW);
                 }
 
                 // medium preset
                 if (gamepad2.y) {
-                    states.setRobotState(States6417.ROBOTSTATE.OUTTAKEMED);
+                    states.setRobotState(ROBOTSTATE.OUTTAKEMED);
                 }
 
                 // high preset
                 if(gamepad2.x) {
-                    states.setRobotState(States6417.ROBOTSTATE.OUTTAKEHIGH);
+                    states.setRobotState(ROBOTSTATE.OUTTAKEHIGH);
                 }
 
                 if(gamepad2.dpad_up) {
