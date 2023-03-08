@@ -65,11 +65,10 @@ import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
                 x (square): outtake on high junction
                 y (triangle): outtake on medium junction
 
-                left trigger: dunk arm
+                left trigger: dunk arm (hold)
                 right bumper: reset slider
 
-                dpad up: raise slider (hold)
-                dpad down: lower slider (hold)
+                left joystick: manual slider
  */
 
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
@@ -273,10 +272,9 @@ public class MainTeleOp extends LinearOpMode {
                     states.setRobotState(ROBOTSTATE.OUTTAKEHIGH);
                 }
 
-                if(gamepad2.dpad_up) {
-                    manualSliderDelta = 100;
-                } else if(gamepad2.dpad_down) {
-                    manualSliderDelta = -100;
+                // manual slider
+                if(Math.abs(gamepad2.left_stick_y) > 0.1) {
+                    manualSliderDelta = -(int)(gamepad2.left_stick_y * Constants.manualSliderDelta);
                 } else {
                     manualSliderDelta = 0;
                 }
