@@ -4,6 +4,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /*
+
+    notes for myself:
+        short term:
+            -test imu
+            -test manual slide
+
+        long term:
+            -meepmeep
+            -tune robot
+            explore auto
+
     CONTROLS:
         One controller (gamepad 1):
             options + dpad down: SWITCH CONTROL TYPE
