@@ -157,7 +157,7 @@ public class MainTeleOp extends LinearOpMode {
 
                         // HOLD RIGHT TRIGGER CONTROLS
                         if (gamepad1.right_trigger > 0.1) {
-                            if (states.getRobotState() == States6417.ROBOTSTATE.INTAKE) {
+                            if (states.getRobotState() == ROBOTSTATE.INTAKE) {
                                 states.setRobotState(ROBOTSTATE.MANEUVERING);
                             }
 
