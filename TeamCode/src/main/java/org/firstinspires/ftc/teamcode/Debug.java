@@ -95,7 +95,6 @@ public class Debug extends LinearOpMode {
         }); //done initializing camera
 
         waitForStart();
-        webcam.stopStreaming();
 
         while(opModeIsActive()){
             // drive calculations

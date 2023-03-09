@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
 
 /*
-
     notes for myself:
         short term:
             -test imu
