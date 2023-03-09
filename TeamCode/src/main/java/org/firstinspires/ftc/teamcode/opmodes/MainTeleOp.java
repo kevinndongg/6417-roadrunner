@@ -1,19 +1,17 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.States6417;
 import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
 
 /*
     notes for myself:
-        short term:
-            -test imu
-            -test manual slide
-
-        long term:
-            -meepmeep
-            -tune robot
-            explore auto
+        -AUTO!!!
+        -imu
+        -test manual slider (left joystick 2)
 
     CONTROLS:
         One controller (gamepad 1):

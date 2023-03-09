@@ -9,9 +9,9 @@ import org.opencv.imgproc.Imgproc;
 
 public class SignalDetectorPipeline extends OpenCvPipeline {
     Mat copy = new Mat();
-    double redTotal;
-    double greenTotal;
-    double blueTotal;
+    public double redTotal;
+    public double greenTotal;
+    public double blueTotal;
 
     public int position;
 

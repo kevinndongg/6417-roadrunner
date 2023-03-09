@@ -6,7 +6,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class States6417 {
     // High level enums
-    enum ROBOTSTATE {
+    public enum ROBOTSTATE {
         INTAKE, MANEUVERING, OUTTAKELOW, OUTTAKEMED, OUTTAKEHIGH
     }
 
