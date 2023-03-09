@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -20,12 +21,16 @@ public class Hardware6417 {
     DcMotorEx frontLeft, frontRight, backLeft, backRight, slider, arm;
     Servo wrist,grabber;
 
+    BNO055IMU imu;
+
     // declares motors
     public Hardware6417(HardwareMap hwMap) {
         frontLeft = hwMap.get(DcMotorEx.class,"front left");
         frontRight = hwMap.get(DcMotorEx.class, "front right");
         backLeft = hwMap.get(DcMotorEx.class, "back left");
         backRight = hwMap.get(DcMotorEx.class, "back right");
+
+        imu = hwMap.get(BNO055IMU.class, "imu");
 
         slider = hwMap.get(DcMotorEx.class, "slider");
         arm = hwMap.get(DcMotorEx.class, "arm");

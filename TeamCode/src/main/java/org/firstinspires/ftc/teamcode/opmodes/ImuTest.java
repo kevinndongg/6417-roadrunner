@@ -21,7 +21,8 @@ public class ImuTest extends LinearOpMode {
 
     double[] angles = new double[3];
 
-    Orientation orientation = imu.getAngularOrientation();
+    double angleOffset;
+    double relativeAngle;
     double driveSpeed = 0.4;
 
     public void runOpMode() throws InterruptedException
@@ -43,7 +44,6 @@ public class ImuTest extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
         while(opModeIsActive()){
             // drive calculations
             double vert = -gamepad1.left_stick_y;
@@ -51,7 +51,6 @@ public class ImuTest extends LinearOpMode {
             double rotate = gamepad1.right_stick_x;
 
             Drive(vert, horz, rotate);
-
 
             getHeading(angles, imu, AngleUnit.DEGREES);
 
