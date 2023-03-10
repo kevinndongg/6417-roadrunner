@@ -19,11 +19,11 @@ public class ImuTest extends LinearOpMode {
     DcMotorEx frontLeft, frontRight, backLeft, backRight;
     BNO055IMU imu;
 
-    double[] angles = new double[3];
-
     double vert,horz,rotate;
     double relativeAngle,leftStickAngle, driveAngle, arcTan;
     double driveSpeed = 0.4;
+
+    boolean lastLB1 = false;
 
     public void runOpMode() throws InterruptedException
     {
@@ -39,7 +39,7 @@ public class ImuTest extends LinearOpMode {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu.initialize(parameters);
 
-        double angleOffset = imu.getAngularOrientation().thirdAngle;
+        double angleOffset = 0;
 
         // servo declarations
 
@@ -54,20 +54,25 @@ public class ImuTest extends LinearOpMode {
             horz = gamepad1.left_stick_x;
             rotate = gamepad1.right_stick_x;
 
-            driveAngle = (leftStickAngle - relativeAngle + 90) % 360;
+            driveAngle = (leftStickAngle - relativeAngle - angleOffset + Math.PI/2) % Math.PI * 2;
 
-            relativeAngle = (imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle + 90) % 360;
-            arcTan = (Math.toDegrees(Math.atan(vert / horz))) % 360;
+            relativeAngle = (imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle + Math.PI/2) % Math.PI*2;
+            arcTan = Math.atan(vert / horz) % Math.PI * 2;
 
             if(horz < 0) {
-                leftStickAngle = arcTan + 180;
+                leftStickAngle = arcTan + Math.PI;
             } else if(vert < 0) {
-                leftStickAngle = arcTan + 360;
+                leftStickAngle = arcTan + Math.PI * 2;
             } else {
                 leftStickAngle = arcTan;
             }
 
-            Drive(vert, horz, rotate, leftStickAngle, relativeAngle);
+            if(gamepad1.left_bumper && !lastLB1) {
+                angleOffset = (imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle + Math.PI/2) % Math.PI/2;
+            }
+            lastLB1 = gamepad1.left_bumper;
+
+            Drive(rotate, driveAngle);
 
             telemetry.addData("relative angle", relativeAngle);
             telemetry.addData("left stick angle", leftStickAngle);
@@ -76,17 +81,14 @@ public class ImuTest extends LinearOpMode {
         }
     }
 
-    public void Drive(double vert, double horz, double rotate, double leftStickAngle, double relativeAngle){
-        double driveAngle = leftStickAngle - relativeAngle -90;
-        /*double frdrive = vert - horz - rotate;
+    public void Drive(double rotate, double driveAngle){
+        double vert = Math.sin(driveAngle);
+        double horz = Math.cos(driveAngle);
+
+        double frdrive = vert - horz - rotate;
         double fldrive = vert + horz + rotate;
         double brdrive = vert + horz - rotate;
-        double bldrive = vert - horz + rotate;*/
-
-        double frdrive = -rotate;
-        double fldrive = + rotate;
-        double brdrive = - rotate;
-        double bldrive = + rotate;
+        double bldrive = vert - horz + rotate;
 
         // finding maximum drive for division below
         double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
