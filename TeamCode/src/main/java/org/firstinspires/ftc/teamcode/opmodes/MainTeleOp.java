@@ -36,10 +36,12 @@ import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
             SIMPLE controls:
                 left joystick: strafe
                 right joystick: turn
+
                 left trigger: slower driving (hold)
+                right trigger: dunk arm (hold)
 
                 left bumper: open/close grabber (toggle)
-                right bumper: dunk arm
+                right bumper: field centric driving (toggle)
 
                 a (cross): intake position
                 b (circle): outtake on low junction
@@ -49,9 +51,11 @@ import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
             gamepad 1:
                 left joystick: strafe
                 right joystick: turn
-                right trigger: slower driving (hold)
+
+                left trigger: slower driving (hold)
 
                 left bumper: open/close grabber (toggle)
+                right bumper: field centric driving (toggle)
 
                 b (circle): wrist up, fast driving
                 a (cross): intake position
@@ -72,8 +76,10 @@ import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
 public class MainTeleOp extends LinearOpMode {
     double vert,horz,rotate;
     boolean slowDrive;
+    boolean fieldCentric = true;
     boolean singleController;
     boolean lastLB1 = false;
+    boolean lastRB1 = false;
     boolean lastOpDD1 = false;
 
     boolean grabbing = false;
@@ -219,11 +225,17 @@ public class MainTeleOp extends LinearOpMode {
                         }
 
                         // dunk arm
-                        if (gamepad1.right_bumper) {
+                        if (gamepad1.right_trigger > 0.1) {
                             armDunk = Constants.armDunk;
                         } else {
                             armDunk = 0;
                         }
+
+                        // toggle field centric driving
+                        if(gamepad1.right_bumper && !lastRB1) {
+                            fieldCentric = !fieldCentric;
+                        }
+                        lastLB1 = gamepad1.right_bumper;
                         break;
                 }
             // TWO CONTROLLER CONTROLS
@@ -239,6 +251,12 @@ public class MainTeleOp extends LinearOpMode {
                 } else {
                     slowDrive = false;
                 }
+
+                // toggle field centric drive
+                if(gamepad1.right_bumper && !lastRB1){
+                    fieldCentric = !fieldCentric;
+                }
+                lastRB1 = gamepad1.right_bumper;
 
                 if (gamepad1.a) {
                     states.setRobotState(ROBOTSTATE.INTAKE);
@@ -288,9 +306,9 @@ public class MainTeleOp extends LinearOpMode {
             states.moveRobot(slowDrive, vert, horz, rotate, armDunk, manualSliderDelta);
 
             // telemetry
-            telemetry.addData("singleController: ", singleController);
             telemetry.addData("controls1: ", controls1);
             telemetry.addData("controls2: ", controls2);
+            telemetry.addData("field centric: ", fieldCentric);
             states.telemetry(telemetry);
             telemetry.update();
         }

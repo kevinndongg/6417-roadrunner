@@ -9,6 +9,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 /*
     HARDWARE CLASS FOR NEILBOT IN THE 2023 POWER PLAY SEASON
@@ -47,7 +50,7 @@ public class Hardware6417 {
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
-    // resets encoders, sets runmode
+    // RESET METHODS
     public void resetSlider() {
         slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slider.setPower(0);
@@ -62,6 +65,8 @@ public class Hardware6417 {
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+    // GRABBER METHODS
+
     public void openGrabber() {
         if(grabber.getPosition() != Constants.grabberOpen) {
             grabber.setPosition(Constants.grabberOpen);
@@ -74,24 +79,7 @@ public class Hardware6417 {
         }
     }
 
-    public void autoSlider(int position) {
-        // check if slider goes up or down and
-        // set power accordingly
-        if(slider.getCurrentPosition() > position) {
-            slider.setPower(Constants.slideDownPower);
-        } else if(slider.getCurrentPosition() < position) {
-            slider.setPower(Constants.slideUpPower);
-        }
-
-        if(slider.getTargetPosition() != position) {
-            slider.setTargetPosition(position);
-        }
-    }
-
-    public void autoSlider(double power, int position) {
-        slider.setPower(power);
-        slider.setTargetPosition(position);
-    }
+    // ARM METHODS
 
     public void autoArm(double power, int position) {
         arm.setPower(power);
@@ -112,10 +100,33 @@ public class Hardware6417 {
         }
     }
 
+    // WRIST METHODS
+
     public void autoWrist(double position) {
         if(wrist.getPosition() != position) {
             wrist.setPosition(position);
         }
+    }
+
+    // SLIDER METHODS
+
+    public void autoSlider(int position) {
+        // check if slider goes up or down and
+        // set power accordingly
+        if(slider.getCurrentPosition() > position) {
+            slider.setPower(Constants.slideDownPower);
+        } else if(slider.getCurrentPosition() < position) {
+            slider.setPower(Constants.slideUpPower);
+        }
+
+        if(slider.getTargetPosition() != position) {
+            slider.setTargetPosition(position);
+        }
+    }
+
+    public void autoSlider(double power, int position) {
+        slider.setPower(power);
+        slider.setTargetPosition(position);
     }
 
     public boolean sliderAbove(int target) {
@@ -129,6 +140,12 @@ public class Hardware6417 {
 
     public boolean bobDone() {
         return slider.getCurrentPosition() > Constants.slideBobPos;
+    }
+
+    // IMU METHODS
+
+    public double getCumulativeAngle(){
+        return imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle;
     }
 
     public void telemetry(Telemetry tele) {
@@ -148,6 +165,31 @@ public class Hardware6417 {
         double blDrive = (-vert + horz - rotate) * Constants.driveTuningBL;
 
         // finding maximum drive for division below
+        double max = Math.abs(Math.max(Math.abs(frDrive),Math.max(Math.abs(flDrive),Math.max(Math.abs(brDrive),Math.abs(blDrive)))));
+
+        // power calculations
+        if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1) {
+            frontRight.setPower(driveSpeed * frDrive / max);
+            frontLeft.setPower(driveSpeed * flDrive / max);
+            backRight.setPower(driveSpeed * brDrive / max);
+            backLeft.setPower(driveSpeed * blDrive / max);
+        } else {
+            frontRight.setPower(0);
+            frontLeft.setPower(0);
+            backRight.setPower(0);
+            backLeft.setPower(0);
+        }
+    }
+
+    public void mecanumDrive(double driveAngle, double rotate, double driveSpeed) {
+        double vert = Math.sin(driveAngle);
+        double horz = Math.cos(driveAngle);
+
+        double frDrive = (vert + horz + rotate) * Constants.driveTuningFR;
+        double flDrive = (vert - horz - rotate) * Constants.driveTuningFL;
+        double brDrive = (vert - horz + rotate) * Constants.driveTuningBR;
+        double blDrive = (vert + horz - rotate) * Constants.driveTuningBL;
+
         double max = Math.abs(Math.max(Math.abs(frDrive),Math.max(Math.abs(flDrive),Math.max(Math.abs(brDrive),Math.abs(blDrive)))));
 
         // power calculations

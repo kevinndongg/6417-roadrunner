@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -11,8 +10,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp(name = "ImuTest", group = "TeleOp")
 public class ImuTest extends LinearOpMode {
@@ -20,7 +17,7 @@ public class ImuTest extends LinearOpMode {
     BNO055IMU imu;
 
     double vert,horz,rotate;
-    double relativeAngle,leftStickAngle, driveAngle, arcTan;
+    double cumulativeAngle,leftStickAngle, driveAngle, arcTan;
     double driveSpeed = 0.4;
 
     boolean lastLB1 = false;
@@ -54,9 +51,9 @@ public class ImuTest extends LinearOpMode {
             horz = gamepad1.left_stick_x;
             rotate = gamepad1.right_stick_x;
 
-            driveAngle = (leftStickAngle - relativeAngle - angleOffset + Math.PI/2) % Math.PI * 2;
+            driveAngle = (leftStickAngle - cumulativeAngle - angleOffset + Math.PI/2) % Math.PI * 2;
 
-            relativeAngle = (imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle + Math.PI/2) % Math.PI*2;
+            cumulativeAngle = (imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle + Math.PI/2) % Math.PI*2;
             arcTan = Math.atan(vert / horz) % Math.PI * 2;
 
             if(horz < 0) {
@@ -74,9 +71,10 @@ public class ImuTest extends LinearOpMode {
 
             Drive(rotate, driveAngle);
 
-            telemetry.addData("relative angle", relativeAngle);
-            telemetry.addData("left stick angle", leftStickAngle);
-            telemetry.addData("drive angle", driveAngle);
+            telemetry.addData("cumulative angle (deg)", Math.toDegrees(cumulativeAngle));
+            telemetry.addData("left stick angle (deg)", Math.toDegrees(leftStickAngle));
+            telemetry.addData("arcTan (deg)", Math.toDegrees(arcTan));
+            telemetry.addData("drive angle (deg)", Math.toDegrees(driveAngle));
             telemetry.update();
         }
     }
