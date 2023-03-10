@@ -21,8 +21,8 @@ public class ImuTest extends LinearOpMode {
 
     double[] angles = new double[3];
 
-    double angleOffset;
-    double relativeAngle;
+    double vert,horz,rotate;
+    double relativeAngle,leftStickAngle, driveAngle, arcTan;
     double driveSpeed = 0.4;
 
     public void runOpMode() throws InterruptedException
@@ -39,40 +39,54 @@ public class ImuTest extends LinearOpMode {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu.initialize(parameters);
 
+        double angleOffset = imu.getAngularOrientation().thirdAngle;
+
         // servo declarations
 
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        waitForStart();
+
         while(opModeIsActive()){
             // drive calculations
-            double vert = -gamepad1.left_stick_y;
-            double horz = gamepad1.left_stick_x;
-            double rotate = gamepad1.right_stick_x;
+            vert = -gamepad1.left_stick_y;
+            horz = gamepad1.left_stick_x;
+            rotate = gamepad1.right_stick_x;
 
-            Drive(vert, horz, rotate);
+            driveAngle = (leftStickAngle - relativeAngle + 90) % 360;
 
-            getHeading(angles, imu, AngleUnit.DEGREES);
+            relativeAngle = (imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle + 90) % 360;
+            arcTan = (Math.toDegrees(Math.atan(vert / horz))) % 360;
 
-            telemetry.addData("angular orientation:", imu.getAngularOrientation());
-            telemetry.addData("angle 1:", angles[0]);
-            telemetry.addData("angle 2:", angles[1]);
-            telemetry.addData("angle 3:", angles[2]);
+            if(horz < 0) {
+                leftStickAngle = arcTan + 180;
+            } else if(vert < 0) {
+                leftStickAngle = arcTan + 360;
+            } else {
+                leftStickAngle = arcTan;
+            }
+
+            Drive(vert, horz, rotate, leftStickAngle, relativeAngle);
+
+            telemetry.addData("relative angle", relativeAngle);
+            telemetry.addData("left stick angle", leftStickAngle);
+            telemetry.addData("drive angle", driveAngle);
             telemetry.update();
         }
     }
 
-    public static void getHeading(double[] angles, BNO055IMU imu, AngleUnit angleUnit) {
-        Orientation anglesOrientation = imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, angleUnit);
-        angles[0] = anglesOrientation.firstAngle;
-        angles[1] = anglesOrientation.secondAngle;
-        angles[2] = anglesOrientation.thirdAngle;
-    }
-    public void Drive(double vert, double horz, double rotate){
-        double frdrive = -vert - horz - rotate;
-        double fldrive = -vert + horz + rotate;
-        double brdrive = -vert + horz - rotate;
-        double bldrive = -vert - horz + rotate;
+    public void Drive(double vert, double horz, double rotate, double leftStickAngle, double relativeAngle){
+        double driveAngle = leftStickAngle - relativeAngle -90;
+        /*double frdrive = vert - horz - rotate;
+        double fldrive = vert + horz + rotate;
+        double brdrive = vert + horz - rotate;
+        double bldrive = vert - horz + rotate;*/
+
+        double frdrive = -rotate;
+        double fldrive = + rotate;
+        double brdrive = - rotate;
+        double bldrive = + rotate;
 
         // finding maximum drive for division below
         double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
