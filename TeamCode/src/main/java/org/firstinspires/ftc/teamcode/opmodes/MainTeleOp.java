@@ -9,9 +9,9 @@ import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
 
 /*
     notes for myself:
-        -AUTO!!!
-        -imu
+        -imu test (field centric)
         -test manual slider (left joystick 2)
+        -auto!!!
 
     CONTROLS:
         One controller (gamepad 1):
@@ -303,7 +303,7 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // moves the robot lol
-            states.moveRobot(slowDrive, vert, horz, rotate, armDunk, manualSliderDelta);
+            states.moveRobot(slowDrive, fieldCentric, vert, horz, rotate, armDunk, manualSliderDelta);
 
             // telemetry
             telemetry.addData("controls1: ", controls1);

@@ -44,7 +44,7 @@ public class States6417 {
         driveSpeed = 0;
     }
 
-    public void moveRobot(boolean slowDrive, double vert, double horz, double rotate, int armDunk, int manualSliderDelta) {
+    public void moveRobot(boolean slowDrive, boolean fieldCentric, double vert, double horz, double rotate, int armDunk, int manualSliderDelta) {
         robot.clipJoyMecanumDrive(vert, horz, rotate, driveSpeed);
 
         switch (robotState) {
