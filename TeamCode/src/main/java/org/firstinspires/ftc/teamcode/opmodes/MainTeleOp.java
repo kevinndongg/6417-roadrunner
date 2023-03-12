@@ -81,6 +81,7 @@ public class MainTeleOp extends LinearOpMode {
     boolean lastLB1 = false;
     boolean lastRB1 = false;
     boolean lastOpDD1 = false;
+    boolean lastRT1 = false;
 
     boolean grabbing = false;
     int armDunk;
@@ -181,7 +182,11 @@ public class MainTeleOp extends LinearOpMode {
                             }
                         } else {
                             states.setRobotState(ROBOTSTATE.INTAKE);
+                            if(lastRT1) {
+                                states.resetSliderTimer();
+                            }
                         }
+                        lastRT1 = gamepad1.right_trigger > 0.1;
 
                         // dunk arm
                         if (gamepad1.right_bumper) {

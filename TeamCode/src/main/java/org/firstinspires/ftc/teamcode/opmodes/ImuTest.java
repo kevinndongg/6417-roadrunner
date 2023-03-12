@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -17,8 +18,9 @@ public class ImuTest extends LinearOpMode {
     BNO055IMU imu;
 
     double vert,horz,rotate;
-    double cumulativeAngle,leftStickAngle, driveAngle, arcTan;
-    double driveSpeed = 0.4;
+    double cumulativeAngle, driveAngle, arcTan, leftStickAngle;
+    double driveSpeed;
+    double angleOffset = Math.PI/2;
 
     boolean lastLB1 = false;
 
@@ -36,7 +38,6 @@ public class ImuTest extends LinearOpMode {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         imu.initialize(parameters);
 
-        double angleOffset = 0;
 
         // servo declarations
 
@@ -51,50 +52,69 @@ public class ImuTest extends LinearOpMode {
             horz = gamepad1.left_stick_x;
             rotate = gamepad1.right_stick_x;
 
-            driveAngle = (leftStickAngle - cumulativeAngle - angleOffset + Math.PI/2) % Math.PI * 2;
 
-            cumulativeAngle = (imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle + Math.PI/2) % Math.PI*2;
-            arcTan = Math.atan(vert / horz) % Math.PI * 2;
-
-            if(horz < 0) {
-                leftStickAngle = arcTan + Math.PI;
-            } else if(vert < 0) {
-                leftStickAngle = arcTan + Math.PI * 2;
-            } else {
-                leftStickAngle = arcTan;
-            }
+            cumulativeAngle = (imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle + Math.PI/2) % (Math.PI*2);
+            arcTan = Math.atan(vert / horz);
 
             if(gamepad1.left_bumper && !lastLB1) {
-                angleOffset = (imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle + Math.PI/2) % Math.PI/2;
+                angleOffset = cumulativeAngle;
             }
             lastLB1 = gamepad1.left_bumper;
 
-            Drive(rotate, driveAngle);
+            if(gamepad1.left_trigger > 0.1) {
+                driveSpeed = 0.4;
+            } else if(gamepad1.right_trigger > 0.1) {
+                driveSpeed = 0.8;
+            } else {
+                driveSpeed = 0.6;
+            }
+
+            if(horz < 0) {
+                leftStickAngle = Math.atan(vert / horz) + Math.PI;
+            } else if(vert < 0) {
+                leftStickAngle = Math.atan(vert / horz) + Math.PI * 2;
+            } else if(vert == 0 && horz == 0) {
+                leftStickAngle = 0;
+            } else {
+                leftStickAngle = Math.atan(vert / horz);
+            }
+
+            Drive(vert, horz, rotate);
 
             telemetry.addData("cumulative angle (deg)", Math.toDegrees(cumulativeAngle));
-            telemetry.addData("left stick angle (deg)", Math.toDegrees(leftStickAngle));
-            telemetry.addData("arcTan (deg)", Math.toDegrees(arcTan));
             telemetry.addData("drive angle (deg)", Math.toDegrees(driveAngle));
+            telemetry.addData("angle offset", Math.toDegrees(angleOffset));
+            telemetry.addData("left stick angle", leftStickAngle);
+            telemetry.addData("vert", vert);
+            telemetry.addData("horz", horz);
+            telemetry.addData("rotate", rotate);
             telemetry.update();
         }
     }
 
-    public void Drive(double rotate, double driveAngle){
-        double vert = Math.sin(driveAngle);
-        double horz = Math.cos(driveAngle);
+    public void Drive(double vert, double horz, double rotate){
+        double magnitude;
 
-        double frdrive = vert - horz - rotate;
-        double fldrive = vert + horz + rotate;
-        double brdrive = vert + horz - rotate;
-        double bldrive = vert - horz + rotate;
+
+        double driveAngle = (leftStickAngle - cumulativeAngle + angleOffset) % (Math.PI * 2);
+
+        magnitude = Math.sqrt(vert * vert + horz * horz);
+
+        double vertControl = magnitude*Math.sin(driveAngle);
+        double horzControl = magnitude*Math.cos(driveAngle);
+
+        double frDrive = vertControl - horzControl - rotate;
+        double flDrive = vertControl + horzControl + rotate;
+        double brDrive = vertControl + horzControl - rotate;
+        double blDrive = vertControl - horzControl + rotate;
 
         // finding maximum drive for division below
-        double max = Math.abs(Math.max(Math.abs(frdrive),Math.max(Math.abs(fldrive),Math.max(Math.abs(brdrive),Math.abs(bldrive)))));
+        double max = Math.abs(Math.max(Math.abs(frDrive),Math.max(Math.abs(flDrive),Math.max(Math.abs(brDrive),Math.abs(blDrive)))));
 
         // power calculations
-        frontRight.setPower(driveSpeed * Constants.driveTuningFR * frdrive / max);
-        frontLeft.setPower(driveSpeed * Constants.driveTuningFL * fldrive / max);
-        backRight.setPower(driveSpeed * Constants.driveTuningBR * brdrive / max);
-        backLeft.setPower(driveSpeed * Constants.driveTuningBL * bldrive / max);
+        frontRight.setPower(driveSpeed * Constants.driveTuningFR * frDrive / max);
+        frontLeft.setPower(driveSpeed * Constants.driveTuningFL * flDrive / max);
+        backRight.setPower(driveSpeed * Constants.driveTuningBR * brDrive / max);
+        backLeft.setPower(driveSpeed * Constants.driveTuningBL * blDrive / max);
     }
 }

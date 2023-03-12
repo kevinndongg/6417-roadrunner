@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -24,6 +25,8 @@ public class States6417 {
         DOWN, UP
     }
 
+    ElapsedTime sliderTimer;
+
     Hardware6417 robot;
 
     ROBOTSTATE robotState;
@@ -42,10 +45,16 @@ public class States6417 {
         armState = ARMSTATE.GROUNDFRONT;
         wristState = WRISTSTATE.DOWN;
         driveSpeed = 0;
+
+        sliderTimer = new ElapsedTime();
     }
 
     public void moveRobot(boolean slowDrive, boolean fieldCentric, double vert, double horz, double rotate, int armDunk, int manualSliderDelta) {
-        robot.clipJoyMecanumDrive(vert, horz, rotate, driveSpeed);
+        /*if(fieldCentric) {
+            robot.clipFieldMecanumDrive(vert, horz, rotate, driveSpeed);
+        } else {*/
+            robot.clipBotMecanumDrive(vert, horz, rotate, driveSpeed);
+        // }
 
         switch (robotState) {
             // INTAKE for when the robot is ready to pick up cones
@@ -134,7 +143,11 @@ public class States6417 {
         switch (slideState) {
             // ZERO for slide bottom
             case ZERO:
-                robot.autoSlider(0);
+                if(sliderTimer.seconds() > 2 && sliderTimer.seconds() < 4) {
+                    robot.resetSlider();
+                } else {
+                    robot.autoSlider(0);
+                }
                 break;
             // MEDIUM for slide to medium junction preset
             case MEDIUM:
@@ -184,6 +197,10 @@ public class States6417 {
                 robot.autoWrist(Constants.wristUp);
                 break;
         }
+    }
+
+    public void resetSliderTimer() {
+        sliderTimer.reset();
     }
 
     public void resetRobot() {
