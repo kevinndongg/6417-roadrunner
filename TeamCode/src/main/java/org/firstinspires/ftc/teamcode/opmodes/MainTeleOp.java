@@ -9,9 +9,10 @@ import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
 
 /*
     notes for myself:
-        -imu test (field centric)
+        -test field centric in mainteleop
         -test manual slider (left joystick 2)
-        -auto!!!
+        -test slidertimer
+        -finish tuning
 
     CONTROLS:
         One controller (gamepad 1):

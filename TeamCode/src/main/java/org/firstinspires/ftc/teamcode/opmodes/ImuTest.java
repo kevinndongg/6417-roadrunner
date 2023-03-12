@@ -18,7 +18,7 @@ public class ImuTest extends LinearOpMode {
     BNO055IMU imu;
 
     double vert,horz,rotate;
-    double cumulativeAngle, driveAngle, arcTan, leftStickAngle;
+    double cumulativeAngle, driveAngle, leftStickAngle;
     double driveSpeed;
     double angleOffset = Math.PI/2;
 
@@ -54,7 +54,6 @@ public class ImuTest extends LinearOpMode {
 
 
             cumulativeAngle = (imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle + Math.PI/2) % (Math.PI*2);
-            arcTan = Math.atan(vert / horz);
 
             if(gamepad1.left_bumper && !lastLB1) {
                 angleOffset = cumulativeAngle;

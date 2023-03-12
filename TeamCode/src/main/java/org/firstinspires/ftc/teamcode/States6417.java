@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class States6417 {
@@ -35,9 +34,15 @@ public class States6417 {
     ARMSTATE armState;
     WRISTSTATE wristState;
     double driveSpeed;
+    double angleOffset;
+    double cumulativeAngle;
+    double driveAngle;
+    double leftStickAngle;
+
 
     public States6417(HardwareMap hwMap) {
         robot = new Hardware6417(hwMap);
+        robot.initImu(hwMap);
 
         robotState = ROBOTSTATE.INTAKE;
         lastRobotState = ROBOTSTATE.INTAKE;
@@ -46,16 +51,14 @@ public class States6417 {
         wristState = WRISTSTATE.DOWN;
         driveSpeed = 0;
 
+        angleOffset = Math.PI/2;
+        cumulativeAngle = robot.getReferenceAngle();
+
         sliderTimer = new ElapsedTime();
     }
 
     public void moveRobot(boolean slowDrive, boolean fieldCentric, double vert, double horz, double rotate, int armDunk, int manualSliderDelta) {
-        /*if(fieldCentric) {
-            robot.clipFieldMecanumDrive(vert, horz, rotate, driveSpeed);
-        } else {*/
-            robot.clipBotMecanumDrive(vert, horz, rotate, driveSpeed);
-        // }
-
+        // check robot state, sets substates
         switch (robotState) {
             // INTAKE for when the robot is ready to pick up cones
             case INTAKE:
@@ -140,6 +143,7 @@ public class States6417 {
                 break;
         }
 
+        // SLIDE CONTROL
         switch (slideState) {
             // ZERO for slide bottom
             case ZERO:
@@ -168,8 +172,8 @@ public class States6417 {
                 break;
         }
 
+        // ARM CONTROL
         switch (armState) {
-
             // GROUNDFRONT for when robot is INTAKE and MANEUVERING
             case GROUNDFRONT:
                 if(robot.sliderAbove(Constants.slideNearBottomPos)) {
@@ -189,6 +193,7 @@ public class States6417 {
                 break;
         }
 
+        // WRIST CONTROL
         switch (wristState) {
             case DOWN:
                 robot.autoWrist(Constants.wristDown);
@@ -197,6 +202,26 @@ public class States6417 {
                 robot.autoWrist(Constants.wristUp);
                 break;
         }
+
+        // DRIVE ANGLE CALCULATIONS
+        if(horz < 0) {
+            leftStickAngle = Math.atan(vert / horz) + Math.PI;
+        } else if(vert < 0) {
+            leftStickAngle = Math.atan(vert / horz) + Math.PI * 2;
+        } else if(vert == 0 && horz == 0) {
+            leftStickAngle = 0;
+        } else {
+            leftStickAngle = Math.atan(vert / horz);
+        }
+
+        cumulativeAngle = robot.getReferenceAngle();
+        driveAngle = (leftStickAngle - cumulativeAngle + angleOffset) % (Math.PI * 2);
+
+        if(fieldCentric) {
+            robot.clipFieldMecanumDrive(vert, horz, rotate, driveSpeed, driveAngle);
+        } else {
+            robot.clipJoyMecanumDrive(vert, horz, rotate, driveSpeed);
+        }
     }
 
     public void resetSliderTimer() {
@@ -204,9 +229,13 @@ public class States6417 {
     }
 
     public void resetRobot() {
-        robot.resetSlider();
-        robot.resetArm();
-        robot.openGrabber();
+        this.robot.resetSlider();
+        this.robot.resetArm();
+        this.robot.openGrabber();
+    }
+
+    public void resetAngleOffset () {
+        this.angleOffset = this.robot.getReferenceAngle();
     }
 
     public void setRobotState(ROBOTSTATE robotState) {
@@ -233,6 +262,7 @@ public class States6417 {
         tele.addData("robotState: ", robotState);
         tele.addData("slideState: ", slideState);
         tele.addData("armState: ", armState);
+        tele.addData("slide timer (secs)", sliderTimer.seconds());
         robot.telemetry(tele);
     }
 }
