@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
     CONTROLS:
         One controller (gamepad 1):
             options + dpad down: SWITCH CONTROL TYPE
+            options + left joystick press: reset drive angle
 
             RIGHTTRIGGER controls:
                 left joystick: strafe
