@@ -82,6 +82,7 @@ public class MainTeleOp extends LinearOpMode {
     boolean lastLB1 = false;
     boolean lastRB1 = false;
     boolean lastOpDD1 = false;
+    boolean lastOpLSB = false;
     boolean lastRT1 = false;
 
     boolean grabbing = false;
@@ -143,6 +144,12 @@ public class MainTeleOp extends LinearOpMode {
                     }
                 }
                 lastOpDD1 = gamepad1.options && gamepad1.dpad_down;
+
+                // reset drive angle
+                if(gamepad1.options && gamepad1.left_stick_button && !lastOpLSB) {
+                    states.resetAngleOffset();
+                }
+                lastOpLSB = gamepad1.options && gamepad1.left_stick_button;
 
                 switch(controls1) {
                     // RIGHTTRIGGER CONTROLS

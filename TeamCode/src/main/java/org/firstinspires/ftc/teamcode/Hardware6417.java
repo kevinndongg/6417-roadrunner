@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -158,7 +157,7 @@ public class Hardware6417 {
     // DRIVE METHODS
 
     // sets powers to drive motors
-    public void clipJoyMecanumDrive(double vert, double horz, double rotate, double driveSpeed){
+    public void clipBotMecanumDrive(double vert, double horz, double rotate, double driveSpeed){
         double frDrive = (vert + horz + rotate) * Constants.driveTuningFR;
         double flDrive = (vert - horz - rotate) * Constants.driveTuningFL;
         double brDrive = (vert - horz + rotate) * Constants.driveTuningBR;

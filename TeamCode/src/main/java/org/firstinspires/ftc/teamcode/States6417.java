@@ -220,7 +220,7 @@ public class States6417 {
         if(fieldCentric) {
             robot.clipFieldMecanumDrive(vert, horz, rotate, driveSpeed, driveAngle);
         } else {
-            robot.clipJoyMecanumDrive(vert, horz, rotate, driveSpeed);
+            robot.clipBotMecanumDrive(vert, horz, rotate, driveSpeed);
         }
     }
 
