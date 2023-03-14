@@ -25,9 +25,7 @@ public class States6417 {
     }
 
     ElapsedTime sliderTimer;
-
     Hardware6417 robot;
-
     ROBOTSTATE robotState;
     ROBOTSTATE lastRobotState;
     SLIDESTATE slideState;
