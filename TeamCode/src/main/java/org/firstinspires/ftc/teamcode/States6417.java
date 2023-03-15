@@ -141,44 +141,12 @@ public class States6417 {
                 break;
         }
 
-        // SLIDE CONTROL
-        switch (slideState) {
-            // ZERO for slide bottom
-            case ZERO:
-                if(sliderTimer.seconds() > 2 && sliderTimer.seconds() < 4) {
-                    robot.resetSlider();
-                } else {
-                    robot.autoSlider(0);
-                }
-                break;
-            // MEDIUM for slide to medium junction preset
-            case MEDIUM:
-                robot.autoSlider(Constants.slideMediumPos + manualSliderDelta);
-                break;
-            case HIGH:
-                robot.autoSlider(Constants.slideHighPos + manualSliderDelta);
-                break;
-            // BOBBING for when robot shifting from MANEUVERING to INTAKE
-            case BOBBING:
-                // makes slides go up
-                robot.bobSlider();
-                // once the slides reach position, change state to INTAKE
-                if(robot.bobDone()) {
-                    lastRobotState = robotState;
-                    robotState = ROBOTSTATE.INTAKE;
-                }
-                break;
-        }
 
         // ARM CONTROL
         switch (armState) {
             // GROUNDFRONT for when robot is INTAKE and MANEUVERING
             case GROUNDFRONT:
-                if(robot.sliderAbove(Constants.slideNearBottomPos)) {
-                    robot.autoArm(Constants.armFastPower,50);
-                } else {
                     robot.autoArm(Constants.armFastPower, 0);
-                }
                 break;
 
             case OUTTAKEHIGH:

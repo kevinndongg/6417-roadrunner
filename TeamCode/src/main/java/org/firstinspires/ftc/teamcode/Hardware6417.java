@@ -20,7 +20,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
  */
 
 public class Hardware6417 {
-    DcMotorEx frontLeft, frontRight, backLeft, backRight, slider, arm;
+    DcMotorEx frontLeft, frontRight, backLeft, backRight, arm;
     Servo wrist,grabber;
 
     BNO055IMU imu;
@@ -42,16 +42,13 @@ public class Hardware6417 {
     }
 
     public void initIntake(HardwareMap hwMap) {
-        slider = hwMap.get(DcMotorEx.class, "slider");
         arm = hwMap.get(DcMotorEx.class, "arm");
 
         wrist = hwMap.get(Servo.class, "wrist");
         grabber = hwMap.get(Servo.class,"grabber");
 
         arm.setDirection(DcMotorSimple.Direction.REVERSE);
-        slider.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
@@ -63,10 +60,6 @@ public class Hardware6417 {
 
     // RESET METHODS
     public void resetSlider() {
-        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slider.setPower(0);
-        slider.setTargetPosition(0);
-        slider.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void resetArm() {
@@ -121,32 +114,7 @@ public class Hardware6417 {
 
     // SLIDER METHODS
 
-    public void autoSlider(int position) {
-        // check if slider goes up or down and
-        // set power accordingly
-        if(slider.getCurrentPosition() > position) {
-            slider.setPower(Constants.slideDownPower);
-        } else if(slider.getCurrentPosition() < position) {
-            slider.setPower(Constants.slideUpPower);
-        }
 
-        if(slider.getTargetPosition() != position) {
-            slider.setTargetPosition(position);
-        }
-    }
-
-    public boolean sliderAbove(int target) {
-        return slider.getCurrentPosition() > target;
-    }
-
-    public void bobSlider() {
-        slider.setPower(Constants.slideBobPower);
-        slider.setTargetPosition(Constants.slideBobPos + 20);
-    }
-
-    public boolean bobDone() {
-        return slider.getCurrentPosition() > Constants.slideBobPos;
-    }
 
     // IMU METHODS
 
@@ -158,10 +126,10 @@ public class Hardware6417 {
 
     // sets powers to drive motors
     public void clipBotMecanumDrive(double vert, double horz, double rotate, double driveSpeed){
-        double frDrive = (vert + horz + rotate) * Constants.driveTuningFR;
-        double flDrive = (vert - horz - rotate) * Constants.driveTuningFL;
-        double brDrive = (vert - horz + rotate) * Constants.driveTuningBR;
-        double blDrive = (vert + horz - rotate) * Constants.driveTuningBL;
+        double frDrive = (vert - horz + rotate) * Constants.driveTuningFR;
+        double flDrive = (vert + horz - rotate) * Constants.driveTuningFL;
+        double brDrive = (vert + horz + rotate) * Constants.driveTuningBR;
+        double blDrive = (vert - horz - rotate) * Constants.driveTuningBL;
 
         // finding maximum drive for division below
         double max = Math.abs(Math.max(Math.abs(frDrive),Math.max(Math.abs(flDrive),Math.max(Math.abs(brDrive),Math.abs(blDrive)))));
@@ -208,8 +176,6 @@ public class Hardware6417 {
     }
 
     public void telemetry(Telemetry tele) {
-        tele.addData("slider position", slider.getCurrentPosition());
-        tele.addData("slider power", slider.getPower());
         tele.addData("Arm position: ", arm.getCurrentPosition());
         tele.addData("Arm Power: ", arm.getPower());
         tele.addData("Grabber position: ", grabber.getPosition());
