@@ -14,6 +14,8 @@ public class Constants {
     public static final int armBackLowPos = 1160;
     public static final int armBackGroundPos = 1850;
     public static final int armDunk = 170;
+    public static final int autoArmUp = 700;
+
     public static final int slideMediumPos = 550;
     public static final int slideHighPos = 1350;
     public static final int slideBobPos = 150;

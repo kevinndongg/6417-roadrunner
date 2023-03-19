@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Hardware6417;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.SignalDetectorPipeline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -57,19 +58,19 @@ public class ParkAuto extends LinearOpMode {
         }); //done initializing camera
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Trajectory forwardPush = drive.trajectoryBuilder(new Pose2d())
-                .forward(20)
+        Trajectory backPush = drive.trajectoryBuilder(new Pose2d())
+                .back(20)
                 .build();
 
-        Trajectory back = drive.trajectoryBuilder(forwardPush.end())
-                .back(10)
+        Trajectory forward = drive.trajectoryBuilder(backPush.end())
+                .forward(10)
                 .build();
 
-        Trajectory strafeR = drive.trajectoryBuilder(back.end())
+        Trajectory strafeR = drive.trajectoryBuilder(forward.end())
                 .strafeLeft(23)
                 .build();
 
-        Trajectory strafeL = drive.trajectoryBuilder(back.end())
+        Trajectory strafeL = drive.trajectoryBuilder(forward.end())
                 .strafeRight(23)
                 .build();
 
@@ -98,36 +99,36 @@ public class ParkAuto extends LinearOpMode {
 
         drive.setPoseEstimate(new Pose2d());
 
-        drive.followTrajectory(forwardPush);
+        drive.followTrajectory(backPush);
 
-        /*switch(position) {
+        switch(position) {
             case 0:
                 robot.autoWrist(Constants.wristUp);
-                robot.autoArm(Constants.armSlowPower,Constants.armNearBack);
-                drive.followTrajectory(forwardPush);
-                drive.followTrajectory(back);
+                robot.autoArm(Constants.armSlowPower,Constants.autoArmUp);
+                drive.followTrajectory(backPush);
+                drive.followTrajectory(forward);
                 drive.followTrajectory(strafeL);
                 robot.autoArm(Constants.armSlowPower,0);
                 robot.autoWrist(Constants.wristDown);
                 break;
             case 1:
                 robot.autoWrist(Constants.wristUp);
-                robot.autoArm(Constants.armSlowPower,Constants.armNearBack);
-                drive.followTrajectory(forwardPush);
-                drive.followTrajectory(back);
+                robot.autoArm(Constants.armSlowPower,Constants.autoArmUp);
+                drive.followTrajectory(backPush);
+                drive.followTrajectory(forward);
                 robot.autoArm(Constants.armSlowPower,0);
                 robot.autoWrist(Constants.wristDown);
                 break;
             case 2:
                 robot.autoWrist(Constants.wristUp);
-                robot.autoArm(Constants.armSlowPower, Constants.armNearBack);
-                drive.followTrajectory(forwardPush);
-                drive.followTrajectory(back);
+                robot.autoArm(Constants.armSlowPower, Constants.autoArmUp);
+                drive.followTrajectory(backPush);
+                drive.followTrajectory(forward);
                 drive.followTrajectory(strafeR);
                 robot.autoArm(Constants.armSlowPower,0);
                 robot.autoWrist(Constants.wristDown);
                 break;
-        }*/
+        }
 
 
 
