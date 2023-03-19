@@ -260,6 +260,9 @@ public class States6417 {
         tele.addData("robotState: ", robotState);
         tele.addData("slideState: ", slideState);
         tele.addData("armState: ", armState);
+        tele.addData("cumulative angle" , cumulativeAngle);
+        tele.addData("left stick angle", leftStickAngle);
+        tele.addData("drive angle", driveAngle);
         tele.addData("slide timer (secs)", sliderTimer.seconds());
         robot.telemetry(tele);
     }
