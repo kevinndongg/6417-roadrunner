@@ -194,8 +194,8 @@ public class MainTeleOp extends LinearOpMode {
                             if(lastRT1) {
                                 states.resetSliderTimer();
                             }
-                            lastRT1 = gamepad1.right_trigger > 0.1;
                         }
+                        lastRT1 = gamepad1.right_trigger > 0.1;
 
                         // dunk arm
                         if (gamepad1.right_bumper) {

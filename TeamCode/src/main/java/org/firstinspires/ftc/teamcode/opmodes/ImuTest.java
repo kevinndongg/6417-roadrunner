@@ -79,7 +79,6 @@ public class ImuTest extends LinearOpMode {
             }
 
             Drive(vert, horz, rotate);
-
             telemetry.addData("cumulative angle (deg)", Math.toDegrees(cumulativeAngle));
             telemetry.addData("drive angle (deg)", Math.toDegrees(driveAngle));
             telemetry.addData("angle offset", Math.toDegrees(angleOffset));

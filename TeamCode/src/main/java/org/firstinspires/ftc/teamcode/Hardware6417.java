@@ -37,8 +37,8 @@ public class Hardware6417 {
         backLeft = hwMap.get(DcMotorEx.class, "back left");
         backRight = hwMap.get(DcMotorEx.class, "back right");
 
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void initIntake(HardwareMap hwMap) {
@@ -181,24 +181,25 @@ public class Hardware6417 {
     }
 
     public void clipFieldMecanumDrive(double vert, double horz, double rotate, double driveSpeed, double driveAngle) {
-        // finding magnitude of drive vector / rotate
-        double magnitude = Math.max(Math.abs(vert), Math.max(Math.abs(horz), Math.abs(rotate)));
-        double vertControl = Math.sin(driveAngle);
-        double horzControl = Math.cos(driveAngle);
+        // finding driveMagnitude of drive vector / rotate
+        double driveMagnitude = Math.max(Math.abs(vert), Math.max(Math.abs(horz), Math.abs(rotate)));
+        double vertHorzMagnitude = Math.max(Math.abs(vert), Math.abs(horz));
+        double vertControl = Math.sin(driveAngle) * vertHorzMagnitude;
+        double horzControl = Math.cos(driveAngle) * vertHorzMagnitude;
 
-        double frDrive = (vertControl + horzControl + rotate) * Constants.driveTuningFR;
-        double flDrive = (vertControl - horzControl - rotate) * Constants.driveTuningFL;
-        double brDrive = (vertControl - horzControl + rotate) * Constants.driveTuningBR;
-        double blDrive = (vertControl + horzControl - rotate) * Constants.driveTuningBL;
+        double frDrive = (vertControl - horzControl - rotate) * Constants.driveTuningFR;
+        double flDrive = (vertControl + horzControl + rotate) * Constants.driveTuningFL;
+        double brDrive = (vertControl + horzControl - rotate) * Constants.driveTuningBR;
+        double blDrive = (vertControl - horzControl + rotate) * Constants.driveTuningBL;
 
         double max = Math.abs(Math.max(Math.abs(frDrive),Math.max(Math.abs(flDrive),Math.max(Math.abs(brDrive),Math.abs(blDrive)))));
 
         // power calculations
         if(Math.abs(vert) > .1 || Math.abs(horz) > .1 || Math.abs(rotate) > .1) {
-            frontRight.setPower(driveSpeed * magnitude * frDrive / max);
-            frontLeft.setPower(driveSpeed * magnitude * flDrive / max);
-            backRight.setPower(driveSpeed * magnitude * brDrive / max);
-            backLeft.setPower(driveSpeed * magnitude * blDrive / max);
+            frontRight.setPower(driveSpeed * driveMagnitude * frDrive / max);
+            frontLeft.setPower(driveSpeed * driveMagnitude * flDrive / max);
+            backRight.setPower(driveSpeed * driveMagnitude * brDrive / max);
+            backLeft.setPower(driveSpeed * driveMagnitude * blDrive / max);
         } else {
             frontRight.setPower(0);
             frontLeft.setPower(0);

@@ -4,14 +4,14 @@ public class Constants {
     public static final double grabberClose = 0.65;
     public static final double grabberOpen = 0.83;
 
-    public static final double wristDown = 0.91;
-    public static final double wristUp = 0.29;
+    public static final double wristDown = 0.77;
+    public static final double wristUp = 0.12;
 
     public static final double armSlowPower = 0.4;
     public static final double armFastPower = 0.7;
     public static final int armNear = 300;
     public static final int armBackUpPos = 1050;
-    public static final int armBackLowPos = 1160;
+    public static final int armBackLowPos = 1200;
     public static final int armBackGroundPos = 1850;
     public static final int armDunk = 170;
     public static final int slideMediumPos = 550;
