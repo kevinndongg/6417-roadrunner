@@ -9,10 +9,11 @@ import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
 
 /*
     notes for myself:
-        -test field centric in mainteleop
-        -test manual slider (left joystick 2)
-        -test slidertimer
         -finish tuning
+        -setup meep meep
+        -auto !!!
+            use arrays to organize positions
+            goal: 1+5   
 
     CONTROLS:
         One controller (gamepad 1):
