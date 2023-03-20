@@ -105,6 +105,11 @@ public class Hardware6417 {
     }
 
     public void autoArm(int position, int dunk) {
+        if(arm.getCurrentPosition() > position) {
+            arm.setPower(Constants.armSlowPower);
+        } else {
+            arm.setPower(Constants.armFastPower);
+        }
         int target = position + dunk;
         if(dunk == 0 || arm.getCurrentPosition() < position) {
             arm.setPower(Constants.armFastPower);

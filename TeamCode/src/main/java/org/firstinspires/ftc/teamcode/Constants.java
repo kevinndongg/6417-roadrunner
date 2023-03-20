@@ -14,15 +14,15 @@ public class Constants {
     public static final int armBackLowPos = 1200;
     public static final int armBackGroundPos = 1850;
     public static final int armDunk = 170;
-    public static final int autoArmUp = 700;
+    public static final int autoArmUp = 900;
 
     public static final int slideMediumPos = 550;
     public static final int slideHighPos = 1350;
     public static final int slideBobPos = 150;
     public static final int slideNearBottomPos = 200;
     public static final int manualSliderDelta = 200;
-    public static final double slideDownPower = 0.95;
-    public static final double slideUpPower = 0.75;
+    public static final double slideDownPower = 0.8;
+    public static final double slideUpPower = 0.7;
     public static final double slideBobPower = 0.25;
 
     public static final double driveSpeedIntake = 0.6;

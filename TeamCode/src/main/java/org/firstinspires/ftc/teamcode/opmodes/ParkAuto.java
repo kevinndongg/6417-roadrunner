@@ -59,7 +59,7 @@ public class ParkAuto extends LinearOpMode {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         Trajectory backPush = drive.trajectoryBuilder(new Pose2d())
-                .back(20)
+                .back(40)
                 .build();
 
         Trajectory forward = drive.trajectoryBuilder(backPush.end())
@@ -67,12 +67,13 @@ public class ParkAuto extends LinearOpMode {
                 .build();
 
         Trajectory strafeR = drive.trajectoryBuilder(forward.end())
-                .strafeLeft(23)
+                .strafeLeft(33)
                 .build();
 
         Trajectory strafeL = drive.trajectoryBuilder(forward.end())
-                .strafeRight(23)
+                .strafeRight(33)
                 .build();
+
 
 
         Hardware6417 robot = new Hardware6417(hardwareMap);
@@ -98,8 +99,6 @@ public class ParkAuto extends LinearOpMode {
         webcam.stopStreaming();
 
         drive.setPoseEstimate(new Pose2d());
-
-        drive.followTrajectory(backPush);
 
         switch(position) {
             case 0:

@@ -145,7 +145,7 @@ public class States6417 {
         switch (slideState) {
             // ZERO for slide bottom
             case ZERO:
-                if(sliderTimer.seconds() > 2 && sliderTimer.seconds() < 4) {
+                if(sliderTimer.seconds() > 4 && sliderTimer.seconds() < 5) {
                     robot.resetSlider();
                 } else {
                     robot.autoSlider(0);
@@ -184,7 +184,11 @@ public class States6417 {
             case OUTTAKEHIGH:
 
             case OUTTAKEMED:
-                robot.autoArm(Constants.armBackUpPos, armDunk);
+                if(armDunk == 0) {
+                    robot.autoArm(Constants.armBackUpPos, armDunk);
+                } else {
+                    robot.autoArm(Constants.armBackUpPos, armDunk);
+                }
                 break;
             case OUTTAKELOW:
                 robot.autoArm(Constants.armBackLowPos, armDunk);

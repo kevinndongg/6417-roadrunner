@@ -80,6 +80,7 @@ public class MainTeleOp extends LinearOpMode {
     boolean slowDrive;
     boolean fieldCentric = true;
     boolean singleController;
+    boolean lastA1 = false;
     boolean lastLB1 = false;
     boolean lastRB1 = false;
     boolean lastOpDD1 = false;
@@ -194,8 +195,13 @@ public class MainTeleOp extends LinearOpMode {
                             if(lastRT1) {
                                 states.resetSliderTimer();
                             }
+
+                            if(gamepad1.a && !lastA1) {
+                                states.resetAngleOffset();
+                            }
                         }
                         lastRT1 = gamepad1.right_trigger > 0.1;
+                        lastA1 = gamepad1.a;
 
                         // dunk arm
                         if (gamepad1.right_bumper) {
