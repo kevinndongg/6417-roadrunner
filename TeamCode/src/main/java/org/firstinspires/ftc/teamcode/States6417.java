@@ -174,7 +174,7 @@ public class States6417 {
         switch (armState) {
             // GROUNDFRONT for when robot is INTAKE and MANEUVERING
             case GROUNDFRONT:
-                if(robot.sliderAbove(Constants.slideNearBottomPos)) {
+                if(robot.sliderNear(0)) {
                     robot.autoArm(Constants.armFastPower,50);
                 } else {
                     robot.autoArm(Constants.armFastPower, 0);
@@ -182,12 +182,19 @@ public class States6417 {
                 break;
 
             case OUTTAKEHIGH:
-
-            case OUTTAKEMED:
-                if(armDunk == 0) {
-                    robot.autoArm(Constants.armBackUpPos, armDunk);
+                if(robot.sliderNear(Constants.slideHighPos)) {
+                    robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos, armDunk);
                 } else {
-                    robot.autoArm(Constants.armBackUpPos, armDunk);
+                    robot.autoArm(Constants.armFastPower, Constants.armQueuePos);
+                }
+                break;
+            case OUTTAKEMED:
+                // if slider is near position, put arm to backuppos
+                // if slider is not near position, queue arm
+                if(robot.sliderNear(Constants.slideMediumPos)) {
+                    robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos, armDunk);
+                } else {
+                    robot.autoArm(Constants.armFastPower, Constants.armQueuePos);
                 }
                 break;
             case OUTTAKELOW:

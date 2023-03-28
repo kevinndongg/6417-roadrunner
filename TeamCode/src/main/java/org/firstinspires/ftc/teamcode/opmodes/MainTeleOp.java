@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
         -setup meep meep
         -auto !!!
             use arrays to organize positions
-            goal: 1+5   
+            goal: 1+5
 
     CONTROLS:
         One controller (gamepad 1):

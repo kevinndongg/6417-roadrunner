@@ -121,6 +121,24 @@ public class Hardware6417 {
         }
     }
 
+    public void autoArm(double power, int position, int dunk) {
+        arm.setPower(power);
+        if(arm.getCurrentPosition() > position) {
+            arm.setPower(Constants.armSlowPower);
+        } else {
+            arm.setPower(Constants.armFastPower);
+        }
+        int target = position + dunk;
+        if(dunk == 0 || arm.getCurrentPosition() < position) {
+            arm.setPower(Constants.armFastPower);
+        } else {
+            arm.setPower(Constants.armSlowPower);
+        }
+        if(arm.getCurrentPosition() != target && arm.getTargetPosition() != target) {
+            arm.setTargetPosition(target);
+        }
+    }
+
     // WRIST METHODS
 
     public void autoWrist(double position) {
@@ -145,8 +163,8 @@ public class Hardware6417 {
         }
     }
 
-    public boolean sliderAbove(int target) {
-        return slider.getCurrentPosition() > target;
+    public boolean sliderNear(int target) {
+        return Math.abs(slider.getCurrentPosition() - target) < Constants.slideNearDelta;
     }
 
     public void bobSlider() {
