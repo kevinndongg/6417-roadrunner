@@ -183,7 +183,11 @@ public class States6417 {
 
             case OUTTAKEHIGH:
                 if(robot.sliderNear(Constants.slideHighPos)) {
-                    robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos, armDunk);
+                    if(robot.armNear(Constants.armBackUpPos)) {
+                        robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos, armDunk);
+                    } else {
+                        robot.autoArm(Constants.armFastPower, Constants.armBackUpPos);
+                    }
                 } else {
                     robot.autoArm(Constants.armFastPower, Constants.armQueuePos);
                 }
@@ -192,7 +196,11 @@ public class States6417 {
                 // if slider is near position, put arm to backuppos
                 // if slider is not near position, queue arm
                 if(robot.sliderNear(Constants.slideMediumPos)) {
-                    robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos, armDunk);
+                    if(robot.armNear(Constants.armBackUpPos)) {
+                        robot.autoArm(Constants.armSlowPower, Constants.armBackUpPos, armDunk);
+                    } else {
+                        robot.autoArm(Constants.armFastPower, Constants.armBackUpPos);
+                    }
                 } else {
                     robot.autoArm(Constants.armFastPower, Constants.armQueuePos);
                 }

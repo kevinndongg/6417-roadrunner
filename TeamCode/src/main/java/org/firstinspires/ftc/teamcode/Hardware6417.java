@@ -139,6 +139,10 @@ public class Hardware6417 {
         }
     }
 
+    public boolean armNear(int target) {
+        return Math.abs(arm.getCurrentPosition()-target) < Constants.armNearDelta;
+    }
+
     // WRIST METHODS
 
     public void autoWrist(double position) {
