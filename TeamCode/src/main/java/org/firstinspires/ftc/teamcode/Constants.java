@@ -30,8 +30,12 @@ public class Constants {
     public static final double driveSpeedIntakeSlow = 0.35;
     public static final double driveSpeedManeuvering = 0.7;
     public static final double driveSpeedManeuveringSlow = 0.5;
-    public static final double driveSpeedOuttakeUp = 0.4;
-    public static final double driveSpeedOuttakeUpSlow = 0.25;
+    public static final double driveSpeedOuttakeLow = 0.5;
+    public static final double driveSpeedOuttakeLowSlow = 0.35;
+    public static final double driveSpeedOuttakeMed = 0.4;
+    public static final double driveSpeedOuttakeMedSlow = 0.25;
+    public static final double driveSpeedOuttakeHigh = 0.35;
+    public static final double driveSpeedOuttakeHighSlow = 0.25;
     public static final double driveSpeedOuttakeGround = 0.55;
     public static final double driveSpeedOuttakeGroundSlow = 0.35;
 

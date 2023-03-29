@@ -55,7 +55,7 @@ public class States6417 {
         sliderTimer = new ElapsedTime();
     }
 
-    public void moveRobot(boolean slowDrive, boolean fieldCentric, double vert, double horz, double rotate, int armDunk, int manualSliderDelta) {
+    public void moveRobot(double slowDrive, boolean fieldCentric, double vert, double horz, double rotate, int armDunk, int manualSliderDelta) {
         // check robot state, sets substates
         switch (robotState) {
             // INTAKE for when the robot is ready to pick up cones
@@ -72,11 +72,7 @@ public class States6417 {
                 wristState = WRISTSTATE.DOWN;
 
                 // set drive speeds
-                if (slowDrive) {
-                    driveSpeed = Constants.driveSpeedIntakeSlow;
-                } else {
-                    driveSpeed = Constants.driveSpeedIntake;
-                }
+                this.driveSpeed = Constants.driveSpeedIntake - slowDrive * (Constants.driveSpeedIntake - Constants.driveSpeedIntakeSlow);
                 break;
             // MANEUVERING case for when robot has cone and is moving to score
             case MANEUVERING:
@@ -95,11 +91,7 @@ public class States6417 {
                 }
 
                 // drive
-                if (slowDrive) {
-                    driveSpeed = Constants.driveSpeedManeuveringSlow;
-                } else {
-                    driveSpeed = Constants.driveSpeedManeuvering;
-                }
+                this.driveSpeed = Constants.driveSpeedManeuvering - slowDrive * (Constants.driveSpeedManeuvering - Constants.driveSpeedManeuveringSlow);
                 break;
             case OUTTAKELOW:
                 armState = ARMSTATE.OUTTAKELOW;
@@ -109,11 +101,7 @@ public class States6417 {
                 slideState = SLIDESTATE.ZERO;
 
                 // drive
-                if(slowDrive) {
-                    driveSpeed = Constants.driveSpeedOuttakeUpSlow;
-                } else {
-                    driveSpeed = Constants.driveSpeedOuttakeUp;
-                }
+                this.driveSpeed = Constants.driveSpeedOuttakeLow - slowDrive * (Constants.driveSpeedOuttakeLow - Constants.driveSpeedOuttakeLowSlow);
                 break;
             case OUTTAKEMED:
                 armState = ARMSTATE.OUTTAKEMED;
@@ -121,11 +109,7 @@ public class States6417 {
                 wristState = WRISTSTATE.UP;
 
                 // drive
-                if(slowDrive) {
-                    driveSpeed = Constants.driveSpeedOuttakeUpSlow;
-                } else {
-                    driveSpeed = Constants.driveSpeedOuttakeUp;
-                }
+                this.driveSpeed = Constants.driveSpeedOuttakeMed - slowDrive * (Constants.driveSpeedOuttakeMed - Constants.driveSpeedOuttakeMedSlow);
                 break;
             case OUTTAKEHIGH:
                 armState = ARMSTATE.OUTTAKEHIGH;
@@ -133,11 +117,7 @@ public class States6417 {
                 wristState = WRISTSTATE.UP;
 
                 // drive
-                if(slowDrive) {
-                    driveSpeed = Constants.driveSpeedOuttakeUpSlow;
-                } else {
-                    driveSpeed = Constants.driveSpeedOuttakeUp;
-                }
+                this.driveSpeed = Constants.driveSpeedOuttakeHigh - slowDrive * (Constants.driveSpeedOuttakeHigh - Constants.driveSpeedOuttakeHighSlow);
                 break;
         }
 

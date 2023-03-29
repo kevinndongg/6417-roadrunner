@@ -78,7 +78,7 @@ import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
     double vert,horz,rotate;
-    boolean slowDrive;
+    double slowDrive;
     boolean fieldCentric = true;
     boolean singleController;
     boolean lastA1 = false;
@@ -165,9 +165,9 @@ public class MainTeleOp extends LinearOpMode {
 
                         // slow drive
                         if (gamepad1.left_trigger > 0.1) {
-                            slowDrive = true;
+                            slowDrive = gamepad1.left_trigger;
                         } else {
-                            slowDrive = false;
+                            slowDrive = 0;
                         }
 
                         // HOLD RIGHT TRIGGER CONTROLS
@@ -220,9 +220,9 @@ public class MainTeleOp extends LinearOpMode {
 
                         // slow drive
                         if (gamepad1.left_trigger > 0.1) {
-                            slowDrive = true;
+                            slowDrive = gamepad1.left_trigger;
                         } else {
-                            slowDrive = false;
+                            slowDrive = 0;
                         }
 
                         // intake
@@ -268,9 +268,9 @@ public class MainTeleOp extends LinearOpMode {
                 lastLB1 = gamepad1.left_bumper;
 
                 if (gamepad1.left_trigger > 0.1) {
-                    slowDrive = true;
+                    slowDrive = gamepad1.left_trigger;
                 } else {
-                    slowDrive = false;
+                    slowDrive = 0;
                 }
 
                 // toggle field centric drive
