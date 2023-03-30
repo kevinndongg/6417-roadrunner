@@ -9,11 +9,12 @@ import org.firstinspires.ftc.teamcode.States6417.ROBOTSTATE;
 
 /*
     notes for myself:
+        -drive :)
         -finish tuning
         -setup meep meep
         -auto !!!
             use arrays to organize positions
-            goal: 1+5
+            goal: 1+5 no time limit
 
     CONTROLS:
         One controller (gamepad 1):

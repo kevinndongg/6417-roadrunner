@@ -154,11 +154,7 @@ public class States6417 {
         switch (armState) {
             // GROUNDFRONT for when robot is INTAKE and MANEUVERING
             case GROUNDFRONT:
-                if(robot.sliderNear(0)) {
-                    robot.autoArm(Constants.armFastPower,50);
-                } else {
-                    robot.autoArm(Constants.armFastPower, 0);
-                }
+                robot.autoArm(Constants.armFastPower, 0);
                 break;
 
             case OUTTAKEHIGH:
