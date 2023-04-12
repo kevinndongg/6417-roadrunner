@@ -219,6 +219,7 @@ public class Hardware6417 {
         double vertControl = Math.sin(driveAngle) * vertHorzMagnitude;
         double horzControl = Math.cos(driveAngle) * vertHorzMagnitude;
 
+        // calculations from driveAngle
         double frDrive = (vertControl - horzControl - rotate) * Constants.driveTuningFR;
         double flDrive = (vertControl + horzControl + rotate) * Constants.driveTuningFL;
         double brDrive = (vertControl + horzControl - rotate) * Constants.driveTuningBR;

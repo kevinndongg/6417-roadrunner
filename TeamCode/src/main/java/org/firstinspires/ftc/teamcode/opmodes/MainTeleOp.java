@@ -121,10 +121,11 @@ public class MainTeleOp extends LinearOpMode {
                 singleController = false;
             }
 
-            // drive calculations
-            vert = -gamepad1.left_stick_y;
-            horz = gamepad1.left_stick_x;
-            rotate = gamepad1.right_stick_x;
+            // drive input
+            // cubic scaling
+            vert = Math.pow(-gamepad1.left_stick_y, 3);
+            horz = Math.pow(gamepad1.left_stick_x, 3);
+            rotate = Math.pow(gamepad1.right_stick_x,3);
 
             // grabber control
             if(grabbing){
@@ -200,6 +201,7 @@ public class MainTeleOp extends LinearOpMode {
 
                             if(gamepad1.a && !lastA1) {
                                 states.resetAngleOffset();
+                                gamepad1.rumble(100);
                             }
                         }
                         lastRT1 = gamepad1.right_trigger > 0.1;
