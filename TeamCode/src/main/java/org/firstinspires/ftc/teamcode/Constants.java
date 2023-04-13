@@ -10,8 +10,8 @@ public class Constants {
     public static final double armSlowPower = 0.4;
     public static final double armFastPower = 0.7;
     public static final int armNearDelta = 300;
-    public static final int armBackUpPos = 1250;
-    public static final int armBackLowPos = 1300;
+    public static final int armBackUpPos = 1170;
+    public static final int armBackLowPos = 1250;
     public static final int armBackGroundPos = 1850;
     public static final int armDunk = 170;
     public static final int autoArmUp = 900;

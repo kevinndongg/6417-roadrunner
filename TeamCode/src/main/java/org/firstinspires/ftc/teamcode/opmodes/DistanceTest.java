@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -34,6 +35,11 @@ public class DistanceTest extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotorEx.class, "front right");
         backLeft = hardwareMap.get(DcMotorEx.class, "back left");
         backRight = hardwareMap.get(DcMotorEx.class, "back right");
+
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         distance = hardwareMap.get(DistanceSensor.class, "distance");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -92,7 +98,7 @@ public class DistanceTest extends LinearOpMode {
 
         double driveAngle = (leftStickAngle - cumulativeAngle + angleOffset) % (Math.PI * 2);
 
-        magnitude = Math.max(vert, Math.max(horz, rotate));
+        magnitude = Math.max(Math.abs(vert), Math.max(Math.abs(horz), Math.abs(rotate)));
 
         double vertControl = magnitude*Math.sin(driveAngle);
         double horzControl = magnitude*Math.cos(driveAngle);
