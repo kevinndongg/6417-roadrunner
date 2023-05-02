@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -8,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -22,6 +24,8 @@ public class DistanceTest extends LinearOpMode {
 
     double vert,horz,rotate;
     double cumulativeAngle, driveAngle, leftStickAngle;
+    Vector2D leftStick;
+    double angleDelta;
     double driveSpeed;
     double angleOffset = Math.PI/2;
 
@@ -60,6 +64,8 @@ public class DistanceTest extends LinearOpMode {
             horz = gamepad1.left_stick_x;
             rotate = gamepad1.right_stick_x;
 
+            leftStick = new Vector2D(-gamepad1.left_stick_y, gamepad1.left_stick_x);
+
 
             cumulativeAngle = (imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle + Math.PI/2) % (Math.PI*2);
 
@@ -86,35 +92,18 @@ public class DistanceTest extends LinearOpMode {
                 leftStickAngle = Math.atan(vert / horz);
             }
 
-            Drive(vert, horz, rotate);
+
+
+            Drive(leftStick, rotate, angleDelta);
             telemetry.addData("distance: ", distance.getDistance(DistanceUnit.MM));
             telemetry.update();
         }
     }
 
-    public void Drive(double vert, double horz, double rotate){
-        double magnitude;
-
-
-        double driveAngle = (leftStickAngle - cumulativeAngle + angleOffset) % (Math.PI * 2);
-
-        magnitude = Math.max(Math.abs(vert), Math.max(Math.abs(horz), Math.abs(rotate)));
-
-        double vertControl = magnitude*Math.sin(driveAngle);
-        double horzControl = magnitude*Math.cos(driveAngle);
-
-        double frDrive = vertControl - horzControl - rotate;
-        double flDrive = vertControl + horzControl + rotate;
-        double brDrive = vertControl + horzControl - rotate;
-        double blDrive = vertControl - horzControl + rotate;
-
-        // finding maximum drive for division below
-        double max = Math.abs(Math.max(Math.abs(frDrive),Math.max(Math.abs(flDrive),Math.max(Math.abs(brDrive),Math.abs(blDrive)))));
-
-        // power calculations
-        frontRight.setPower(magnitude * driveSpeed * Constants.driveTuningFR * frDrive / max);
-        frontLeft.setPower(magnitude * driveSpeed * Constants.driveTuningFL * flDrive / max);
-        backRight.setPower(magnitude * driveSpeed * Constants.driveTuningBR * brDrive / max);
-        backLeft.setPower(magnitude * driveSpeed * Constants.driveTuningBL * blDrive / max);
+    public void Drive(Vector2D vectControl, double rotate, double angleDelta){
+        double frDrive = (vectControl.getY() - vectControl.getX() - rotate) * Constants.driveTuningFR;
+        double flDrive = (vectControl.getY() + vectControl.getX() + rotate) * Constants.driveTuningFL;
+        double brDrive = (vectControl.getY() + vectControl.getX() - rotate) * Constants.driveTuningBR;
+        double blDrive = (vectControl.getY() - vectControl.getX() + rotate) * Constants.driveTuningBL;
     }
 }
